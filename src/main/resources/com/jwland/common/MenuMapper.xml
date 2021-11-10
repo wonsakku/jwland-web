@@ -1,0 +1,13 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jwland.common.MenuMapper">
+
+	<select id="getMenu" resultType="map">
+		SELECT menu_priority, menu_name, url, admin_page 
+		FROM jwland.menu 
+		ORDER BY admin_page desc, menu_priority
+	</select>
+
+</mapper>
