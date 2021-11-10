@@ -1,24 +1,24 @@
 -- 메뉴
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('클리닉&보충', 1, '/clinic', 'N');
+values('클리닉&보충', 1, '/clinic/page', 'N');
 
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('고3 모의고사 체크', 2, '/exam-check', 'N');
+values('고3 모의고사 체크', 2, '/exam-check/page', 'N');
 
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('기출 및 문제 정오표', 3, '/errata', 'N');
+values('기출 및 문제 정오표', 3, '/errata/page', 'N');
 
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('자료실', 4, '/board', 'N');
+values('자료실', 4, '/board/page', 'N');
 
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('공지사항', 5, '/notice', 'N');
+values('공지사항', 5, '/notice/page', 'N');
 
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('출결확인', 6, '/attendance', 'Y');
+values('출결확인', 6, '/attendance/page', 'Y');
 
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('클리닉 출결 확인', 7, '/clinic-attendance', 'Y');
+values('클리닉 출결 확인', 7, '/clinic-attendance/page', 'Y');
 
 --insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 --values('클리닉/보충', 8, , 'Y');

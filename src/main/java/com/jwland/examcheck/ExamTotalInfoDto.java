@@ -7,6 +7,9 @@ public class ExamTotalInfoDto {
 
 	private int year;
 	private int month;
-	private String title;
-	private int wrongAnswerCount;
+	private int grade;
+	private String examType;
+	private String subject;
+	private int problemNumber;
+	private int wrongCount;
 }

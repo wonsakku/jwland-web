@@ -10,6 +10,7 @@
 			   et.grade, 
 			   et.exam_type, 
 			   es.subject, 
+               t.problem_number,
 			   t.wrong_count
 		FROM (
 			SELECT exam_type_sequence_no, 

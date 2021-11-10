@@ -9,64 +9,248 @@
 <body>
 
 <main layout:fragment="content">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Dashboard</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group mr-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+	<div class="container">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">모의고사 체크</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            	<!-- Button trigger modal -->
+				<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#popupEnroll">
+				  오답 등록하기
+				</button>
+				<button type="button" class="btn btn-success mr-1" data-toggle="modal" data-target="#popupUpdate">
+				  오답 수정하기
+				</button>
+            	
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+              <span data-feather="calendar"></span>
+              This week
+            </button>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            This week
-          </button>
         </div>
-      </div>
 
-      <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-      <h2>Section title</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Header</th>
-              <th>Header</th>
-              <th>Header</th>
-              <th>Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>쓰벌</td>
-              <td>Lorem</td>
-              <td>ipsum</td>
-              <td>dolor</td>
-              <td>sit</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>amet</td>
-              <td>consectetur</td>
-              <td>adipiscing</td>
-              <td>elit</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
+		<table class="table text-center">
+		  <thead class="thead-dark">
+		    <tr>
+		      <th scope="col">순번</th>
+		      <th scope="col">연도</th>
+		      <th scope="col">월</th>
+		      <th scope="col">시험명</th>
+		      <th scope="col">번호</th>
+		      <th scope="col">오답자수</th>
+		    </tr>
+		  </thead>
+		  <tbody id="exam-table-body">
+		  </tbody>
+		</table>
+	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="popupEnroll" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="staticBackdropLabel1">오답 등록 팝업</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+			<table class="table text-center  table-bordered">
+			  <thead class="thead-dark">
+			    <tr>
+			      <th scope="col">항목</th>
+			      <th scope="col">입력</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	<tr>
+			  		<th scope="row">년도</th>
+			  		<td>
+			  		  <select class="custom-select" id="select-year">
+					    <option value="2020">2020</option>
+					    <option value="2021" selected>2021</option>
+					    <option value="2022">2022</option>
+					    <option value="2023">2023</option>
+					    <option value="2024">2024</option>
+					    <option value="2025">2025</option>
+					    <option value="2026">2026</option>
+					  </select>
+			  		</td>
+			  	</tr>
+			  	<tr>
+			  		<th scope="row">월</th>
+			  		<td>
+			  		  <select class="custom-select" id="select-month">
+			  		  	<option selected>선택</option>
+					    <option value="3">3</option>
+					    <option value="4">4</option>
+					    <option value="5">5</option>
+					    <option value="6">6</option>
+					    <option value="7">7</option>
+					    <option value="8">8</option>
+					    <option value="9">9</option>
+					    <option value="10">10</option>
+					    <option value="11">11</option>
+					  </select>
+			  		</td>
+			  	</tr>
+			  	<tr>
+			  		<th scope="row">시험 종류</th>
+			  		<td>
+			  		  <select class="custom-select" id="inputGroupSelect01">
+					    <option value="1" selected>평가원</option>
+					    <option value="2">교육청</option>
+					    <option value="3">대성</option>
+					    <option value="4">종로</option>
+					    <option value="5">비상</option>
+					  </select>
+			  		</td>
+			  	</tr>
+			  	<tr>
+			  		<th scope="row">과목</th>
+			  		<td>
+			  		  <select class="custom-select" id="inputGroupSelect01">
+					    <option value="1" selected>생명과학1</option>
+					    <option value="2">생명과학2</option>
+					    <option value="3">화학1</option>
+					    <option value="4">화학2</option>
+					  </select>
+			  		</td>
+			  	</tr>
+			  	<tr>
+			  		<th scope="row">번호 선택</th>
+			  		<td class="text-left">
+			  			<button class="btn btn-info mr-1" data-toggle="modal" data-target="#selectProblemNumber">번호 선택</button>
+			  			<span></span>
+			  		</td>
+			  	</tr>
+			  </tbody>
+			</table>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary">등록</button>
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="popupUpdate" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="staticBackdropLabel2">오답 수정 팝업</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">오답 수정 팝업</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+	<!-- Modal -->
+	<div class="modal fade" id="selectProblemNumber" data-backdrop="static" data-keyboard="false" tabindex="-2" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+	  <div class="modal-dialog  modal-dialog-scrollable">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="staticBackdropLabel3">번호 선택</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	       
+	      <div class="modal-body">
+	      	<ul class="list-group font-weight-bold" id="problem-number-list">
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-1" class="mr-2" aria-label="Checkbox for following text input" value="1">1</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-2" class="mr-2" aria-label="Checkbox for following text input" value="2">2</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-3" class="mr-2" aria-label="Checkbox for following text input" value="3">3</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-4" class="mr-2" aria-label="Checkbox for following text input" value="4">4</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-5" class="mr-2" aria-label="Checkbox for following text input" value="5">5</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-6" class="mr-2" aria-label="Checkbox for following text input" value="6">6</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-7" class="mr-2" aria-label="Checkbox for following text input" value="7">7</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-8" class="mr-2" aria-label="Checkbox for following text input" value="8">8</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-9" class="mr-2" aria-label="Checkbox for following text input" value="9">9</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-10" class="mr-2" aria-label="Checkbox for following text input" value="10">10</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-11" class="mr-2" aria-label="Checkbox for following text input" value="11">11</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-12" class="mr-2" aria-label="Checkbox for following text input" value="12">12</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-13" class="mr-2" aria-label="Checkbox for following text input" value="13">13</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-14" class="mr-2" aria-label="Checkbox for following text input" value="14">14</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-15" class="mr-2" aria-label="Checkbox for following text input" value="15">15</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-16" class="mr-2" aria-label="Checkbox for following text input" value="16">16</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-17" class="mr-2" aria-label="Checkbox for following text input" value="17">17</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-18" class="mr-2" aria-label="Checkbox for following text input" value="18">18</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-19" class="mr-2" aria-label="Checkbox for following text input" value="19">19</li> 
+			  <li class="list-group-item"><input type="checkbox" id="problem-number-20" class="mr-2" aria-label="Checkbox for following text input" value="20">20</li> 
+			</ul>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Understood</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+
 </main>
 </body>
 </html>
+
 <script th:inline="javascript">
-	var data = [[${examTotalInfoList}]];
-	console.log(data);	
-	console.log(2);
+// <script type="application/javascript">
+// 	console.log(data);	
+// 	console.log(2);
 	(function(){
-	
+		showExamList();
 	})();
 	
+	function showExamList(){
+		var url = "/exam-check";
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_showEaxmList(data, xhr, status);
+	        },
+	        fail: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
 	
+	
+	function _cb_showEaxmList(data){
+		console.log(data);
+		
+		$("#exam-table-body").html("");
+		var html = "";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html += "<tr>";
+			html += "<th scope='row'>" + (i+1) + "</th>";
+			html += "<td>" + data[i].year + "년</td>";
+			html += "<td>" + data[i].month + "월</td>";
+			html += "<td>" + data[i].examType + " " + data[i].subject + "</td>";
+			html += "<td>" + data[i].problemNumber + "번</td>";
+			html += "<td>" + data[i].wrongCount + "명</td>";
+			html += "</tr>";
+		}
+		
+		$("#exam-table-body").html(html);
+		
+	}
 	
 	
 </script>
