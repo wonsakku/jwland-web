@@ -1,17 +1,17 @@
 --drop table
-drop table jwland.menu;
-drop table jwland.account;
-drop table jwland.exam_subject;
-drop table jwland.exam_type;
-drop table jwland.exam_master;
+drop table if exists jwland.menu;
+drop table if exists jwland.account;
+drop table if exists jwland.exam_subject;
+drop table if exists jwland.exam_type;
+drop table if exists jwland.exam_master;
 
 
 --drop sequence
-drop sequence jwland.menu_sequence;
-drop sequence jwland.account_sequence;
-drop sequence jwland.exam_subject_sequence;
-drop sequence jwland.exam_type_sequence;
-drop sequence jwland.exam_master_sequence;
+drop sequence if exists jwland.menu_sequence;
+drop sequence if exists jwland.account_sequence;
+drop sequence if exists jwland.exam_subject_sequence;
+drop sequence if exists jwland.exam_type_sequence;
+drop sequence if exists jwland.exam_master_sequence;
 
 
 
