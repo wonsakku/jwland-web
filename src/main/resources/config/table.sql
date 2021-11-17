@@ -43,7 +43,7 @@ create table jwland.account(
 	name varchar(5) not null,
 	birth varchar(4) not null,
 	nick_name varchar(20) not null unique,
-	is_approved varchar(1) not null DEFAULT 'N',
+	approved varchar(1) not null DEFAULT 'N',
 	role varchar(10) not null default 'student',
 	created_at TIMESTAMP not null default now(),
 	modify_at TIMESTAMP not null default now(),

@@ -1,4 +1,4 @@
-package com.jwland.common;
+package com.jwland.web;
 
 import java.util.List;
 

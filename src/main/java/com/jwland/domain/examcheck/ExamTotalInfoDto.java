@@ -1,4 +1,4 @@
-package com.jwland.examcheck;
+package com.jwland.domain.examcheck;
 
 import lombok.Data;
 

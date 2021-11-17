@@ -1,4 +1,4 @@
-package com.jwland.common;
+package com.jwland.web.mapper;
 
 import java.util.List;
 

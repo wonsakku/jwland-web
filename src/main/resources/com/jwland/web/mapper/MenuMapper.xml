@@ -2,7 +2,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.jwland.common.MenuMapper">
+<mapper namespace="com.jwland.web.mapper.MenuMapper">
 
 	<select id="getMenu" resultType="map">
 		SELECT menu_priority, menu_name, url, admin_page 

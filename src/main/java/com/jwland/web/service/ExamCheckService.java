@@ -1,8 +1,11 @@
-package com.jwland.examcheck;
+package com.jwland.web.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.jwland.domain.examcheck.ExamTotalInfoDto;
+import com.jwland.web.mapper.ExamCheckMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

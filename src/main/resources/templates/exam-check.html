@@ -28,8 +28,6 @@
           </div>
         </div>
 
-
-
 		<table class="table text-center">
 		  <thead class="thead-dark">
 		    <tr>
@@ -37,6 +35,7 @@
 		      <th scope="col">연도</th>
 		      <th scope="col">월</th>
 		      <th scope="col">시험명</th>
+		      <th scope="col">과목</th>
 		      <th scope="col">번호</th>
 		      <th scope="col">오답자수</th>
 		    </tr>
@@ -83,7 +82,7 @@
 			  		<th scope="row">월</th>
 			  		<td>
 			  		  <select class="custom-select" id="select-month">
-			  		  	<option selected>선택</option>
+			  		  	<option selected value="">선택</option>
 					    <option value="3">3</option>
 					    <option value="4">4</option>
 					    <option value="5">5</option>
@@ -100,7 +99,8 @@
 			  		<th scope="row">시험 종류</th>
 			  		<td>
 			  		  <select class="custom-select" id="inputGroupSelect01">
-					    <option value="1" selected>평가원</option>
+					    <option value="" selected>=== 시 험   종 류 ===</option>
+					    <option value="1">평가원</option>
 					    <option value="2">교육청</option>
 					    <option value="3">대성</option>
 					    <option value="4">종로</option>
@@ -112,7 +112,8 @@
 			  		<th scope="row">과목</th>
 			  		<td>
 			  		  <select class="custom-select" id="inputGroupSelect01">
-					    <option value="1" selected>생명과학1</option>
+					    <option value="" selected>===== 과 목 =====</option>
+					    <option value="1" >생명과학1</option>
 					    <option value="2">생명과학2</option>
 					    <option value="3">화학1</option>
 					    <option value="4">화학2</option>
@@ -173,26 +174,13 @@
 	       
 	      <div class="modal-body">
 	      	<ul class="list-group font-weight-bold" id="problem-number-list">
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-1" class="mr-2" aria-label="Checkbox for following text input" value="1">1</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-2" class="mr-2" aria-label="Checkbox for following text input" value="2">2</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-3" class="mr-2" aria-label="Checkbox for following text input" value="3">3</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-4" class="mr-2" aria-label="Checkbox for following text input" value="4">4</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-5" class="mr-2" aria-label="Checkbox for following text input" value="5">5</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-6" class="mr-2" aria-label="Checkbox for following text input" value="6">6</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-7" class="mr-2" aria-label="Checkbox for following text input" value="7">7</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-8" class="mr-2" aria-label="Checkbox for following text input" value="8">8</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-9" class="mr-2" aria-label="Checkbox for following text input" value="9">9</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-10" class="mr-2" aria-label="Checkbox for following text input" value="10">10</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-11" class="mr-2" aria-label="Checkbox for following text input" value="11">11</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-12" class="mr-2" aria-label="Checkbox for following text input" value="12">12</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-13" class="mr-2" aria-label="Checkbox for following text input" value="13">13</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-14" class="mr-2" aria-label="Checkbox for following text input" value="14">14</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-15" class="mr-2" aria-label="Checkbox for following text input" value="15">15</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-16" class="mr-2" aria-label="Checkbox for following text input" value="16">16</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-17" class="mr-2" aria-label="Checkbox for following text input" value="17">17</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-18" class="mr-2" aria-label="Checkbox for following text input" value="18">18</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-19" class="mr-2" aria-label="Checkbox for following text input" value="19">19</li> 
-			  <li class="list-group-item"><input type="checkbox" id="problem-number-20" class="mr-2" aria-label="Checkbox for following text input" value="20">20</li> 
+	      	  <th:block th:each="m : ${#numbers.sequence(1,20)}">
+	      	  <li class="list-group-item">
+	      	  	<input type="checkbox" th:name="|problem-number-${m}|" th:id="|problem-number-${m}|" 
+	      	  	class="mr-2" aria-label="Checkbox for following text input" th:value="${m}">
+	      	  	<label th:for="|problem-number-${m}|" th:text="${m}" style="width:90%; height: 100%;"></label>
+	      	  </li>
+	      	  </th:block>
 			</ul>
 	      </div>
 	      <div class="modal-footer">
@@ -242,7 +230,8 @@
 			html += "<th scope='row'>" + (i+1) + "</th>";
 			html += "<td>" + data[i].year + "년</td>";
 			html += "<td>" + data[i].month + "월</td>";
-			html += "<td>" + data[i].examType + " " + data[i].subject + "</td>";
+			html += "<td>" + data[i].examType + "</td>";
+			html += "<td>" + data[i].subject + "</td>";
 			html += "<td>" + data[i].problemNumber + "번</td>";
 			html += "<td>" + data[i].wrongCount + "명</td>";
 			html += "</tr>";

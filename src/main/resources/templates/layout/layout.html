@@ -2,11 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 	<title layout:title-pattern="$LAYOUT_TITLE : $CONTENT_TITLE">JW-Land</title>
-	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
 	<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<!--     <script src="/node_modules/bootstrap/js/dist/bootstrap.bundle.min.js" ></script> -->
 	<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<!--    <link rel="stylesheet" href="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" /> -->
-<!--    <link rel="stylesheet" href="/node_modules/jquery/dist/jquery.min.js" />   -->
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/css/dashboard.css" />
+<!-- 	<script src="/js/dashboard.js"></script> -->
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
 </head>
 <body>
 
@@ -15,15 +33,16 @@
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-<!--   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
+  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-    	<th:block th:if="${session.account_id == null}">
-	    	<a class="nav-link btn btn-primary" href="#" th:href="@{/login}">로그인</a>
-	    	<a class="nav-link btn btn-primary" href="#" th:href="@{/join}">회원가입</a>
+    <li class="nav-item text-nowrap row">
+    	<th:block th:if="${session.accountSequenceNo == null}">
+	    	<a class="nav-link btn btn-success" href="/login" th:href="@{/login}">로그인</a>
     	</th:block>
-    	<th:block th:if="${session.account_id != null}">
-		    <a class="nav-link" href="#">Sign out</a>
+    	<th:block th:if="${session.accountSequenceNo != null}">
+    		<form th:action="@{/logout}" method="post">
+		    	<button type="submit" class="nav-link btn btn-danger">로그아웃</button>
+    		</form>
     	</th:block>
     </li>
   </ul>
@@ -35,39 +54,6 @@
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column" id="sidebar-ul">
         </ul>
-
-<!--         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"> -->
-<!--           <span>Saved reports</span> -->
-<!--           <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report"> -->
-<!--             <span data-feather="plus-circle"></span> -->
-<!--           </a> -->
-<!--         </h6> -->
-<!--         <ul class="nav flex-column mb-2"> -->
-<!--           <li class="nav-item"> -->
-<!--             <a class="nav-link" href="#"> -->
-<!--               <span data-feather="file-text"></span> -->
-<!--               Current month -->
-<!--             </a> -->
-<!--           </li> -->
-<!--           <li class="nav-item"> -->
-<!--             <a class="nav-link" href="#"> -->
-<!--               <span data-feather="file-text"></span> -->
-<!--               Last quarter -->
-<!--             </a> -->
-<!--           </li> -->
-<!--           <li class="nav-item"> -->
-<!--             <a class="nav-link" href="#"> -->
-<!--               <span data-feather="file-text"></span> -->
-<!--               Social engagement -->
-<!--             </a> -->
-<!--           </li> -->
-<!--           <li class="nav-item"> -->
-<!--             <a class="nav-link" href="#"> -->
-<!--               <span data-feather="file-text"></span> -->
-<!--               Year-end sale -->
-<!--             </a> -->
-<!--           </li> -->
-<!--         </ul> -->
       </div>
     </nav>
 
@@ -78,17 +64,15 @@
   </div>
 </div>
 
+</body>
+<script th:inline="javascript">
 
-<script type="application/javascript">
-
-	
     (function () {
 		load_menu();
     }());
     
     
     function load_menu(){
-
       var url = "/menu";
       $.ajax({
         url: url,
@@ -105,6 +89,7 @@
 
     function _cb_load_menu(data){
       var menu = data;
+      console.log(menu);
       var $sidebar = $("#sidebar-ul");
       $sidebar.html("");
 
@@ -123,7 +108,7 @@
     
     
 </script>
-</body>
+
 </html>
 
 

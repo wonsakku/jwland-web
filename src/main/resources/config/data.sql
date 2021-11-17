@@ -55,12 +55,12 @@ values('화학2');
 
 -- 회원 임시 데이터
 insert into jwland.account(name, birth, nick_name)
-values('루피', '0101', '해적왕');
+values('루피', '0101', '밀집모자');
 insert into jwland.account(name, birth, nick_name)
-values('조로', '0411', '대검객');
+values('조로', '0411', '해적사냥꾼');
 insert into jwland.account(name, birth, nick_name)
-values('나미', '0707', '나미');
-insert into jwland.account(name, birth, nick_name, is_approved, role)
+values('나미', '0703', '도둑고양이');
+insert into jwland.account(name, birth, nick_name, approved, role)
 values('jw', '0430', 'jwland', 'Y', 'admin');
 
 
