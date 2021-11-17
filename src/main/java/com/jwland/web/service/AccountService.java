@@ -4,11 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.jwland.domain.account.AccountVO;
 import com.jwland.domain.account.FormLoginDto;
-import com.jwland.domain.account.LoginSuccessDto;
 import com.jwland.web.exception.NoAccountException;
 import com.jwland.web.mapper.AccountMapper;
 
@@ -18,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class AccountService {
+public class AccountService implements UserDetailsService{
 	
 	private final ModelMapper modelMapper;
 	private final AccountMapper accountMapper;
@@ -33,15 +35,22 @@ public class AccountService {
 			throw new NoAccountException();
 		}
 		
-//		LoginSuccessDto account = modelMapper.map(loginAccount, LoginSuccessDto.class);
-//		session.setAttribute("account", account);
-		
 		HttpSession session = request.getSession();
 		session.setAttribute("accountSequenceNo", loginAccount.getAccountSequenceNo());
 		session.setAttribute("role", loginAccount.getRole());
 		session.setAttribute("approved", loginAccount.getApproved());
 		session.setAttribute("nickName", loginAccount.getNickName());
 	}
+
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		
+		
+		return null;
+	}
+	
 }
 
 
