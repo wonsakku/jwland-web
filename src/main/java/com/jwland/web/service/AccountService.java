@@ -4,9 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.jwland.domain.account.AccountVO;
@@ -20,7 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class AccountService implements UserDetailsService{
+//public class AccountService implements UserDetailsService{
+public class AccountService{
 	
 	private final ModelMapper modelMapper;
 	private final AccountMapper accountMapper;
@@ -43,14 +41,14 @@ public class AccountService implements UserDetailsService{
 	}
 
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		System.out.println(1);
-		System.out.println(username);
-		
-		return null;
-	}
+//	@Override
+//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//		
+//		System.out.println(1);
+//		System.out.println(username);
+//		
+//		return null;
+//	}
 	
 }
 
