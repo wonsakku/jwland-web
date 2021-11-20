@@ -1,13 +1,16 @@
 package com.jwland.domain.account;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+
+@Builder @Data @NoArgsConstructor @AllArgsConstructor
 public class LoginSuccessDto {
 
 	private Long accountSequenceNo;
 	private String nickName;
 	private String approved;
 	private String role;
-	
 }

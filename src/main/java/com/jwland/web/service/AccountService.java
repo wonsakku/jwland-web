@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.jwland.domain.account.AccountVO;
 import com.jwland.domain.account.FormLoginDto;
+import com.jwland.domain.account.JoinAccountDto;
+import com.jwland.domain.account.LoginSuccessDto;
+import com.jwland.web.constant.SessionConstant;
 import com.jwland.web.exception.NoAccountException;
 import com.jwland.web.mapper.AccountMapper;
 
@@ -34,10 +37,18 @@ public class AccountService{
 		}
 		
 		HttpSession session = request.getSession();
-		session.setAttribute("accountSequenceNo", loginAccount.getAccountSequenceNo());
-		session.setAttribute("role", loginAccount.getRole());
-		session.setAttribute("approved", loginAccount.getApproved());
-		session.setAttribute("nickName", loginAccount.getNickName());
+		LoginSuccessDto loginInfo = LoginSuccessDto.builder()
+				.nickName(loginAccount.getNickName())
+				.accountSequenceNo(loginAccount.getAccountSequenceNo())
+				.approved(loginAccount.getApproved())
+				.role(loginAccount.getRole())
+				.build();
+		
+		session.setAttribute(SessionConstant.LOGIN_ATTRIBUTE_NAME, loginInfo);
+	}
+
+	public void join(JoinAccountDto joinAccountDto) {
+		accountMapper.join(joinAccountDto);
 	}
 
 

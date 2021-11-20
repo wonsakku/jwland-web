@@ -55,9 +55,14 @@
 
 <script th:inline="javascript">
 	var error = [[${error}]];
-	console.log(error);
+	var msg = [[${msg}]];
+
 	if(error != null){
 		alert(error);
+	}
+	
+	if(msg != null){
+		alert(msg);
 	}
 	
 	(function(){

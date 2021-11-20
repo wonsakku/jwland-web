@@ -40,7 +40,7 @@ create table jwland.menu(
 
 create table jwland.account(
 	account_sequence_no BIGINT DEFAULT NEXTVAL('jwland.account_sequence'),
-	name varchar(5) not null,
+	name varchar(20) not null,
 	birth varchar(4) not null,
 	nick_name varchar(20) not null unique,
 	approved varchar(1) not null DEFAULT 'N',

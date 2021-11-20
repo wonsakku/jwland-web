@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jwland.domain.account.FormLoginDto;
 import com.jwland.domain.account.JoinAccountDto;
+import com.jwland.web.constant.SessionConstant;
 import com.jwland.web.exception.WrongAccessException;
 import com.jwland.web.service.AccountService;
 
@@ -59,17 +60,11 @@ public class AccountController {
 	
 	@PostMapping("/join")
 	public ModelAndView join(@ModelAttribute(value = "joinAccountDto") @Validated JoinAccountDto joinAccountDto, 
-			RedirectAttributes redirectAttribute,  Errors errors) {
+			RedirectAttributes rttr,  Errors errors) {
 		
-		System.out.println(1);
+		accountService.join(joinAccountDto);
 		
-		if(errors.hasErrors()) {
-			System.out.println(2);
-			redirectAttribute.addAttribute("error", errors.getFieldError().toString());
-			System.out.println(3);
-			return new ModelAndView("redirect:/join");
-		}
-		System.out.println(0);
+		rttr.addFlashAttribute("msg", joinAccountDto.getNickName() + "님의 가입이 완료되었습니다.");
 		
 		return new ModelAndView("redirect:/login");
 	}
@@ -79,7 +74,7 @@ public class AccountController {
 	public ModelAndView logout(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		
-		boolean login = Collections.list(session.getAttributeNames()).contains("accountSequenceNo");
+		boolean login = Collections.list(session.getAttributeNames()).contains(SessionConstant.LOGIN_ATTRIBUTE_NAME);
 		
 		if(!login) {
 			throw new WrongAccessException();
@@ -89,6 +84,7 @@ public class AccountController {
 		
 		return new ModelAndView("redirect:/");
 	}
+
 }
 
 

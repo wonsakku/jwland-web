@@ -29,17 +29,17 @@
 <body>
 
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">JW-Land</a>
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/" th:href="@{/}">JW-Land</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap row">
-    	<th:block th:if="${session.accountSequenceNo == null}">
+    	<th:block th:if="${session.loginInfo == null}">
 	    	<a class="nav-link btn btn-success" href="/login" th:href="@{/login}">로그인</a>
     	</th:block>
-    	<th:block th:if="${session.accountSequenceNo != null}">
+    	<th:block th:if="${session.loginInfo != null}">
     		<form th:action="@{/logout}" method="post">
 		    	<button type="submit" class="nav-link btn btn-danger">로그아웃</button>
     		</form>

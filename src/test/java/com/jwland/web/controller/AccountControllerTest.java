@@ -1,5 +1,6 @@
 package com.jwland.web.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -9,15 +10,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import javax.servlet.http.HttpSession;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jwland.domain.account.AccountVO;
+import com.jwland.domain.account.LoginSuccessDto;
+import com.jwland.web.constant.AccountConstant;
+import com.jwland.web.constant.SessionConstant;
+import com.jwland.web.mapper.AccountMapper;
 import com.jwland.web.service.AccountService;
 
 @SpringBootTest
@@ -27,7 +36,12 @@ class AccountControllerTest {
 
 	@Autowired MockMvc mockMvc;
 	@Autowired AccountService accountService;
+	@Autowired AccountMapper accountMapper;
 //	@Autowired private MockHttpServletRequest request;
+	
+	private final String DEFAULT_ROLE = "ROLE_STUDENT";
+	private final String DEFAULT_APPROVED = "N";
+	private final String DEFAULT_JOIN_SUCCESS_MSG_SUFFIX = "님의 가입이 완료되었습니다.";
 	
 	@Test
 	@DisplayName("로그인 페이지 이동")
@@ -36,7 +50,7 @@ class AccountControllerTest {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(view().name("account/sign-in"))
-			.andExpect(model().attributeExists("formLoginDto"))
+			.andExpect(model().attributeExists(AccountConstant.FORM_LOGIN_DTO))
 			;
 	}
 	
@@ -44,6 +58,7 @@ class AccountControllerTest {
 	@DisplayName("로그인 성공")
 	void formLoginSuccess() throws Exception{
 
+		// given
 		MvcResult result = mockMvc.perform(
 							post("/login")
 							.param("name", "나미")
@@ -52,17 +67,19 @@ class AccountControllerTest {
 						.andExpect(status().is3xxRedirection())
 						.andExpect(view().name("redirect:/"))
 						.andDo(print())
-						.andExpect(request().sessionAttribute("accountSequenceNo", 3L))
-						.andExpect(request().sessionAttribute("approved", "N"))
-						.andExpect(request().sessionAttribute("role", "student"))
-						.andExpect(request().sessionAttribute("nickName", "도둑 고양이"))
+//						.andExpect(request().se)
 						.andReturn()
 						;
-//		assertThat(result.getRequest().getSession().getAttribute("accountSequenceNo")).isEqualTo(3L);
-//		assertThat(result.getRequest().getSession().getAttribute("role")).isEqualTo("student");
-//		assertThat(result.getRequest().getSession().getAttribute("approved")).isEqualTo("N");
+		//when
+		MockHttpServletRequest request = result.getRequest();
+		HttpSession session = request.getSession();
+		
+		// then 
+		assertThat(session.getAttribute(SessionConstant.LOGIN_ATTRIBUTE_NAME)).isNotNull();
+		assertThat(session.getAttribute(SessionConstant.LOGIN_ATTRIBUTE_NAME)).isInstanceOf(LoginSuccessDto.class);
 	}
 
+	
 	@Test
 	@DisplayName("로그인 실패 - 일치하는 정보 없을 경우 ")
 	void formLoginFail_01() throws Exception{
@@ -77,22 +94,48 @@ class AccountControllerTest {
 				.andExpect(flash().attribute("error", "일치하는 계정 정보가 없습니다."))
 				;
 	}
+
+	@Test
+	@DisplayName("로그인 실패 - 입력값 오류")
+	void formLogin_Fail_02() throws Exception{
+		
+		// given
+		MvcResult result = mockMvc.perform(
+				post("/login")
+				.param("name", "나미")
+				.param("birth", "07031")
+				)
+				.andExpect(flash().attributeExists("error"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/login"))
+				.andDo(print())
+				.andReturn()
+				;
+	}
+	
+	
 	
 	@Test
 	@DisplayName("로그아웃")
 	void lotgout_Success() throws Exception {
 		
+		// given
+		LoginSuccessDto login = LoginSuccessDto.builder()
+				.nickName("도둑 고양이")
+				.approved("N")
+				.role("ROLE_STUDENT")
+				.accountSequenceNo(3L)
+				.build();
+		
+		// when & then
 		mockMvc.perform(
 				post("/logout")
-				.sessionAttr("accountSequenceNo", 3L)
-				.sessionAttr("birth", "0703")
-				.sessionAttr("nickName", "도둑 고양이")
-				.sessionAttr("approved", "N")
+				.sessionAttr(SessionConstant.LOGIN_ATTRIBUTE_NAME, login)
 				)
 			.andDo(print())
 			.andExpect(view().name("redirect:/"))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(request().sessionAttributeDoesNotExist("accountSequenceNo", "approved", "role", "nickName"))
+			.andExpect(request().sessionAttributeDoesNotExist(SessionConstant.LOGIN_ATTRIBUTE_NAME))
 			;
 	}
 
@@ -115,44 +158,60 @@ class AccountControllerTest {
 			.andDo(print())
 			.andExpect(view().name("account/join"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeExists("joinAccountDto"))
+			.andExpect(model().attributeExists(AccountConstant.JOIN_ACCOUNT_DTO))
 			;
 	}
+	
 	
 	
 	@Test
 	@DisplayName("회원가입")
 	void join_Success() throws Exception{
+
+		String name = "비비";
+		String birth = "0202";
+		String nickName = "미스 웬즈데이";
+		
 		mockMvc.perform(
 				post("/join")
-				.param("name", "비비")
-				.param("birth", "0202")
-				.param("nickName", "미스 웬즈데이")
+				.param("name", name)
+				.param("birth", birth)
+				.param("nickName", nickName)
 				)
+			.andDo(print())
 			.andExpect(status().is3xxRedirection())
+			.andExpect(flash().attributeExists("msg"))
+			.andExpect(flash().attribute("msg", nickName + DEFAULT_JOIN_SUCCESS_MSG_SUFFIX))
 			.andExpect(view().name("redirect:/login"))
-			;
+			; 
+		
+		AccountVO newAccount = accountMapper.findByName(name);
+		assertThat(newAccount).isNotNull();
+		assertThat(newAccount.getAccountSequenceNo()).isNotNull();
+		assertThat(newAccount.getName()).isEqualTo(name);
+		assertThat(newAccount.getNickName()).isEqualTo(nickName);
+		assertThat(newAccount.getBirth()).isEqualTo(birth);
+		assertThat(newAccount.getApproved()).isEqualTo(DEFAULT_APPROVED);
+		assertThat(newAccount.getRole()).isEqualTo(DEFAULT_ROLE);
 	}
 	
 	
 	@Test
 	@DisplayName("회원가입 - 입력값 오류")
 	void join_Fail_01() throws Exception{
-		MvcResult result = mockMvc.perform(
+		mockMvc.perform(
 				post("/join")
 				.param("name", "비비")
 				.param("birth", "2")
 				.param("nickName", "미스 웬즈데이")
-//				.with(csrf())
 				)
-		.andExpect(status().isBadRequest())
+		.andExpect(status().is3xxRedirection())
 		.andExpect(flash().attributeExists("error"))
 		.andExpect(view().name("redirect:/join"))
-		.andReturn()
+//		.andReturn()
 		;
-		
-//		System.out.println(result.getFlashMap().get("error").toString());
 	}
+
 	
 }
 
