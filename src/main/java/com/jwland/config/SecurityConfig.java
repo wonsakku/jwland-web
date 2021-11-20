@@ -25,13 +25,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		// 요청 권한 관련
 		http.authorizeRequests()
-				.mvcMatchers("/", "/login", "/menu")
+				.mvcMatchers("/", "/login", "/menu", "/join")
 					.permitAll()
 				.anyRequest().authenticated();
 
 		// 로그인
 		http.formLogin()
-				.loginPage("/login").permitAll();
+				.loginPage("/login")
+				.usernameParameter("name")
+				.passwordParameter("birth")
+				.permitAll();
 		// 로그아웃
 		http.logout()
 				.logoutSuccessUrl("/");

@@ -1,5 +1,6 @@
 package com.jwland.web.controller;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -19,12 +20,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jwland.domain.account.FormLoginDto;
 import com.jwland.web.service.AccountService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class AccountControllerTest {
 
 	@Autowired MockMvc mockMvc;
@@ -37,7 +40,7 @@ class AccountControllerTest {
 		mockMvc.perform(get("/login"))
 			.andDo(print())
 			.andExpect(status().isOk())
-			.andExpect(view().name("sign-in"))
+			.andExpect(view().name("account/sign-in"))
 			.andExpect(model().attributeExists("formLoginDto"))
 			;
 	}
@@ -109,7 +112,64 @@ class AccountControllerTest {
 			.andExpect(flash().attribute("error", "잘못된 접근 방식입니다."))
 			;
 	}
+	
+	@Test
+	@DisplayName("회원가입 페이지 이동")
+	void join() throws Exception {
+		mockMvc.perform(get("/join"))
+			.andDo(print())
+			.andExpect(view().name("account/join"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("joinAccountDto"))
+			;
+	}
+	
+	
+	@Test
+	@DisplayName("회원가입")
+	void join_Success() throws Exception{
+		mockMvc.perform(
+				post("/join")
+				.param("name", "비비")
+				.param("birth", "0202")
+				.param("nickName", "미스 웬즈데이")
+				)
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/login"))
+			;
+	}
+	
+	
+	@Test
+	@DisplayName("회원가입 - 입력값 오류")
+	void join_Fail_01() throws Exception{
+		MvcResult result = mockMvc.perform(
+				post("/join")
+				.param("name", "비비")
+				.param("birth", "2")
+				.param("nickName", "미스 웬즈데이")
+				.with(csrf())
+				)
+		.andExpect(status().isBadRequest())
+		.andExpect(flash().attributeExists("error"))
+		.andExpect(view().name("redirect:/join"))
+		.andReturn()
+		;
+		
+//		System.out.println(result.getFlashMap().get("error").toString());
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

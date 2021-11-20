@@ -44,13 +44,13 @@ create table jwland.account(
 	birth varchar(4) not null,
 	nick_name varchar(20) not null unique,
 	approved varchar(1) not null DEFAULT 'N',
-	role varchar(10) not null default 'student',
+	role varchar(20) not null default 'ROLE_STUDENT',
 	created_at TIMESTAMP not null default now(),
 	modify_at TIMESTAMP not null default now(),
 	constraint account_primary_key PRIMARY KEY("account_sequence_no"),
 	constraint account_unique_info_key UNIQUE(name, birth)
-
 );
+
 
 
 

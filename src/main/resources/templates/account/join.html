@@ -1,0 +1,140 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Checkout example · Bootstrap v4.6</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/checkout/">
+
+    
+	<link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/sign-in/">
+	<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Custom styles for this template -->
+	<script src="/js/form-validation.js"></script>
+    <link href="/css/form-validation.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+<!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+  </head>
+  <body class="bg-light">
+    
+<div class="container">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src="/images/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <h2>Checkout form</h2>
+    <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+  </div>
+
+  <div class="row">
+	
+	<div class="col-md-2"></div>
+	
+    <div class="col-md-8">
+      <h4 class="mb-3">Billing address</h4>
+      <form class="needs-validation" th:object="${joinAccountDto}" th:action="@{/join}" method="post">
+        <div class="mb-3">
+          <label for="name">name</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">@</span>
+            </div>
+            <input type="text" class="form-control" id="name" placeholder="name" th:field="*{name}" required>
+            <div class="invalid-feedback" style="width: 100%;">
+              Your username is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="birth">birth</label>
+          <input type="password" class="form-control" id="birth" placeholder="mmdd"  th:field="*{birth}" required>
+          <div class="invalid-feedback">
+            Please enter your birthday.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="nickName">nickName</label>
+          <input type="text" class="form-control" id="nickName" placeholder="nickName"  th:field="*{nickName}" required>
+          <div class="invalid-feedback">
+            Please enter your nickName.
+          </div>
+        </div>
+        
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2017-2021 Company Name</p>
+  </footer>
+  
+</div>
+
+</body>
+
+<script th:inline="javascript">
+	var error = [[${error}]];
+	console.log(error);
+	if(error != null){
+		alert(JSON.stringify(error));
+	}
+	
+	(function(){
+// 		$("#join-btn").on("click", function(e){
+// 			e.preventDefault();
+// 			location.href="/join";
+// 		});
+	})();
+	
+</script>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
