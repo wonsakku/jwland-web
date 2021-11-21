@@ -1,6 +1,8 @@
 package com.jwland.web.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -9,17 +11,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.nio.charset.CharsetEncoder;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.jwland.domain.account.LoginSuccessDto;
 import com.jwland.domain.classes.ClassDomain;
+import com.jwland.web.common.ExceptionMessages;
+import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;
+import com.jwland.web.exception.AuthenticationException;
+import com.jwland.web.exception.AuthorizeException;
 import com.jwland.web.mapper.ClassMapper;
 import com.jwland.web.service.ClassService;
 
@@ -29,25 +42,82 @@ import com.jwland.web.service.ClassService;
 class ClassControllerTest {
 
 
+//	MockMvc mockMvc;
+//	@Autowired WebApplicationContext ctx;
 	@Autowired MockMvc mockMvc;
+	
 	@Autowired ClassService classService;
 	@Autowired ClassMapper classMapper;
 	
 	
+	
 	private final String ROLE_ADMIN = "ROLE_ADMIN";
+	private final String ROLE_STUDENT = "ROLE_STUDENT";
 	private final String APPROVED = "Y";
 
+//	@BeforeEach
+//	void setup() {
+//		this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
+//				.addFilters(new CharacterEncodingFilter("UTF-8", true))
+//				.build();
+//	}
 	
 	@Test
-	@DisplayName("클래스 등록 페이지로 이동")
+	@DisplayName("클래스 등록 페이지 이동")
 	void class_Enroll_Page() throws Exception{
+		
+		// given
+		LoginSuccessDto login = getLoginInfo();
+		
+		// when & then
+		mockMvc.perform(
+					get("/class/enroll-page")
+						.sessionAttr(VariableConstant.LOGIN_ATTRIBUTE_NAME, login)
+				)
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(view().name("class/class-enroll"))
+				;
+	}
+	
+	
+	@Test
+	@DisplayName("인증되지 않은 사용자가 클래스 등록 페이지로 이동할 경우 - AuthenticationException")
+	void class_Enroll_Page_Fail_01() throws Exception{
 		mockMvc.perform(get("/class/enroll-page"))
 			.andDo(print())
-			.andExpect(status().isOk())
-			.andExpect(view().name("class/class-enroll"))
-			.andExpect(model().attributeExists("createClassDto"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name(UrlPathConstant.REDIRECT_LOGIN_PAGE))
+			.andExpect(result -> assertEquals(AuthenticationException.class, result.getResolvedException().getClass()))
+			.andExpect(result -> 
+				assertEquals(ExceptionMessages.AUTHENTICATION_ERROR.getMessage(), result.getResolvedException().getMessage())
+			)
 			;
+		
 	}
+
+	@Test
+	@DisplayName("권한이 없는 사용자가 클래스 등록 페이지로 이동할 경우 - AuthorizeException")
+	void class_Enroll_Page_Fail_02() throws Exception{
+		
+		LoginSuccessDto login = getStudentLoginInfo();
+		
+		mockMvc.perform(
+				get("/class/enroll-page")
+					.sessionAttr(VariableConstant.LOGIN_ATTRIBUTE_NAME, login)
+				)
+		.andDo(print())
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name(UrlPathConstant.REDIRECT_ROOT_PAGE))
+		.andExpect(result -> assertEquals(result.getResolvedException().getClass(), AuthorizeException.class))
+		.andExpect(result -> 
+			assertEquals(result.getResolvedException().getMessage(), ExceptionMessages.AUTHORIZE_ERROR.getMessage())
+		)
+		;
+		
+	}
+	
+	
 	
 	
 	@Test
@@ -55,13 +125,8 @@ class ClassControllerTest {
 	void class_Enroll_Success() throws Exception{
 		
 		// given
-		String nickName = "jwland";
-		LoginSuccessDto login = LoginSuccessDto.builder()
-				.nickName(nickName)
-				.approved(APPROVED)
-				.role(ROLE_ADMIN)
-				.accountSequenceNo(4L)
-				.build();
+		LoginSuccessDto login = getLoginInfo();
+		String nickName = login.getNickName();
 		
 		String className = "클래스 등록 테스트";
 		String openYear = "2021";
@@ -103,7 +168,51 @@ class ClassControllerTest {
 		assertThat(clz.getModifyAccountId()).isEqualTo(nickName);
 		
 	}
+
 	
+
+	@Test
+	@DisplayName("수업 상세 관리 페이지 데이터 로딩 테스트")
+	void class_Detail_Manage_Page() throws Exception{
+		
+		// given
+		LoginSuccessDto login = getLoginInfo();
+		
+		//  when & then
+		mockMvc.perform(
+						get("/class/classes")
+						.characterEncoding("UTF-8")
+//						.param("open", "CLOSE")
+						.sessionAttr(VariableConstant.LOGIN_ATTRIBUTE_NAME, login)
+					)
+			.andDo(print())
+			;
+	}
+
+	
+	
+	private LoginSuccessDto getLoginInfo() {
+
+		String nickName = "jwland";
+		return LoginSuccessDto.builder()
+				.nickName(nickName)
+				.approved(APPROVED)
+				.role(ROLE_ADMIN)
+				.accountSequenceNo(4L)
+				.build();
+	}
+	
+	private LoginSuccessDto getStudentLoginInfo() {
+		String nickName = "just test";
+		return LoginSuccessDto.builder()
+				.nickName(nickName)
+				.approved(APPROVED)
+				.role(ROLE_STUDENT)
+				.accountSequenceNo(0L)
+				.build();
+	}
+
+
 }
 
 
