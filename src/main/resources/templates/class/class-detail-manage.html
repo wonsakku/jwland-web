@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sd="http://www.thymeleaf.org/spring-data"
+	layout:decorator="layout/layout.html"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title></title>
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+</style>
+
+</head>
+<body>
+	<main layout:fragment="content" role="main">
+	
+		<div class="album py-5 bg-light">
+			<div class="container">
+				<h1>수업 상세 관리</h1>
+				
+				<div class="row mt-4" id="class-list-container">
+<!-- 					<div class="col-md-4"> -->
+<!-- 						<div class="card mb-4 shadow-sm"> -->
+<!-- 							<svg class="bd-placeholder-img card-img-top" width="100%" height="225"> -->
+<!-- 								<rect width="100%" height="100%" fill="#55595c" /> -->
+<!-- 								<text x="50%" y="50%" fill="#eceeef" dy=".3em">수업 등록</text></svg> -->
+<!-- 							<div class="card-body"> -->
+<!-- 								<div class="d-flex justify-content-between align-items-center text-center"> -->
+<!-- 									<div class="btn-group"> -->
+<!-- 										<button type="button" class="btn btn-lg btn-outline-secondary">수강생 등록</button> -->
+<!-- 										<button type="button" class="btn btn-lg btn-outline-secondary">출결 관리</button> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+				</div>
+			</div>
+		</div>
+		
+	</main>
+	
+</body>
+</html>
+
+
+<script th:inline="javascript">
+	
+	var msg = [[${msg}]];
+	
+	if(msg != null){
+		alert(msg);
+	}
+
+	(function() {
+		loadClassDetails();
+	})();
+	
+	
+	function loadClassDetails(){
+		var url = "/class/classes";
+		$.ajax({
+			url: url,
+			type: "GET",
+			timeout: 10000,
+			success: function(data, xhrStatus, xhr){
+				_cb_loadClassDetails(data, xhr, xhrStatus);
+			}
+			
+		});
+	}
+	
+	function _cb_loadClassDetails(data, xhrStatus, xhr){
+		console.log(data);
+		console.log(xhr);
+		console.log(xhrStatus);
+		
+		var $classListContainer = $("#class-list-container");
+		$classListContainer.html("");
+
+		var html = "";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html += '<div class="col-md-4 class-container">';
+			html += '<input type="hidden" value="' + data[i].classSequenceNo + '" class="class-sequence-no">';
+			html += '<input type="hidden" value="' + data[i].className + '" class="class-name">';
+			html += '<div class="card mb-4 shadow-sm">';
+			html += '<svg class="bd-placeholder-img card-img-top" width="100%" height="225">';
+			html += '<rect width="100%" height="100%" fill="#55595c" />';
+			html += '<text x="50%" y="50%" fill="#eceeef" dy=".3em">' + data[i].className + '</text></svg>';
+			html += '<div class="card-body">';
+			html += '<div class="d-flex justify-content-between align-items-center text-center">';
+			html += '<div class="btn-group">';	
+			html += '<button type="button" class="btn btn-lg btn-outline-primary" onclick="addStudent(this)">수강생 등록</button>';
+			html += '<button type="button" class="btn btn-lg btn-outline-danger"  onclick="manageAttendance(this)">출결 관리</button>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+		}
+		
+		$classListContainer.html(html);	
+	}
+	
+	
+	function addStudent(elem){
+		var classSequenceNo = $(elem).closest(".class-container").find(".class-sequence-no").val();
+		var className = $(elem).closest(".class-container").find(".class-name").val();
+		location.href = "/class/classes/" + classSequenceNo + "/add-student?className=" + className;
+	}
+	
+	
+	function manageAttendance(elem){
+		var classSequenceNo = $(elem).closest(".class-container").find(".class-sequence-no").val();
+		alert(classSequenceNo);
+	}
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

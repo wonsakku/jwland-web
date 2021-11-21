@@ -13,5 +13,12 @@
 		SELECT * FROM jwland.class
 		WHERE class_name = #{className}
 	</select>
+	
+	<select id="getClassDetails" parameterType="String" resultType="com.jwland.domain.classes.ClassDetailDto">
+		SELECT class_sequence_no, class_name, open_year, open_month, start_date, open
+		FROM jwland.class
+		WHERE open = #{open}
+		ORDER BY open DESC
+	</select>
 
 </mapper>

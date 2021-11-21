@@ -20,12 +20,12 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
-		registry.addInterceptor(accessInterceptor)
-			.excludePathPatterns(UrlPathConstant.staticResourcePath())
-			.addPathPatterns(UrlPathConstant.anyoneAccessablePath())
-			.addPathPatterns(UrlPathConstant.onlyAdminAccessablePath())
-			.addPathPatterns(UrlPathConstant.studentAccessablePath())
-			;
+//		registry.addInterceptor(accessInterceptor)
+//			.excludePathPatterns(UrlPathConstant.staticResourcePath())
+//			.addPathPatterns(UrlPathConstant.anyoneAccessablePath())
+//			.addPathPatterns(UrlPathConstant.onlyAdminAccessablePath())
+//			.addPathPatterns(UrlPathConstant.studentAccessablePath())
+//			;
 	}
 	
 

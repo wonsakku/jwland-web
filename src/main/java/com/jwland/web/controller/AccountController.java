@@ -1,20 +1,25 @@
 package com.jwland.web.controller;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jwland.domain.account.AccountInfoDto;
 import com.jwland.domain.account.FormLoginDto;
 import com.jwland.domain.account.JoinAccountDto;
 import com.jwland.web.constant.UrlPathConstant;
@@ -81,6 +86,13 @@ public class AccountController {
 		session.invalidate();
 		
 		return new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
+	}
+	
+
+	@GetMapping("/accounts")
+	public ResponseEntity<List<AccountInfoDto>> findAccountsInfo(@RequestParam(value = "name", required = false, defaultValue = "") String name){
+		List<AccountInfoDto> accountInfos = accountService.findAccountsInfo(name);
+		return ResponseEntity.status(HttpStatus.OK).body(accountInfos);
 	}
 
 }

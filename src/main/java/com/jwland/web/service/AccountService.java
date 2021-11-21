@@ -1,11 +1,16 @@
 package com.jwland.web.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.jwland.domain.account.AccountInfoDto;
 import com.jwland.domain.account.AccountVO;
 import com.jwland.domain.account.FormLoginDto;
 import com.jwland.domain.account.JoinAccountDto;
@@ -49,6 +54,12 @@ public class AccountService{
 
 	public void join(JoinAccountDto joinAccountDto) {
 		accountMapper.join(joinAccountDto);
+	}
+
+	public List<AccountInfoDto> findAccountsInfo(String name) {
+		Map<String, String> parameter = new HashMap<>();
+		parameter.put("name", name);
+		return accountMapper.findAccountsInfo(parameter) ;
 	}
 
 

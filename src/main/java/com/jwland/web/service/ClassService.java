@@ -1,5 +1,7 @@
 package com.jwland.web.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.jwland.domain.account.LoginSuccessDto;
+import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.ClassDomain;
 import com.jwland.domain.classes.CreateClassDto;
 import com.jwland.web.constant.VariableConstant;
@@ -41,6 +44,10 @@ public class ClassService {
 		}
 		
 		return ((LoginSuccessDto) sessionLoginAttr).getNickName();
+	}
+
+	public List<ClassDetailDto> getClassDetails(String open) {
+		return classMapper.getClassDetails(open);
 	}
 	
 	

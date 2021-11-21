@@ -22,4 +22,14 @@
 		WHERE name = #{name}
 	</select>
 
+	<select id="findAccountsInfo" resultType="com.jwland.domain.account.AccountInfoDto">
+		SELECT account_sequence_no, name, birth, nick_name
+		FROM jwland.account
+		WHERE 1=1
+		AND	  role != 'ROLE_ADMIN'
+		<if test="name != null and name != ''">
+			AND name LIKE '%' || #{name} || '%'
+		</if>
+	</select>
+
 </mapper>

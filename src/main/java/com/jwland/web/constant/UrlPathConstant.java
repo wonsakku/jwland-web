@@ -26,7 +26,7 @@ public interface UrlPathConstant {
 	
 	
 	public static List<String> onlyAdminAccessablePath(){
-		return Arrays.asList("/attendance/**", "/clinic-attendance/**");
+		return Arrays.asList("/attendance/**", "/clinic-attendance/**", "/class/**");
 	}
 
 	

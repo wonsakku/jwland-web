@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jwland.domain.account.AccountVO;
 import com.jwland.domain.account.LoginSuccessDto;
-import com.jwland.web.common.ExceptionMessages;
+import com.jwland.web.constant.ExceptionMessages;
 import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.mapper.AccountMapper;

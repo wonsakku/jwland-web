@@ -28,7 +28,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.jwland.domain.account.LoginSuccessDto;
 import com.jwland.domain.classes.ClassDomain;
-import com.jwland.web.common.ExceptionMessages;
+import com.jwland.web.constant.ExceptionMessages;
 import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.AuthenticationException;
@@ -181,13 +181,36 @@ class ClassControllerTest {
 		//  when & then
 		mockMvc.perform(
 						get("/class/classes")
-						.characterEncoding("UTF-8")
 //						.param("open", "CLOSE")
 						.sessionAttr(VariableConstant.LOGIN_ATTRIBUTE_NAME, login)
 					)
 			.andDo(print())
 			;
 	}
+	
+	
+	@Test
+	@DisplayName("수강생 등록 페이지로 이동")
+	void add_Student_Page() throws Exception{
+		// given
+		LoginSuccessDto login = getLoginInfo();
+		String className = "test-className";
+		String classSequenceNo = "4";
+		
+		mockMvc.perform(
+				get("/class/classes/{classSequenceNo}/add-student", classSequenceNo)
+				.sessionAttr(VariableConstant.LOGIN_ATTRIBUTE_NAME, login)
+				.param("className", className)
+			)
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(view().name("class/class-add-student"))
+			.andExpect(model().attributeExists("className", "classSequenceNo"))
+			.andExpect(model().attribute("className", className))
+			.andExpect(model().attribute("classSequenceNo", Integer.parseInt(classSequenceNo)))
+			;
+	}
+	
 
 	
 	
