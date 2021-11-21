@@ -10,7 +10,7 @@ import com.jwland.domain.account.AccountVO;
 import com.jwland.domain.account.FormLoginDto;
 import com.jwland.domain.account.JoinAccountDto;
 import com.jwland.domain.account.LoginSuccessDto;
-import com.jwland.web.constant.SessionConstant;
+import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.NoAccountException;
 import com.jwland.web.mapper.AccountMapper;
 
@@ -44,7 +44,7 @@ public class AccountService{
 				.role(loginAccount.getRole())
 				.build();
 		
-		session.setAttribute(SessionConstant.LOGIN_ATTRIBUTE_NAME, loginInfo);
+		session.setAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME, loginInfo);
 	}
 
 	public void join(JoinAccountDto joinAccountDto) {

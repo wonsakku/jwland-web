@@ -1,8 +1,10 @@
 package com.jwland.web.exception;
 
+import com.jwland.web.common.ExceptionMessages;
+
 public class WrongAccessException extends RuntimeException{
 
 	public WrongAccessException() {
-		super("잘못된 접근 방식입니다.");
+		super(ExceptionMessages.WRONG_ACCESS_ERROR.getMessage());
 	}
 }

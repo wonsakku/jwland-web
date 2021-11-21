@@ -1,8 +1,10 @@
 package com.jwland.web.exception;
 
+import com.jwland.web.common.ExceptionMessages;
+
 public class NoAccountException extends IllegalArgumentException{
 
 	public NoAccountException() {
-		super("일치하는 계정 정보가 없습니다.");
+		super(ExceptionMessages.NO_ACCOUNT_ERROR.getMessage());
 	}
 }

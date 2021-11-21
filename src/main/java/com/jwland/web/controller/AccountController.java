@@ -1,11 +1,9 @@
 package com.jwland.web.controller;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,7 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jwland.domain.account.FormLoginDto;
 import com.jwland.domain.account.JoinAccountDto;
-import com.jwland.web.constant.SessionConstant;
+import com.jwland.web.constant.UrlPathConstant;
+import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.WrongAccessException;
 import com.jwland.web.service.AccountService;
 
@@ -36,37 +35,36 @@ public class AccountController {
 	@GetMapping("/login")
 	public ModelAndView loginPage(Model model) {
 		ModelAndView mav = new ModelAndView("account/sign-in");
-		mav.addObject("formLoginDto", new FormLoginDto());
+		mav.addObject(VariableConstant.FORM_LOGIN_DTO, new FormLoginDto());
 		return mav;
 	}
 	
 	@PostMapping("/login")
-	public ModelAndView login(@ModelAttribute(value = "formLoginDto") @Validated FormLoginDto formLoginDto,
+	public ModelAndView login(@ModelAttribute(value = VariableConstant.FORM_LOGIN_DTO) @Validated FormLoginDto formLoginDto,
 			HttpServletRequest request) {
 		
 		accountService.login(formLoginDto, request);
 		
-		ModelAndView mav = new ModelAndView("redirect:/");
+		ModelAndView mav = new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
 		return mav;
 	}
 	
 	@GetMapping("/join")
 	public ModelAndView joinPage() {
 		ModelAndView mav = new ModelAndView("account/join");
-		mav.addObject("joinAccountDto", new JoinAccountDto());
+		mav.addObject(VariableConstant.JOIN_ACCOUNT_DTO, new JoinAccountDto());
 		return mav; 
 	}
 	
 	
 	@PostMapping("/join")
-	public ModelAndView join(@ModelAttribute(value = "joinAccountDto") @Validated JoinAccountDto joinAccountDto, 
+	public ModelAndView join(@ModelAttribute(value = VariableConstant.JOIN_ACCOUNT_DTO) @Validated JoinAccountDto joinAccountDto, 
 			RedirectAttributes rttr,  Errors errors) {
 		
 		accountService.join(joinAccountDto);
+		rttr.addFlashAttribute(VariableConstant.MESSAGE, joinAccountDto.getNickName() + VariableConstant.JOIN_SUCCESS_MESSAGE_SURFFIX);
 		
-		rttr.addFlashAttribute("msg", joinAccountDto.getNickName() + "님의 가입이 완료되었습니다.");
-		
-		return new ModelAndView("redirect:/login");
+		return new ModelAndView(UrlPathConstant.REDIRECT_LOGIN_PAGE);
 	}
 	
 	
@@ -74,7 +72,7 @@ public class AccountController {
 	public ModelAndView logout(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		
-		boolean login = Collections.list(session.getAttributeNames()).contains(SessionConstant.LOGIN_ATTRIBUTE_NAME);
+		boolean login = Collections.list(session.getAttributeNames()).contains(VariableConstant.LOGIN_ATTRIBUTE_NAME);
 		
 		if(!login) {
 			throw new WrongAccessException();
@@ -82,7 +80,7 @@ public class AccountController {
 		
 		session.invalidate();
 		
-		return new ModelAndView("redirect:/");
+		return new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
 	}
 
 }

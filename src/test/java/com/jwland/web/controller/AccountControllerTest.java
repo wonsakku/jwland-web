@@ -24,8 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jwland.domain.account.AccountVO;
 import com.jwland.domain.account.LoginSuccessDto;
-import com.jwland.web.constant.AccountConstant;
-import com.jwland.web.constant.SessionConstant;
+import com.jwland.web.common.ExceptionMessages;
+import com.jwland.web.constant.UrlPathConstant;
+import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.mapper.AccountMapper;
 import com.jwland.web.service.AccountService;
 
@@ -41,7 +42,6 @@ class AccountControllerTest {
 	
 	private final String DEFAULT_ROLE = "ROLE_STUDENT";
 	private final String DEFAULT_APPROVED = "N";
-	private final String DEFAULT_JOIN_SUCCESS_MSG_SUFFIX = "님의 가입이 완료되었습니다.";
 	
 	@Test
 	@DisplayName("로그인 페이지 이동")
@@ -50,7 +50,7 @@ class AccountControllerTest {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(view().name("account/sign-in"))
-			.andExpect(model().attributeExists(AccountConstant.FORM_LOGIN_DTO))
+			.andExpect(model().attributeExists(VariableConstant.FORM_LOGIN_DTO))
 			;
 	}
 	
@@ -65,7 +65,7 @@ class AccountControllerTest {
 							.param("birth", "0703")
 						)
 						.andExpect(status().is3xxRedirection())
-						.andExpect(view().name("redirect:/"))
+						.andExpect(view().name(UrlPathConstant.REDIRECT_ROOT_PAGE))
 						.andDo(print())
 //						.andExpect(request().se)
 						.andReturn()
@@ -75,8 +75,8 @@ class AccountControllerTest {
 		HttpSession session = request.getSession();
 		
 		// then 
-		assertThat(session.getAttribute(SessionConstant.LOGIN_ATTRIBUTE_NAME)).isNotNull();
-		assertThat(session.getAttribute(SessionConstant.LOGIN_ATTRIBUTE_NAME)).isInstanceOf(LoginSuccessDto.class);
+		assertThat(session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME)).isNotNull();
+		assertThat(session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME)).isInstanceOf(LoginSuccessDto.class);
 	}
 
 	
@@ -89,25 +89,27 @@ class AccountControllerTest {
 				.param("birth", "0703")
 				)
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/login"))
-				.andExpect(flash().attributeExists("error"))
-				.andExpect(flash().attribute("error", "일치하는 계정 정보가 없습니다."))
+//				.andExpect(view().name(UrlPathContant.REDIRECT_LOGIN_PAGE))
+				.andExpect(view().name(UrlPathConstant.REDIRECT_LOGIN_PAGE))
+				.andExpect(flash().attributeExists(VariableConstant.ERROR))
+//				.andExpect(flash().attribute(VariableConstant.ERROR, "일치하는 계정 정보가 없습니다."))
+				.andExpect(flash().attribute(VariableConstant.ERROR, ExceptionMessages.NO_ACCOUNT_ERROR.getMessage()))
 				;
 	}
 
+	
 	@Test
 	@DisplayName("로그인 실패 - 입력값 오류")
 	void formLogin_Fail_02() throws Exception{
 		
-		// given
-		MvcResult result = mockMvc.perform(
+		mockMvc.perform(
 				post("/login")
 				.param("name", "나미")
 				.param("birth", "07031")
 				)
-				.andExpect(flash().attributeExists("error"))
+				.andExpect(flash().attributeExists(VariableConstant.ERROR))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/login"))
+				.andExpect(view().name(UrlPathConstant.REDIRECT_LOGIN_PAGE))
 				.andDo(print())
 				.andReturn()
 				;
@@ -122,20 +124,20 @@ class AccountControllerTest {
 		// given
 		LoginSuccessDto login = LoginSuccessDto.builder()
 				.nickName("도둑 고양이")
-				.approved("N")
-				.role("ROLE_STUDENT")
+				.approved(DEFAULT_APPROVED)
+				.role(DEFAULT_ROLE)
 				.accountSequenceNo(3L)
 				.build();
 		
 		// when & then
 		mockMvc.perform(
 				post("/logout")
-				.sessionAttr(SessionConstant.LOGIN_ATTRIBUTE_NAME, login)
+				.sessionAttr(VariableConstant.LOGIN_ATTRIBUTE_NAME, login)
 				)
 			.andDo(print())
-			.andExpect(view().name("redirect:/"))
+			.andExpect(view().name(UrlPathConstant.REDIRECT_ROOT_PAGE))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(request().sessionAttributeDoesNotExist(SessionConstant.LOGIN_ATTRIBUTE_NAME))
+			.andExpect(request().sessionAttributeDoesNotExist(VariableConstant.LOGIN_ATTRIBUTE_NAME))
 			;
 	}
 
@@ -144,10 +146,11 @@ class AccountControllerTest {
 	void logout_Fail_01() throws Exception{
 		mockMvc.perform(post("/logout"))
 			.andDo(print())
-			.andExpect(view().name("redirect:/"))
+//			.andExpect(view().name(UrlPathContant.REDIRECT_ROOT_PAGE))
+			.andExpect(view().name(UrlPathConstant.REDIRECT_ROOT_PAGE))
 			.andExpect(status().is3xxRedirection())
-			.andExpect(flash().attributeExists("error"))
-			.andExpect(flash().attribute("error", "잘못된 접근 방식입니다."))
+			.andExpect(flash().attributeExists(VariableConstant.ERROR))
+			.andExpect(flash().attribute(VariableConstant.ERROR, ExceptionMessages.WRONG_ACCESS_ERROR.getMessage()))
 			;
 	}
 	
@@ -158,7 +161,7 @@ class AccountControllerTest {
 			.andDo(print())
 			.andExpect(view().name("account/join"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeExists(AccountConstant.JOIN_ACCOUNT_DTO))
+			.andExpect(model().attributeExists(VariableConstant.JOIN_ACCOUNT_DTO))
 			;
 	}
 	
@@ -180,9 +183,10 @@ class AccountControllerTest {
 				)
 			.andDo(print())
 			.andExpect(status().is3xxRedirection())
-			.andExpect(flash().attributeExists("msg"))
-			.andExpect(flash().attribute("msg", nickName + DEFAULT_JOIN_SUCCESS_MSG_SUFFIX))
-			.andExpect(view().name("redirect:/login"))
+			.andExpect(flash().attributeExists(VariableConstant.MESSAGE))
+			.andExpect(flash().attribute(VariableConstant.MESSAGE, nickName + VariableConstant.JOIN_SUCCESS_MESSAGE_SURFFIX))
+//			.andExpect(view().name(UrlPathContant.REDIRECT_LOGIN_PAGE))
+			.andExpect(view().name(UrlPathConstant.REDIRECT_LOGIN_PAGE))
 			; 
 		
 		AccountVO newAccount = accountMapper.findByName(name);
@@ -206,8 +210,8 @@ class AccountControllerTest {
 				.param("nickName", "미스 웬즈데이")
 				)
 		.andExpect(status().is3xxRedirection())
-		.andExpect(flash().attributeExists("error"))
-		.andExpect(view().name("redirect:/join"))
+		.andExpect(flash().attributeExists(VariableConstant.ERROR))
+		.andExpect(view().name(UrlPathConstant.REDIRECT_JOIN_PAGE))
 //		.andReturn()
 		;
 	}
