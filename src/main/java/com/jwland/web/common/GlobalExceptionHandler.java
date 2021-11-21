@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jwland.web.constant.UrlPathConstant;
+import com.jwland.web.constant.VariableConstant;
+import com.jwland.web.exception.AuthenticationException;
+import com.jwland.web.exception.AuthorizeException;
 import com.jwland.web.exception.NoAccountException;
 import com.jwland.web.exception.WrongAccessException;
 
@@ -20,18 +24,32 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(NoAccountException.class)
 	public ModelAndView noAccountException(NoAccountException e, RedirectAttributes rttr) {
 		log.error("--- Exception Message : {}", e.getMessage());
-		rttr.addFlashAttribute("error", e.getMessage());
-		return new ModelAndView("redirect:/login");
+		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
+		return new ModelAndView(UrlPathConstant.REDIRECT_LOGIN_PAGE);
 	}
-
+ 
 	
 	@ExceptionHandler(WrongAccessException.class)
 	public ModelAndView wrongAccessException(WrongAccessException e, RedirectAttributes rttr) {
 		log.error("--- Exception Message : {}", e.getMessage());
-		rttr.addFlashAttribute("error", e.getMessage());
-		return new ModelAndView("redirect:/");
+		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
+		return new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
+	}
+	
+	@ExceptionHandler(AuthorizeException.class)
+	public ModelAndView authorizeException(AuthorizeException e, RedirectAttributes rttr) {
+		log.error("--- Exception Message : {}", e.getMessage());
+		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
+		return new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
 	}
 
+	@ExceptionHandler(AuthenticationException.class)
+	public ModelAndView authenticationException(AuthenticationException e, RedirectAttributes rttr) {
+		log.error("--- Exception Message : {}", e.getMessage());
+		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
+		return new ModelAndView(UrlPathConstant.REDIRECT_LOGIN_PAGE);
+	}
+	
 
 	@ExceptionHandler(BindException.class)
 	public ModelAndView bindingException(HttpServletRequest request, BindException e, RedirectAttributes rttr) {
@@ -40,16 +58,16 @@ public class GlobalExceptionHandler {
 		String requestUri = request.getRequestURI().toString();
 		
 		if(e.hasFieldErrors()) {
-			rttr.addFlashAttribute("error", e.getFieldErrors().get(0).getDefaultMessage());
-			return new ModelAndView("redirect:" + requestUri);
+			rttr.addFlashAttribute(VariableConstant.ERROR, e.getFieldErrors().get(0).getDefaultMessage());
+			return new ModelAndView(UrlPathConstant.REDIRECT_PREFIX + requestUri);
 		}
 		
 		if(e.hasGlobalErrors()) {
-			rttr.addFlashAttribute("error", e.getGlobalErrors().get(0).getDefaultMessage());
-			return new ModelAndView("redirect:" + requestUri);
+			rttr.addFlashAttribute(VariableConstant.ERROR, e.getGlobalErrors().get(0).getDefaultMessage());
+			return new ModelAndView(UrlPathConstant.REDIRECT_PREFIX + requestUri);
 		}
 		
-		return new ModelAndView("redirect:" + requestUri);
+		return new ModelAndView(UrlPathConstant.REDIRECT_PREFIX + requestUri);
 	}
 	
 	
