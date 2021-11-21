@@ -20,6 +20,9 @@ values('출결확인', 6, '/attendance/page', 'Y');
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 values('클리닉 출결 확인', 7, '/clinic-attendance/page', 'Y');
 
+insert into jwland.menu(menu_name, menu_priority, url, admin_page)
+values('수업 관리', 8, '/class/manage-page', 'Y');
+
 --insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 --values('클리닉/보충', 8, , 'Y');
 

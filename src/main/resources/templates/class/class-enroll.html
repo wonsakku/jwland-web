@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sd="http://www.thymeleaf.org/spring-data"
+	layout:decorator="layout/layout.html"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title></title>
+
+	<script src="/js/form-validation.js"></script>
+    <link href="/css/form-validation.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+</head>
+<body>
+	<main layout:fragment="content" >
+		<div class="container">
+		
+		  <div class="row py-5">
+			<div class="col-md-2"></div>
+			
+		    <div class="col-md-8">
+		      <h4 class="mb-3">수업 등록 페이지</h4>
+		      <form class="needs-validation" th:object="${createClassDto}" th:action="@{/class/enroll}" method="post">
+		        <div class="mb-3">
+		          <label for="className">수업명</label>
+		          <div class="input-group">
+		            <div class="input-group-prepend">
+		              <span class="input-group-text">@</span>
+		            </div>
+		            <input type="text" class="form-control" id="name" placeholder="수업명" th:field="*{className}" required>
+		            <div class="invalid-feedback" style="width: 100%;">
+		              Your className is required.
+		            </div>
+		          </div>
+		        </div>
+		
+		        <div class="mb-3">
+		          <label for="openYear">수업 시작 연도</label>
+		          <input type="text" class="form-control" id="openYear" placeholder="수업 시작 연도 (YYYY)"  th:field="*{openYear}" required>
+		          <div class="invalid-feedback">
+		            Please enter class Open Year.
+		          </div>
+		        </div>
+		
+		        <div class="mb-3">
+		          <label for="openMonth">수업 시작 월</label>
+		          <input type="text" class="form-control" id="openMonth" placeholder="수업 시작 월 (MM)"  th:field="*{openMonth}" required>
+		          <div class="invalid-feedback">
+		            Please enter Class Open Month.
+		          </div>
+		        </div>
+		        
+		        <div class="mb-3">
+		          <label for="startDate">개강 날짜</label>
+		          <input type="text" class="form-control" id="startDate" placeholder="개강 날짜 (YYYYMMDD)"  th:field="*{startDate}" required>
+		          <div class="invalid-feedback">
+		            Please enter Class Start Date.
+		          </div>
+		        </div>
+		        
+		        <div class="mb-3">
+		          <label for="totalClassCount">전체 강의 수</label>
+		          <input type="text" class="form-control" id="totalClassCount" placeholder="전체 강의 수"  th:field="*{totalClassCount}" required>
+		          <div class="invalid-feedback">
+		            Please enter Total Class Count.
+		          </div>
+		        </div>
+		        
+		        <hr class="mb-4">
+		        <button class="btn btn-primary btn-lg btn-block" type="submit">수업 등록하기</button>
+		      </form>
+		    </div>
+		  </div>
+		
+		  <footer class="my-5 pt-5 text-muted text-center text-small">
+		    <p class="mb-1">&copy; 2017-2021 Company Name</p>
+		  </footer>
+		  
+		</div>
+		
+	</main>
+</body>
+
+
+<script th:inline="javascript">
+	(function() {
+
+	})();
+</script>
+</html>

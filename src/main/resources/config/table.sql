@@ -4,6 +4,7 @@ drop table if exists jwland.account;
 drop table if exists jwland.exam_subject;
 drop table if exists jwland.exam_type;
 drop table if exists jwland.exam_master;
+drop table if exists jwland.class;
 
 
 --drop sequence
@@ -12,6 +13,7 @@ drop sequence if exists jwland.account_sequence;
 drop sequence if exists jwland.exam_subject_sequence;
 drop sequence if exists jwland.exam_type_sequence;
 drop sequence if exists jwland.exam_master_sequence;
+drop sequence if exists jwland.class_sequence;
 
 
 
@@ -22,6 +24,7 @@ create sequence jwland.account_sequence;
 create sequence jwland.exam_subject_sequence;
 create sequence jwland.exam_type_sequence;
 create sequence jwland.exam_master_sequence;
+create sequence jwland.class_sequence;
 
 
 -- table
@@ -85,6 +88,25 @@ create table jwland.exam_master(
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	constraint exam_master_primary_key PRIMARY KEY("exam_master_sequence_no"),
 	constraint exam_master_unique_info_key UNIQUE(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no)	
+);
+
+
+
+
+create table jwland.class(
+	class_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_sequence'),
+	class_name varchar(100) NOT NULL,
+	open_year varchar(4) NOT NULL,
+	open_month varchar(2) NOT NULL,
+	start_date varchar(8) NOT NULL,
+	total_class_count SMALLINT NOT NULL,
+	complete_class_count SMALLINT NOT NULL DEFAULT 0,
+	open varchar(5) NOT NULL DEFAULT 'OPEN',
+	created_at TIMESTAMP NOT NULL DEFAULT now(),
+	create_account_id varchar(20) NOT NULL,
+	modify_at TIMESTAMP NOT NULL DEFAULT now(),
+	modify_account_id varchar(20) NOT NULL,
+	constraint class_primary_key PRIMARY KEY("class_sequence_no")
 );
 
 
