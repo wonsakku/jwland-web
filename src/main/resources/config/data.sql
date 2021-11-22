@@ -64,7 +64,7 @@ values('조로', '0411', '해적사냥꾼');
 insert into jwland.account(name, birth, nick_name)
 values('나미', '0703', '도둑고양이');
 insert into jwland.account(name, birth, nick_name, approved, role)
-values('jw', '0430', 'jwland', 'Y', 'ROLE_ADMIN');
+values('admin', '0000', 'admin', 'Y', 'ROLE_ADMIN');
 
 
 

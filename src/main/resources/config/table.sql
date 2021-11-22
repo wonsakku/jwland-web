@@ -5,6 +5,8 @@ drop table if exists jwland.exam_subject;
 drop table if exists jwland.exam_type;
 drop table if exists jwland.exam_master;
 drop table if exists jwland.class;
+drop table if exists jwland.account_class_map;
+
 
 
 --drop sequence
@@ -25,6 +27,7 @@ create sequence jwland.exam_subject_sequence;
 create sequence jwland.exam_type_sequence;
 create sequence jwland.exam_master_sequence;
 create sequence jwland.class_sequence;
+
 
 
 -- table
@@ -111,7 +114,11 @@ create table jwland.class(
 
 
 
-
+create table jwland.account_class_map(
+	account_sequence_no BIGINT,
+	class_sequence_no BIGINT,
+	constraint account_class_map_primary_key PRIMARY KEY("account_sequence_no", "class_sequence_no")
+);
 
 
 
