@@ -39,5 +39,13 @@
 		VALUES(#{classSequenceNo}, #{accountSequenceNo})
 	</insert>
 	
+	<select id="getEnrolledAccountInfos" parameterType="int" resultType="com.jwland.domain.classes.EnrolledAccountsDto">
+		SELECT acm.account_sequence_no, a.name, a.nick_name
+		FROM jwland.account_class_map acm
+		LEFT JOIN jwland.account a
+		ON acm.account_sequence_no = a.account_sequence_no
+		WHERE acm.class_sequence_no = #{classSequenceNo}
+	</select>
+	
 
 </mapper>

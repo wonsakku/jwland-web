@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.ClassDomain;
+import com.jwland.domain.classes.EnrolledAccountsDto;
 
 @Mapper
 public interface ClassMapper {
@@ -22,4 +23,6 @@ public interface ClassMapper {
 	void enrollStudentToClass(Map<String, Integer> parameter);
 
 	List<Integer> getEnrolledAccounts(int classSequenceNo);
+
+	List<EnrolledAccountsDto> getEnrolledAccountInfos(int classSequenceNo);
 }

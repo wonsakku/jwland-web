@@ -17,6 +17,7 @@ import com.jwland.domain.classes.ClassAccountMapDto;
 import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.ClassDomain;
 import com.jwland.domain.classes.CreateClassDto;
+import com.jwland.domain.classes.EnrolledAccountsDto;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.WrongAccessException;
 import com.jwland.web.mapper.ClassMapper;
@@ -75,6 +76,10 @@ public class ClassService {
 
 	public List<Integer> getEnrolledAccounts(int classSequenceNo) {
 		return classMapper.getEnrolledAccounts(classSequenceNo);
+	}
+
+	public List<EnrolledAccountsDto> getEnrolledAccountInfos(int classSequenceNo) {
+		return classMapper.getEnrolledAccountInfos(classSequenceNo);
 	}
 	
 	

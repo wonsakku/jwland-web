@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jwland.domain.classes.ClassAccountMapDto;
 import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.CreateClassDto;
+import com.jwland.domain.classes.EnrolledAccountsDto;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.service.ClassService;
 
@@ -93,6 +94,22 @@ public class ClassController {
 		classService.enrollStudentToClass(classAccountMapDto);
 		rttr.addFlashAttribute(VariableConstant.MESSAGE, "등록되었습니다.");
 		return new ModelAndView("redirect:/class/detail-manage-page");
+	}
+	
+	
+	@GetMapping("/classes/{classSequenceNo}/check-attendance")
+	public ModelAndView checkAttendancePage(@PathVariable int classSequenceNo, 
+			   @RequestParam(value = "className", required = true) String className) {
+		ModelAndView mav = new ModelAndView("class/attendance-check");
+		mav.addObject("className", className);
+		mav.addObject("classSequenceNo", classSequenceNo);
+		return mav;
+	}
+	
+	@GetMapping("/classes/{classSequenceNo}/account-infos")
+	public ResponseEntity<List<EnrolledAccountsDto>> getEnrolledAccountInfos(@PathVariable int classSequenceNo){
+		List<EnrolledAccountsDto> accountsInfos = classService.getEnrolledAccountInfos(classSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(accountsInfos);
 	}
 	
 }

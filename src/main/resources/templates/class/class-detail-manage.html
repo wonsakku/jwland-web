@@ -125,7 +125,8 @@
 	
 	function manageAttendance(elem){
 		var classSequenceNo = $(elem).closest(".class-container").find(".class-sequence-no").val();
-		alert(classSequenceNo);
+		var className = $(elem).closest(".class-container").find(".class-name").val();
+		location.href = "/class/classes/" + classSequenceNo + "/check-attendance?className=" + className;
 	}
 	
 </script>

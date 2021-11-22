@@ -122,8 +122,17 @@ create table jwland.account_class_map(
 
 
 
-
-
+create table jwland.class_attendance_management(
+	class_sequence_no BIGINT,
+	account_sequence_no BIGINT,
+	class_date varchar(6),
+	status varchar(5),
+	created_at TIMESTAMP NOT NULL DEFAULT now(),
+	create_account_id varchar(20) NOT NULL,
+	modify_at TIMESTAMP NOT NULL DEFAULT now(),
+	modify_account_id varchar(20) NOT NULL,
+	constraint class_attendance_management_primary_key PRIMARY KEY("class_sequence_no", "account_sequence_no", "class_date")
+);
 
 
 
