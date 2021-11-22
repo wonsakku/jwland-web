@@ -21,4 +21,23 @@
 		ORDER BY open DESC
 	</select>
 
+
+	<select id="getEnrolledAccounts" parameterType="int" resultType="int">
+		SELECT account_sequence_no
+		FROM jwland.account_class_map
+		WHERE class_sequence_no = #{classSequenceNo}
+	</select>
+
+
+	<delete id="deleteMapTableWithClassSequenceNo" parameterType="int">
+		DELETE FROM jwland.account_class_map
+		WHERE class_sequence_no = #{classSequenceNo}
+	</delete>
+	
+	<insert id="enrollStudentToClass" parameterType="map">
+		INSERT INTO jwland.account_class_map(class_sequence_no, account_sequence_no)
+		VALUES(#{classSequenceNo}, #{accountSequenceNo})
+	</insert>
+	
+
 </mapper>

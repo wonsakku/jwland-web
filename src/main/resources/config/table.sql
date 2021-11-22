@@ -115,14 +115,10 @@ create table jwland.class(
 
 
 create table jwland.account_class_map(
-	account_sequence_no BIGINT,
 	class_sequence_no BIGINT,
-	constraint account_class_map_primary_key PRIMARY KEY("account_sequence_no", "class_sequence_no")
+	account_sequence_no BIGINT,
+	constraint account_class_map_primary_key PRIMARY KEY("class_sequence_no", "account_sequence_no")
 );
-
-
-
-
 
 
 

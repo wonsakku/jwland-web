@@ -1,6 +1,7 @@
 package com.jwland.web.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,4 +16,10 @@ public interface ClassMapper {
 	ClassDomain findClassByClassName(String className);
 
 	List<ClassDetailDto> getClassDetails(String open);
+
+	void deleteMapTableWithClassSequenceNo(int classSequenceNo);
+
+	void enrollStudentToClass(Map<String, Integer> parameter);
+
+	List<Integer> getEnrolledAccounts(int classSequenceNo);
 }

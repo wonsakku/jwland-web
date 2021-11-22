@@ -216,12 +216,12 @@ class ClassControllerTest {
 	
 	private LoginSuccessDto getLoginInfo() {
 
-		String nickName = "jwland";
+		String nickName = "test";
 		return LoginSuccessDto.builder()
 				.nickName(nickName)
 				.approved(APPROVED)
 				.role(ROLE_ADMIN)
-				.accountSequenceNo(4L)
+				.accountSequenceNo(1L)
 				.build();
 	}
 	

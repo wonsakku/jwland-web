@@ -1,14 +1,19 @@
 package com.jwland.web.service;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jwland.domain.account.LoginSuccessDto;
+import com.jwland.domain.classes.ClassAccountMapDto;
 import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.ClassDomain;
 import com.jwland.domain.classes.CreateClassDto;
@@ -48,6 +53,28 @@ public class ClassService {
 
 	public List<ClassDetailDto> getClassDetails(String open) {
 		return classMapper.getClassDetails(open);
+	}
+
+	@Transactional
+	public void enrollStudentToClass(ClassAccountMapDto classAccountMapDto) {
+		int classSequenceNo = classAccountMapDto.getClassSequenceNo();
+		List<Integer> accountSequenceList = classAccountMapDto.getAccountSequenceList();
+		classMapper.deleteMapTableWithClassSequenceNo(classSequenceNo);
+		
+		accountSequenceList.sort(Comparator.naturalOrder());
+		
+		for(int i = 0 ; i < accountSequenceList.size() ; i++) {
+			Map<String, Integer> parameter = new HashMap<>();
+			parameter.put("classSequenceNo", classSequenceNo);
+			parameter.put("accountSequenceNo", accountSequenceList.get(i));
+			classMapper.enrollStudentToClass(parameter);
+			parameter = null;
+		}
+		
+	}
+
+	public List<Integer> getEnrolledAccounts(int classSequenceNo) {
+		return classMapper.getEnrolledAccounts(classSequenceNo);
 	}
 	
 	

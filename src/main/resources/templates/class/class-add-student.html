@@ -71,9 +71,12 @@
 
 <script th:inline="javascript">
 	
+	var accountSequenceList = new Array();
+	const classSequenceNo = [[${classSequenceNo}]];
 
 	(function() {
 		loadStudents();
+		loadEnrolledStudent();
 		
 		$("#student-name").on("keyup", function(e){
 			if(e.keyCode == 13){
@@ -112,7 +115,7 @@
 		for(var i = 0 ; i < data.length ; i++){
 			html += "<tr>";
 			
-			html += "<td><input type='checkbox' value='" + data[i].accountSequenceNo + "' class='account-sequence-no'></td>";
+			html += "<td><input type='checkbox' value='" + data[i].accountSequenceNo + "' class='account-sequence-no' onclick='toggleAccountSequenceToList(this)'></td>";
 			html += "<td>" + data[i].name + "</td>";
 			html += "<td>" + data[i].birth + "</td>";
 			html += "<td>" + data[i].nickName + "</td>";
@@ -121,22 +124,91 @@
 		}
 		
 		$studentTableBody.html(html);
+		checkEnrolledStudents();
+	}
+	
+	function loadEnrolledStudent(){
+		var url = "/class/classes/" + classSequenceNo + "/accounts";
+		$.ajax({
+			url: url,
+			type: "GET",
+			timeout: 10000,
+			success: function(data, xhrStatus, xhr){
+				_cb_loadEnrolledStudent(data, xhrStatus, xhr);
+			}
+		});
+	}
+	
+	
+	function _cb_loadEnrolledStudent(data, xhrStatus, xhr) {
+
+		accountSequenceList = data;
+// 		console.log(accountSequenceList);
+		checkEnrolledStudents();
+	}
+	
+	
+	function checkEnrolledStudents(){
+		
+		$("#student-table-body").find(".account-sequence-no").each(function(index, item) {
+			
+			for(var i = 0 ; i < accountSequenceList.length ; i++ ){
+				if($(item).val() == accountSequenceList[i] ){
+					$(item).attr("checked", "true");
+					break;
+				}
+			}
+		});
+	}
+	
+	
+	function toggleAccountSequenceToList(elem){
+		
+		var seq = $(elem).val();
+		
+		if($(elem).is(":checked")){
+			accountSequenceList.push(seq);
+		}else{
+				
+			for(var i = 0 ; i < accountSequenceList.length ; i++){
+				
+				if(accountSequenceList[i] == seq){
+					accountSequenceList.splice(i, 1);
+					break;
+				}
+			}
+		}
 	}
 	
 	function addStudents(){
 		
-		var accountSequenceList = new Array();
+		if(!confirm("등록하시겠습니까?")){
+			return ;
+		}
 		
-		$("#student-table-body").find(".account-sequence-no").each(function(index, item){
-			if($(item).is(":checked")){
-				accountSequenceList.push($(item).val());
-			}
-		});
+		var formData = document.createElement("form");
 		
-		console.log(accountSequenceList);
+		var hiddenField = document.createElement("input");
+		hiddenField.setAttribute("type", "hidden");
+		hiddenField.setAttribute("name", "classSequenceNo");
+		hiddenField.setAttribute("value", classSequenceNo);
+		formData.appendChild(hiddenField);
 		
-		var newForm = document.createElement("form");
+		for(var i = 0 ; i < accountSequenceList.length ; i++){
+			var hiddenField2 = document.createElement("input");
+			hiddenField2.setAttribute("type", "hidden");
+			hiddenField2.setAttribute("name", "accountSequenceList[" + i + "]");
+			hiddenField2.setAttribute("value", accountSequenceList[i]);
+			formData.appendChild(hiddenField2);
+		}
 		
+		formData.setAttribute("charset", "UTF-8");
+		formData.setAttribute("method", "post");
+		formData.setAttribute("action", "/class/classes/student/enroll");
+		
+		document.body.appendChild(formData);
+		
+		formData.submit();
 	}
 	
 </script>

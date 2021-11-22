@@ -58,11 +58,27 @@ values('화학2');
 
 -- 회원 임시 데이터
 insert into jwland.account(name, birth, nick_name)
-values('루피', '0101', '밀집모자');
+values('루피', '0505', '밀집모자');
 insert into jwland.account(name, birth, nick_name)
-values('조로', '0411', '해적사냥꾼');
+values('조로', '1111', '해적사냥꾼');
 insert into jwland.account(name, birth, nick_name)
 values('나미', '0703', '도둑고양이');
+insert into jwland.account(name, birth, nick_name)
+values('상디', '0302', '검은다리');
+insert into jwland.account(name, birth, nick_name)
+values('비비', '0202', '미스 웬즈데이');
+insert into jwland.account(name, birth, nick_name)
+values('블라디레나 밀리제', '0712', '선혈의 여왕');
+insert into jwland.account(name, birth, nick_name)
+values('신에이 노우젠', '0519', '목없는 사신');
+insert into jwland.account(name, birth, nick_name)
+values('라이덴 슈가', '0825', '베어볼프(늑대인간)');
+insert into jwland.account(name, birth, nick_name)
+values('세오토 릿카', '0420', '래핑 폭스');
+insert into jwland.account(name, birth, nick_name)
+values('앙쥬 에마', '1002', '스노우 위치');
+insert into jwland.account(name, birth, nick_name)
+values('크레나 쿠쿠밀라', '0506', '건슬링거');
 insert into jwland.account(name, birth, nick_name, approved, role)
 values('admin', '0000', 'admin', 'Y', 'ROLE_ADMIN');
 

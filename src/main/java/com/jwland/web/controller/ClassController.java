@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jwland.domain.classes.ClassAccountMapDto;
 import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.CreateClassDto;
 import com.jwland.web.constant.VariableConstant;
@@ -78,6 +81,19 @@ public class ClassController {
 		return mav;
 	}
 	
+	@GetMapping("/classes/{classSequenceNo}/accounts")
+	public ResponseEntity<List<Integer>> getEnrolledAccounts(@PathVariable int classSequenceNo){
+		List<Integer> classSequenceNoList = classService.getEnrolledAccounts(classSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(classSequenceNoList);
+	}
+	
+	
+	@PostMapping("/classes/student/enroll")
+	public ModelAndView enrollStudentToClass(@ModelAttribute ClassAccountMapDto classAccountMapDto, RedirectAttributes rttr) {
+		classService.enrollStudentToClass(classAccountMapDto);
+		rttr.addFlashAttribute(VariableConstant.MESSAGE, "등록되었습니다.");
+		return new ModelAndView("redirect:/class/detail-manage-page");
+	}
 	
 }
 
