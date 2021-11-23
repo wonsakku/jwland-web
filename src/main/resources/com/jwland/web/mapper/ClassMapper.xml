@@ -39,6 +39,7 @@
 		VALUES(#{classSequenceNo}, #{accountSequenceNo})
 	</insert>
 	
+		
 	<select id="getEnrolledAccountInfos" parameterType="int" resultType="com.jwland.domain.classes.EnrolledAccountsDto">
 		SELECT acm.account_sequence_no, a.name, a.nick_name
 		FROM jwland.account_class_map acm
@@ -47,5 +48,40 @@
 		WHERE acm.class_sequence_no = #{classSequenceNo}
 	</select>
 	
+	
+	<select id="getClassDate" parameterType="int" resultType="String">
+		SELECT class_date
+		FROM jwland.class_attendance_management
+		WHERE class_sequence_no = #{classSequenceNo}
+		GROUP BY class_date
+	</select>
+
+	<delete id="deleteClassAttendanceInfo" parameterType="map">
+		DELETE FROM jwland.class_attendance_management
+		WHERE class_sequence_no = #{classSequenceNo}::INT
+		AND class_date = #{classDate}
+	</delete>	
+	
+	<insert id="enrollAttendanceInfo" parameterType="ClassAttendanceManagementVO">
+		INSERT INTO jwland.class_attendance_management(class_sequence_no, account_sequence_no, class_date, status, create_account_id, modify_account_id)
+		VALUES(#{classSequenceNo}, #{accountSequenceNo}, #{classDate}, #{status}, #{createAccountId}, #{modifyAccountId} )
+	</insert>
+	
+	<select id="findAttendanceInfoByDate" parameterType="map" resultType="PersonalClassAttendanceDto">
+		SELECT account_sequence_no, status FROM jwland.class_attendance_management
+		WHERE class_sequence_no = #{classSequenceNo}::INT
+		AND class_date = #{classDate}
+	</select>
+	
 
 </mapper>
+
+
+
+
+
+
+
+
+
+

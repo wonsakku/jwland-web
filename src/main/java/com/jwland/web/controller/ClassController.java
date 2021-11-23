@@ -18,9 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jwland.domain.classes.ClassAccountMapDto;
+import com.jwland.domain.classes.ClassAttendanceEnrollDto;
 import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.CreateClassDto;
 import com.jwland.domain.classes.EnrolledAccountsDto;
+import com.jwland.domain.classes.PersonalClassAttendanceDto;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.service.ClassService;
 
@@ -110,6 +112,30 @@ public class ClassController {
 	public ResponseEntity<List<EnrolledAccountsDto>> getEnrolledAccountInfos(@PathVariable int classSequenceNo){
 		List<EnrolledAccountsDto> accountsInfos = classService.getEnrolledAccountInfos(classSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(accountsInfos);
+	}
+	
+	@GetMapping("/classes/{classSequenceNo}/date")
+	public ResponseEntity<List<String>> getClassDate(@PathVariable int classSequenceNo){
+		List<String> classDateList = classService.getClassDate(classSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(classDateList);
+	}
+	
+	@PostMapping("/classes/attendance/enroll")
+	public ModelAndView classAttendanceEnroll
+			(@ModelAttribute @Validated ClassAttendanceEnrollDto classAttendanceEnrollDto, 
+			HttpServletRequest request, RedirectAttributes rttr){
+		int classSequenceNo = classAttendanceEnrollDto.getClassSequenceNo();
+		String className = classAttendanceEnrollDto.getClassName();
+		classService.classAttendanceEnroll(classAttendanceEnrollDto, request);
+		rttr.addFlashAttribute(VariableConstant.MESSAGE, "출석 등록이 완료되었습니다.");
+		return new ModelAndView("redirect:/class/classes/" + classSequenceNo + "/check-attendance?className=" + className);
+	}
+	
+	@GetMapping("/classes/{classSequenceNo}/attendance-info")
+	public ResponseEntity<List<PersonalClassAttendanceDto>> findAttendanceInfoByDate(@RequestParam(value = "classDate") String classDate,
+			@PathVariable int classSequenceNo) {
+		List<PersonalClassAttendanceDto> list = classService.findAttendanceInfoByDate(classDate, classSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 	
 }

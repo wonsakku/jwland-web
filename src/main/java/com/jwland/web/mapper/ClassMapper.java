@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.jwland.domain.classes.ClassAttendanceManagementVO;
 import com.jwland.domain.classes.ClassDetailDto;
 import com.jwland.domain.classes.ClassDomain;
 import com.jwland.domain.classes.EnrolledAccountsDto;
+import com.jwland.domain.classes.PersonalClassAttendanceDto;
 
 @Mapper
 public interface ClassMapper {
@@ -25,4 +27,12 @@ public interface ClassMapper {
 	List<Integer> getEnrolledAccounts(int classSequenceNo);
 
 	List<EnrolledAccountsDto> getEnrolledAccountInfos(int classSequenceNo);
+
+	List<String> getClassDate(int classSequenceNo);
+
+	void deleteClassAttendanceInfo(Map<String, String> parameter);
+
+	void enrollAttendanceInfo(ClassAttendanceManagementVO vo);
+
+	List<PersonalClassAttendanceDto> findAttendanceInfoByDate(Map<String, String> parameter);
 }
