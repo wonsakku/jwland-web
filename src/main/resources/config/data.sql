@@ -14,15 +14,8 @@ values('자료실', 4, '/board/page', 'N');
 insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 values('공지사항', 5, '/notice/page', 'N');
 
-insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('출결확인', 6, '/attendance/page', 'Y');
-
-insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('클리닉 출결 확인', 7, '/clinic-attendance/page', 'Y');
-
-insert into jwland.menu(menu_name, menu_priority, url, admin_page)
-values('수업 관리', 8, '/class/manage-page', 'Y');
-
+insert into jwland.menu (menu_name, menu_priority, url, admin_page)
+values('관리자 페이지', 6, '/admin/page', 'Y')
 --insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 --values('클리닉/보충', 8, , 'Y');
 
