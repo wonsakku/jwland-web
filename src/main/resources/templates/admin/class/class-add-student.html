@@ -128,7 +128,7 @@
 	}
 	
 	function loadEnrolledStudent(){
-		var url = "/class/classes/" + classSequenceNo + "/accounts";
+		var url = "/admin/class/classes/" + classSequenceNo + "/accounts";
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -204,7 +204,7 @@
 		
 		formData.setAttribute("charset", "UTF-8");
 		formData.setAttribute("method", "post");
-		formData.setAttribute("action", "/class/classes/student/enroll");
+		formData.setAttribute("action", "/admin/class/classes/student/enroll");
 		
 		document.body.appendChild(formData);
 		

@@ -6,10 +6,10 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.jwland.domain.account.AccountInfoDto;
 import com.jwland.domain.account.AccountVO;
-import com.jwland.domain.account.FormLoginDto;
-import com.jwland.domain.account.JoinAccountDto;
+import com.jwland.domain.account.dto.AccountInfoDto;
+import com.jwland.domain.account.dto.FormLoginDto;
+import com.jwland.domain.account.dto.JoinAccountDto;
 
 @Mapper
 public interface AccountMapper {

@@ -2,19 +2,19 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.jwland.web.mapper.ClassMapper">
+<mapper namespace="com.jwland.web.admin.mapper.AdminClassMapper">
 
-	<insert id="enrollClass" parameterType="com.jwland.domain.classes.ClassDomain">
+	<insert id="enrollClass" parameterType="com.jwland.domain.classes.ClassVO">
 		INSERT INTO jwland.class(class_name, open_year, open_month, start_date, total_class_count, created_at, create_account_id, modify_at, modify_account_id)
 		VALUES(#{className}, #{openYear}, #{openMonth}, #{startDate}, #{totalClassCount}, now(), #{createAccountId}, now(), #{modifyAccountId})
 	</insert>
 
-	<select id="findClassByClassName" parameterType="String" resultType="com.jwland.domain.classes.ClassDomain">
+	<select id="findClassByClassName" parameterType="String" resultType="com.jwland.domain.classes.ClassVO">
 		SELECT * FROM jwland.class
 		WHERE class_name = #{className}
 	</select>
 	
-	<select id="getClassDetails" parameterType="String" resultType="com.jwland.domain.classes.ClassDetailDto">
+	<select id="getClassDetails" parameterType="String" resultType="com.jwland.domain.classes.dto.ClassDetailDto">
 		SELECT class_sequence_no, class_name, open_year, open_month, start_date, open
 		FROM jwland.class
 		WHERE open = #{open}
@@ -40,7 +40,7 @@
 	</insert>
 	
 		
-	<select id="getEnrolledAccountInfos" parameterType="int" resultType="com.jwland.domain.classes.EnrolledAccountsDto">
+	<select id="getEnrolledAccountInfos" parameterType="int" resultType="com.jwland.domain.classes.dto.EnrolledAccountsDto">
 		SELECT acm.account_sequence_no, a.name, a.nick_name
 		FROM jwland.account_class_map acm
 		LEFT JOIN jwland.account a
@@ -54,6 +54,7 @@
 		FROM jwland.class_attendance_management
 		WHERE class_sequence_no = #{classSequenceNo}
 		GROUP BY class_date
+		ORDER BY class_date
 	</select>
 
 	<delete id="deleteClassAttendanceInfo" parameterType="map">

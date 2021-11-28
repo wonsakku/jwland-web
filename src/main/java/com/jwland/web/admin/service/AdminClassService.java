@@ -1,4 +1,4 @@
-package com.jwland.web.service;
+package com.jwland.web.admin.service;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,18 +12,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jwland.domain.account.LoginSuccessDto;
-import com.jwland.domain.classes.ClassAccountMapDto;
-import com.jwland.domain.classes.ClassAttendanceEnrollDto;
+import com.jwland.domain.account.dto.LoginSuccessDto;
 import com.jwland.domain.classes.ClassAttendanceManagementVO;
-import com.jwland.domain.classes.ClassDetailDto;
-import com.jwland.domain.classes.ClassDomain;
-import com.jwland.domain.classes.CreateClassDto;
-import com.jwland.domain.classes.EnrolledAccountsDto;
-import com.jwland.domain.classes.PersonalClassAttendanceDto;
+import com.jwland.domain.classes.ClassVO;
+import com.jwland.domain.classes.dto.ClassAccountMapDto;
+import com.jwland.domain.classes.dto.ClassAttendanceEnrollDto;
+import com.jwland.domain.classes.dto.ClassDetailDto;
+import com.jwland.domain.classes.dto.CreateClassDto;
+import com.jwland.domain.classes.dto.EnrolledAccountsDto;
+import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
+import com.jwland.web.admin.mapper.AdminClassMapper;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.WrongAccessException;
-import com.jwland.web.mapper.ClassMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ClassService {
+public class AdminClassService {
 
-	private final ClassMapper classMapper;
+	private final AdminClassMapper classMapper;
 	private final ModelMapper modelMapper;
 
 	public void enrollClass(CreateClassDto createClassDto, HttpServletRequest request) {
-		ClassDomain clz = modelMapper.map(createClassDto, ClassDomain.class);
+		ClassVO clz = modelMapper.map(createClassDto, ClassVO.class);
 		String nickName = getNickNameFromSession(request);
 		clz.assignCreateAndModifyAccountId(nickName);
 		classMapper.enrollClass(clz);

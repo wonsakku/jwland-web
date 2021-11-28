@@ -1,4 +1,4 @@
-package com.jwland.web.controller;
+package com.jwland.web.admin.controller;
 
 import java.util.List;
 
@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jwland.domain.classes.ClassAccountMapDto;
-import com.jwland.domain.classes.ClassAttendanceEnrollDto;
-import com.jwland.domain.classes.ClassDetailDto;
-import com.jwland.domain.classes.CreateClassDto;
-import com.jwland.domain.classes.EnrolledAccountsDto;
-import com.jwland.domain.classes.PersonalClassAttendanceDto;
+import com.jwland.domain.classes.dto.ClassAccountMapDto;
+import com.jwland.domain.classes.dto.ClassAttendanceEnrollDto;
+import com.jwland.domain.classes.dto.ClassDetailDto;
+import com.jwland.domain.classes.dto.CreateClassDto;
+import com.jwland.domain.classes.dto.EnrolledAccountsDto;
+import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
+import com.jwland.web.admin.service.AdminClassService;
 import com.jwland.web.constant.VariableConstant;
-import com.jwland.web.service.ClassService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,23 +32,23 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @RestController
-@RequestMapping("/class")
-public class ClassController {
+@RequestMapping("/admin/class")
+public class AdminClassController {
 
-	private final ClassService classService;
+	private final AdminClassService classService;
 	
 	@GetMapping("/enroll-page")
 	public ModelAndView classEnrollPage() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("createClassDto", new CreateClassDto());
-		mav.setViewName("class/class-enroll");
+		mav.setViewName("admin/class/class-enroll");
 		return mav;
 	}
 	
-	@GetMapping("/manage-page")
-	public ModelAndView classManagePage() {
-		return new ModelAndView("class/class-manage");
-	}
+//	@GetMapping("/manage-page")
+//	public ModelAndView classManagePage() {
+//		return new ModelAndView("admin/class/class-manage");
+//	}
 	
 	
 	@PostMapping("/enroll")
@@ -60,12 +60,12 @@ public class ClassController {
 		classService.enrollClass(createClassDto, request);
 		rttr.addFlashAttribute(VariableConstant.MESSAGE, "강의가 등록되었습니다.");
 		
-		return new ModelAndView("redirect:/class/manage-page");
+		return new ModelAndView("redirect:/admin/manage-page");
 	}
 	
 	@GetMapping("/detail-manage-page")
 	public ModelAndView classDetailManagePage() {
-		return new ModelAndView("class/class-detail-manage");
+		return new ModelAndView("admin/class/class-detail-manage");
 	}
 	
 	@GetMapping("/classes")
@@ -78,7 +78,7 @@ public class ClassController {
 	public ModelAndView addStudentPage(@PathVariable int classSequenceNo, 
 									   @RequestParam(value = "className", required = true) String className) {
 		
-		ModelAndView mav = new ModelAndView("class/class-add-student");
+		ModelAndView mav = new ModelAndView("admin/class/class-add-student");
 		mav.addObject("classSequenceNo", classSequenceNo);
 		mav.addObject("className", className);
 		return mav;
@@ -95,14 +95,14 @@ public class ClassController {
 	public ModelAndView enrollStudentToClass(@ModelAttribute ClassAccountMapDto classAccountMapDto, RedirectAttributes rttr) {
 		classService.enrollStudentToClass(classAccountMapDto);
 		rttr.addFlashAttribute(VariableConstant.MESSAGE, "등록되었습니다.");
-		return new ModelAndView("redirect:/class/detail-manage-page");
+		return new ModelAndView("redirect:/admin/class/detail-manage-page");
 	}
 	
 	
 	@GetMapping("/classes/{classSequenceNo}/check-attendance")
 	public ModelAndView checkAttendancePage(@PathVariable int classSequenceNo, 
 			   @RequestParam(value = "className", required = true) String className) {
-		ModelAndView mav = new ModelAndView("class/attendance-check");
+		ModelAndView mav = new ModelAndView("admin/class/attendance-check");
 		mav.addObject("className", className);
 		mav.addObject("classSequenceNo", classSequenceNo);
 		return mav;
@@ -128,7 +128,7 @@ public class ClassController {
 		String className = classAttendanceEnrollDto.getClassName();
 		classService.classAttendanceEnroll(classAttendanceEnrollDto, request);
 		rttr.addFlashAttribute(VariableConstant.MESSAGE, "출석 등록이 완료되었습니다.");
-		return new ModelAndView("redirect:/class/classes/" + classSequenceNo + "/check-attendance?className=" + className);
+		return new ModelAndView("redirect:/admin/class/classes/" + classSequenceNo + "/check-attendance?className=" + className);
 	}
 	
 	@GetMapping("/classes/{classSequenceNo}/attendance-info")
@@ -137,8 +137,32 @@ public class ClassController {
 		List<PersonalClassAttendanceDto> list = classService.findAttendanceInfoByDate(classDate, classSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
+
+	@GetMapping("/classes/{classSequenceNo}/class-manage-page")
+	public ModelAndView classManagePage(@PathVariable String classSequenceNo,
+			@RequestParam(value = "className", required = true) String className) {
+		
+		ModelAndView mav = new ModelAndView("admin/class/class-manage-page");
+		mav.addObject("classSequenceNo", classSequenceNo);
+		mav.addObject("className", className);
+		return mav;
+	}
+	
+	
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

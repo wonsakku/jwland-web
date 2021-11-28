@@ -1,4 +1,4 @@
-package com.jwland.domain.account;
+package com.jwland.domain.account.dto;
 
 import lombok.Data;
 

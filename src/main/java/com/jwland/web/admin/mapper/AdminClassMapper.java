@@ -1,4 +1,4 @@
-package com.jwland.web.mapper;
+package com.jwland.web.admin.mapper;
 
 import java.util.List;
 import java.util.Map;
@@ -6,17 +6,17 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.jwland.domain.classes.ClassAttendanceManagementVO;
-import com.jwland.domain.classes.ClassDetailDto;
-import com.jwland.domain.classes.ClassDomain;
-import com.jwland.domain.classes.EnrolledAccountsDto;
-import com.jwland.domain.classes.PersonalClassAttendanceDto;
+import com.jwland.domain.classes.ClassVO;
+import com.jwland.domain.classes.dto.ClassDetailDto;
+import com.jwland.domain.classes.dto.EnrolledAccountsDto;
+import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
 
 @Mapper
-public interface ClassMapper {
+public interface AdminClassMapper {
 
-	void enrollClass(ClassDomain clz);
+	void enrollClass(ClassVO clz);
 
-	ClassDomain findClassByClassName(String className);
+	ClassVO findClassByClassName(String className);
 
 	List<ClassDetailDto> getClassDetails(String open);
 

@@ -10,7 +10,7 @@
 		WHERE name = #{name}
 	</select>
 
-	<insert id="join" parameterType="com.jwland.domain.account.JoinAccountDto">
+	<insert id="join" parameterType="com.jwland.domain.account.dto.JoinAccountDto">
 		INSERT INTO jwland.account(name, birth, nick_name)
 		VALUES(#{name}, #{birth}, #{nickName})
 	</insert>
@@ -22,7 +22,7 @@
 		WHERE name = #{name}
 	</select>
 
-	<select id="findAccountsInfo" resultType="com.jwland.domain.account.AccountInfoDto">
+	<select id="findAccountsInfo" resultType="com.jwland.domain.account.dto.AccountInfoDto">
 		SELECT account_sequence_no, name, birth, nick_name
 		FROM jwland.account
 		WHERE 1=1
@@ -30,6 +30,8 @@
 		<if test="name != null and name != ''">
 			AND name LIKE '%' || #{name} || '%'
 		</if>
+		AND approved = 'Y'
+		ORDER BY account_sequence_no
 	</select>
 
 </mapper>

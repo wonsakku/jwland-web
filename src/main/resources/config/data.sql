@@ -63,7 +63,7 @@ values('비비', '0202', '미스 웬즈데이');
 insert into jwland.account(name, birth, nick_name)
 values('블라디레나 밀리제', '0712', '선혈의 여왕');
 insert into jwland.account(name, birth, nick_name)
-values('신에이 노우젠', '0519', '목없는 사신');
+values('신에이 노우젠', '0519', '언더테이커');
 insert into jwland.account(name, birth, nick_name)
 values('라이덴 슈가', '0825', '베어볼프(늑대인간)');
 insert into jwland.account(name, birth, nick_name)

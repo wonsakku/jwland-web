@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-public class ClassDomain {
+public class ClassVO {
 	
 	private Long classSequenceNo;
 	private String className;

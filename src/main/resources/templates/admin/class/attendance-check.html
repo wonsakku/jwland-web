@@ -100,7 +100,7 @@
 	
 	function loadEnrolledStudents() {
 		
-		var url = "/class/classes/" + classSequenceNo + "/account-infos";
+		var url = "/admin/class/classes/" + classSequenceNo + "/account-infos";
 		
 		$.ajax({
 			url: url,
@@ -142,7 +142,7 @@
 	}
 	
 	function loadClassDate(){
-		var url = "/class/classes/" + classSequenceNo + "/date";
+		var url = "/admin/class/classes/" + classSequenceNo + "/date";
 		
 		$.ajax({
 			url: url,
@@ -159,7 +159,7 @@
 	}
 	
 	function _cb_loadClassDate(data, xhrStatus, xhr){
-		console.log(data);
+// 		console.log(data);
 		
 		$("#class-date-select").html("");
 		
@@ -240,7 +240,7 @@
 		
 		formData.setAttribute("charset", "UTF-8");
 		formData.setAttribute("method", "post");
-		formData.setAttribute("action", "/class/classes/attendance/enroll");
+		formData.setAttribute("action", "/admin/class/classes/attendance/enroll");
 		
 		document.body.appendChild(formData);
 		
@@ -276,8 +276,8 @@
 	}
 	
 	function findAttendanceInfoByDate(selectedDate){
-		console.log(selectedDate);
-		var url = "/class/classes/" + classSequenceNo + "/attendance-info?classDate=" + selectedDate;
+// 		console.log(selectedDate);
+		var url = "/admin/class/classes/" + classSequenceNo + "/attendance-info?classDate=" + selectedDate;
 		$.ajax({
 			url: url,
 			type: "GET",
@@ -304,7 +304,19 @@
 				}
 			});
 		}
+
+		toggleAttendanceSelectbodDiable();
+	}
+	
+	function toggleAttendanceSelectbodDiable(){
 		
+		var selected_date = $("#class-date-select").val();
+		
+		if(selected_date == today || selected_date == null || selected_date == ''){
+			$(".status").removeAttr("disabled", "disabled");
+		}else{
+			$(".status").attr("disabled", "disabled");
+		}
 	}
 	
 	

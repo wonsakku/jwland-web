@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sd="http://www.thymeleaf.org/spring-data"
+	layout:decorator="layout/layout.html"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title></title>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+</head>
+<body>
+	<main layout:fragment="content"  role="main">
+			
+<!-- 	  <section class="jumbotron text-center mt-4"> -->
+<!-- 	    <div class="container"> -->
+<!-- 	      <h1>Album example</h1> -->
+<!-- 	      <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p> -->
+<!-- 	      <p> -->
+<!-- 	        <a href="#" class="btn btn-primary my-2">Main call to action</a> -->
+<!-- 	        <a href="#" class="btn btn-secondary my-2">Secondary action</a> -->
+<!-- 	      </p> -->
+<!-- 	    </div> -->
+<!-- 	  </section> -->
+
+	  <div class="album py-5 bg-light">
+	  	  <div class="row pb-4">
+		      <h3 class="col-md-6 col-sm-12">[ [[${className}]] ] 수업 관리 페이지</h3>
+		      <div class="col-md-6 col-sm-12 text-right">
+		      		<input type="text" id="student-name"/>
+		      		<button type="button" class="btn btn-primary" onclick="loadStudents()">검색</button>
+		      		<button type="button" class="btn btn-info" onclick="addStudents()">등록</button>
+		      </div>
+	  	  </div>
+	      <div class="table-responsive text-center">
+	        <table class="table table-striped table-sm">
+	          <thead>
+	            <tr>
+	              <th>선택</th>
+	              <th>이름</th>
+	              <th>생일</th>
+	              <th>닉네임</th>
+	            </tr>
+	          </thead>
+	          <tbody id="student-table-body">
+	          </tbody>
+	        </table>
+	      </div>
+	  </div>
+	</main>
+</body>
+
+</html>
+
+
+
+
+<script th:inline="javascript">
+	
+	var accountSequenceList = new Array();
+	const classSequenceNo = [[${classSequenceNo}]];
+
+	(function() {
+// 		loadStudents();
+// 		loadEnrolledStudent();
+		
+// 		$("#student-name").on("keyup", function(e){
+// 			if(e.keyCode == 13){
+// 				loadStudents();
+// 			}
+// 		});
+
+		notPrepared();
+
+
+	})();
+
+	
+	function notPrepared(){
+		alert('준비중인 페이지입니다');
+		history.back(-1);
+	}
+	
+	
+	function loadStudents() {
+		var url = "/accounts";
+		var name = $("#student-name").val();
+		
+		if(name != null && name.trim() != ''){
+			url += "?name=" + name;
+		}
+		
+		$.ajax({
+			url: url,
+			type: "GET",
+			timeout: 10000,
+			success: function(data, xhrStatus, xhr){
+				_cb_loadStudents(data, xhrStatus, xhr);
+			}
+		});
+	}
+	
+	function _cb_loadStudents(data, xhrStatus, xhr){
+		
+		var $studentTableBody = $("#student-table-body");
+		$studentTableBody.html("");
+
+		var html = "";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html += "<tr>";
+			
+			html += "<td><input type='checkbox' value='" + data[i].accountSequenceNo + "' class='account-sequence-no' onclick='toggleAccountSequenceToList(this)'></td>";
+			html += "<td>" + data[i].name + "</td>";
+			html += "<td>" + data[i].birth + "</td>";
+			html += "<td>" + data[i].nickName + "</td>";
+
+			html += "</tr>";
+		}
+		
+		$studentTableBody.html(html);
+		checkEnrolledStudents();
+	}
+	
+	function loadEnrolledStudent(){
+		var url = "/admin/class/classes/" + classSequenceNo + "/accounts";
+		$.ajax({
+			url: url,
+			type: "GET",
+			timeout: 10000,
+			success: function(data, xhrStatus, xhr){
+				_cb_loadEnrolledStudent(data, xhrStatus, xhr);
+			}
+		});
+	}
+	
+	
+	function _cb_loadEnrolledStudent(data, xhrStatus, xhr) {
+
+		accountSequenceList = data;
+// 		console.log(accountSequenceList);
+		checkEnrolledStudents();
+	}
+	
+	
+	function checkEnrolledStudents(){
+		
+		$("#student-table-body").find(".account-sequence-no").each(function(index, item) {
+			
+			for(var i = 0 ; i < accountSequenceList.length ; i++ ){
+				if($(item).val() == accountSequenceList[i] ){
+					$(item).attr("checked", "true");
+					break;
+				}
+			}
+		});
+	}
+	
+	
+	function toggleAccountSequenceToList(elem){
+		
+		var seq = $(elem).val();
+		
+		if($(elem).is(":checked")){
+			accountSequenceList.push(seq);
+		}else{
+				
+			for(var i = 0 ; i < accountSequenceList.length ; i++){
+				
+				if(accountSequenceList[i] == seq){
+					accountSequenceList.splice(i, 1);
+					break;
+				}
+			}
+		}
+	}
+	
+	function addStudents(){
+		
+		if(!confirm("등록하시겠습니까?")){
+			return ;
+		}
+		
+		var formData = document.createElement("form");
+		
+		var hiddenField = document.createElement("input");
+		hiddenField.setAttribute("type", "hidden");
+		hiddenField.setAttribute("name", "classSequenceNo");
+		hiddenField.setAttribute("value", classSequenceNo);
+		formData.appendChild(hiddenField);
+		
+		for(var i = 0 ; i < accountSequenceList.length ; i++){
+			var hiddenField2 = document.createElement("input");
+			hiddenField2.setAttribute("type", "hidden");
+			hiddenField2.setAttribute("name", "accountSequenceList[" + i + "]");
+			hiddenField2.setAttribute("value", accountSequenceList[i]);
+			formData.appendChild(hiddenField2);
+		}
+		
+		formData.setAttribute("charset", "UTF-8");
+		formData.setAttribute("method", "post");
+		formData.setAttribute("action", "/admin/class/classes/student/enroll");
+		
+		document.body.appendChild(formData);
+		
+		formData.submit();
+	}
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.jwland.domain.account.LoginSuccessDto;
+import com.jwland.domain.account.dto.LoginSuccessDto;
 import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.AuthenticationException;

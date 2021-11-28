@@ -1,4 +1,4 @@
-package com.jwland.domain.classes;
+package com.jwland.domain.classes.dto;
 
 import lombok.Data;
 

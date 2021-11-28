@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jwland.domain.account.AccountVO;
-import com.jwland.domain.account.LoginSuccessDto;
+import com.jwland.domain.account.dto.LoginSuccessDto;
 import com.jwland.web.constant.ExceptionMessages;
 import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;

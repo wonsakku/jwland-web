@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jwland.web.admin.mapper.AdminAccountMapper">
+
+	<select id="getAccountManagementList" parameterType="map" resultType="com.jwland.domain.account.dto.AccountManagementDto">
+		SELECT account_sequence_no
+			 , name
+			 , birth
+			 , nick_name
+			 , approved
+			 , role
+		FROM jwland.account
+		WHERE 1=1
+		<if test="name != '' and name != null">
+			AND name LIKE '%'||#{name}||'%'
+		</if>
+		<choose>
+			<when test="approved != null">
+				AND approved LIKE '%'||#{approved}||'%'
+			</when>
+			<otherwise>
+				AND approved = 'N'
+			</otherwise>
+		</choose>
+		ORDER BY account_sequence_no
+	</select>
+	
+	<update id="updateApproveStatus" parameterType="list">
+		UPDATE jwland.account
+		SET approved = 'Y'
+		WHERE account_sequence_no IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+

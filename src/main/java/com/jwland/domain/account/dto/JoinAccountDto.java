@@ -1,4 +1,4 @@
-package com.jwland.domain.account;
+package com.jwland.domain.account.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

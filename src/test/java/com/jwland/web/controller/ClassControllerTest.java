@@ -2,7 +2,6 @@ package com.jwland.web.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -11,30 +10,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.nio.charset.CharsetEncoder;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
-import com.jwland.domain.account.LoginSuccessDto;
-import com.jwland.domain.classes.ClassDomain;
+import com.jwland.domain.account.dto.LoginSuccessDto;
+import com.jwland.domain.classes.ClassVO;
+import com.jwland.web.admin.mapper.AdminClassMapper;
+import com.jwland.web.admin.service.AdminClassService;
 import com.jwland.web.constant.ExceptionMessages;
 import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.AuthenticationException;
 import com.jwland.web.exception.AuthorizeException;
-import com.jwland.web.mapper.ClassMapper;
-import com.jwland.web.service.ClassService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,8 +38,8 @@ class ClassControllerTest {
 //	@Autowired WebApplicationContext ctx;
 	@Autowired MockMvc mockMvc;
 	
-	@Autowired ClassService classService;
-	@Autowired ClassMapper classMapper;
+	@Autowired AdminClassService classService;
+	@Autowired AdminClassMapper classMapper;
 	
 	
 	
@@ -151,7 +143,7 @@ class ClassControllerTest {
 			.andExpect(flash().attribute(VariableConstant.MESSAGE, "강의가 등록되었습니다."))
 			;
 		
-		ClassDomain clz = classMapper.findClassByClassName(className);
+		ClassVO clz = classMapper.findClassByClassName(className);
 		
 		// then
 		assertThat(clz.getClassSequenceNo()).isNotNull();

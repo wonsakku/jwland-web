@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.jwland.domain.account.AccountInfoDto;
-import com.jwland.domain.account.FormLoginDto;
-import com.jwland.domain.account.JoinAccountDto;
+import com.jwland.domain.account.dto.AccountInfoDto;
+import com.jwland.domain.account.dto.FormLoginDto;
+import com.jwland.domain.account.dto.JoinAccountDto;
 import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.WrongAccessException;
