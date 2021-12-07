@@ -1,0 +1,29 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jwland.web.admin.mapper.AdminExamMapper">
+
+	<insert id="enrollExam" parameterType="com.jwland.domain.exam.ExamEnrollDto">
+		INSERT INTO jwland.exam_type(year, month, exam_type)
+		VALUES(#{year}, #{month}, #{examType})
+	</insert>
+
+	<select id="checkExamExist" resultType="map" parameterType="com.jwland.domain.exam.ExamEnrollDto">
+		SELECT * FROM jwland.exam_type
+		WHERE year = #{year}
+		AND   month = #{month}
+		AND   exam_type = #{examType}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+

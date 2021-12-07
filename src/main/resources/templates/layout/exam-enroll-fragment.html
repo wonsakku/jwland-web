@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>jwLand</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+<!--     <link rel="stylesheet" href="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" /> -->
+    <link rel="stylesheet" href="/node_modules/jquery/dist/jquery.min.js" />
+    <style>
+		
+    </style>
+</head>
+
+<body>
+
+
+<!-- Modal -->
+<div class="modal fade" id="popup-enroll-exam" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true" th:fragment="popup-enroll-exam">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel1">기출 등록 팝업</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cancelEnrollExam()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form>
+		<table class="table text-center  table-bordered">
+		  <thead class="thead-dark">
+		    <tr>
+		      <th scope="col">항목</th>
+		      <th scope="col">입력</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	<tr>
+	  			<div class="form-group">
+			  		<th scope="row"  class="align-middle"> <label for="exam-year">년 도</label> </th>
+			  		<td><input type="text" class="form-control" id="exam-year"></td>
+	  			</div>
+		  	</tr>
+		  	<tr>
+		  		<div class="form-group">
+			  		<th scope="row"  class="align-middle"> <label for="exam-month">월</label> </th>
+			  		<td><input type="text" class="form-control" id="exam-month"></td>
+		  		</div>
+		  	</tr>
+		  	<tr>
+		  		<th scope="row"  class="align-middle">시험 종류</th>
+		  		<td>
+					<div class="input-group">
+					  <div class="input-group-prepend" style="width:100%;" >
+					    <button class="btn btn-outline-secondary dropdown-toggle" type="button" style="width:100%;"  data-toggle="dropdown" aria-expanded="false" id="enroll-exam-select-exam">시험 선택</button>
+					    <input type="hidden" id="selected-enroll-exam-type">
+					    <div class="dropdown-menu">
+					      <a class="dropdown-item" data-value="평가원">평가원</a>
+					      <a class="dropdown-item" data-value="교육청">교육청</a>
+					      <a class="dropdown-item" data-value="대성">대성</a>
+					      <a class="dropdown-item" data-value="종로">종로</a>
+					      <a class="dropdown-item" data-value="비상">비상</a>
+					    </div>
+					  </div>
+					</div>
+		  		</td>
+		  	</tr>
+		  </tbody>
+		</table>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="enroll()">등록</button>
+        <button type="button" class="btn btn-danger" onclick="cancelEnrollExam()" data-dismiss="modal" id="enroll-exam-cancel-btn">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+<script th:inline="javascript"  th:fragment="popup-enroll-exam-event">
+
+	(function(){
+		$(".dropdown-item").on("click", function(e){
+			var value = $(this).data("value");
+			$("#enroll-exam-select-exam").text(value);
+			$("#selected-enroll-exam-type").val(value);
+		});
+	})();
+
+	function enroll() {
+		
+		var examYear = $("#exam-year").val();
+		var examMonth = $("#exam-month").val();
+		var examType = $("#selected-enroll-exam-type").val();
+		
+		var examInfo = new Object();
+		examInfo.year = examYear;
+		examInfo.month = examMonth;
+		examInfo.examType = examType;
+		
+		var url = "/admin/exam/enroll";
+		
+		if(!confirm("등록하시겠습니까?")){
+			return ;
+		}
+		
+		$.ajax({
+			url: url,
+			method: "POST",
+			contentType: "application/json",
+			data: JSON.stringify(examInfo),
+			timeout: 10000,
+			success: function(data, a, b){
+				alert(data);
+				$("#enroll-exam-cancel-btn").click();
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+		});
+		
+	}
+
+	function cancelEnrollExam(){
+		$("#enroll-exam-select-exam").text("시험선택");
+		$("#exam-year").val("");
+		$("#exam-month").val("");
+	}
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

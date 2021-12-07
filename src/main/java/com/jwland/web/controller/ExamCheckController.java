@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jwland.domain.examcheck.ExamTotalInfoDto;
+import com.jwland.domain.exam.ExamTotalInfoDto;
 import com.jwland.web.service.ExamCheckService;
 
 import lombok.RequiredArgsConstructor;

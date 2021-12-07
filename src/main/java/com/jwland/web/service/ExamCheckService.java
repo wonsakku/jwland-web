@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.jwland.domain.examcheck.ExamTotalInfoDto;
+import com.jwland.domain.exam.ExamTotalInfoDto;
 import com.jwland.web.mapper.ExamCheckMapper;
 
 import lombok.RequiredArgsConstructor;

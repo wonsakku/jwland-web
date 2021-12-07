@@ -73,7 +73,6 @@ create table jwland.exam_type(
 	exam_type_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_type_sequence'),
 	year BIGINT NOT NULL,
 	month BIGINT NOT NULL,
-	grade VARCHAR(10) NOT NULL,
 	exam_type VARCHAR(20) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),

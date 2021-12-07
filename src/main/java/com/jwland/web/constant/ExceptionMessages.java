@@ -11,8 +11,10 @@ public enum ExceptionMessages {
 	AUTHENTICATION_ERROR("로그인이 필요한 페이지입니다."),
 	AUTHORIZE_ERROR("권한이 없습니다."),
 	NO_ACCOUNT_ERROR("일치하는 계정 정보가 없습니다."),
-	WRONG_ACCESS_ERROR("접근 방식이 올바르지 않습니다.")
+	WRONG_ACCESS_ERROR("접근 방식이 올바르지 않습니다."),
+
 	
+	ALREADY_ENROLLED_EXAM("이미 등록된 기출입니다.")
 	;
 
 	private String message;

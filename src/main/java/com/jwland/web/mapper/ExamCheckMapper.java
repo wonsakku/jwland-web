@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.jwland.domain.examcheck.ExamTotalInfoDto;
+import com.jwland.domain.exam.ExamTotalInfoDto;
 
 @Mapper
 public interface ExamCheckMapper {

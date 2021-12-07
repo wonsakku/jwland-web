@@ -1,4 +1,4 @@
-package com.jwland.domain.examcheck;
+package com.jwland.domain.exam;
 
 import lombok.Data;
 
@@ -7,7 +7,6 @@ public class ExamTotalInfoDto {
 
 	private int year;
 	private int month;
-	private int grade;
 	private String examType;
 	private String subject;
 	private int problemNumber;

@@ -20,4 +20,7 @@ public interface VariableConstant {
 	// 사용 승인 메세지
 	public static final String USING_APPROVE_MESSAGE = "선택한 학생에 대한 사용 승인이 완료되었습니다.";
 	
+	
+	// exam enroll message
+	public static final String EXAM_ENROLL_SUCCESS_MESSAGE = "기출 등록이 완료되었습니다.";
 }
