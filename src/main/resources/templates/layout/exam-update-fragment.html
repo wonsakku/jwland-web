@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>jwLand</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+<!--     <link rel="stylesheet" href="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" /> -->
+    <link rel="stylesheet" href="/node_modules/jquery/dist/jquery.min.js" />
+    <style>
+		
+    </style>
+</head>
+
+<body>
+
+<!-- Modal -->
+<div class="modal fade" id="popup-update-exam" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true" th:fragment="popup-update-exam">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel1">기출 수정 팝업</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cancelUpdateExam()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form>
+			<div class="form-group row">
+				<label for="update-exam-year" class="col-sm-2 col-form-label text-center">시험 연도</label>
+			    <div class="col-sm-10">
+			      <select class="form-control" id="update-exam-year">
+			      </select>
+			    </div>
+			</div>
+			<hr>
+			<div class="form-group row">
+				<label for="update-exam-month" class="col-sm-2 col-form-label text-center">시험 월</label>
+			    <div class="col-sm-10">
+			      <select class="form-control" id="update-exam-month" disabled>
+			      </select>
+			    </div>
+			</div>
+			<hr>
+			<div class="form-group row">
+				<label for="update-exam-pre-type" class="col-sm-2 col-form-label text-center">변경할 시험명</label>
+			    <div class="col-sm-10">
+			      <select class="form-control" id="update-exam-pre-type" disabled>
+			      </select>
+			    </div>
+			</div>
+			<hr>
+			<div class="form-group row">
+				<label for="update-exam-pre-type" class="col-sm-2 col-form-label text-center">시험명</label>
+			    <div class="col-sm-10">
+			      <select class="form-control" id="update-exam-post-type" disabled>
+			      </select>
+			    </div>
+			</div>
+		</form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="updateExamType()">수정</button>
+        <button type="button" class="btn btn-danger" onclick="deleteExamType()">삭제</button>
+        <button type="button" class="btn btn-warning" onclick="cancelUpdateExam()" data-dismiss="modal" id="update-exam-cancel-btn">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+<script th:inline="javascript"  th:fragment="popup-update-exam-event">
+
+	(function(){
+		
+		$("#popup-update-exam-btn").on("click", function(e){
+			loadExamYear();			
+		});
+		
+		$("#update-exam-year").on("change", function(e){
+			if($(this).val() == null || $(this).val().trim() == ''){
+				resetUpdateExamMonth();
+				resetUpdateExamPreType();
+				resetUpdateExamPostType();
+			}else{
+				loadExamMonth();
+				resetUpdateExamPreType();
+				resetUpdateExamPostType();
+			}
+		});
+
+		$("#update-exam-month").on("change", function(e){
+			if($(this).val() == null || $(this).val().trim() == ''){
+				resetUpdateExamPreType();
+				resetUpdateExamPostType();
+			}else{
+				loadExamType();
+				resetUpdateExamPostType();
+			}
+		});
+		
+		$("#update-exam-pre-type").on("change", function(e){
+			if($(this).val() == null || $(this).val().trim() == ''){
+				resetUpdateExamPostType();
+			}else{
+				loadAllExamType();
+			}
+		});
+		
+		
+	})();
+
+	function loadExamYear(){
+		var url = "/admin/exam/years";
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_loadExamYear(data, xhr, status);
+	        },
+	        fail: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
+	
+	function _cb_loadExamYear(data, xhr, status){
+		$("#update-exam-year").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i] + "'>" + data[i] + "</option>";
+		}
+		$("#update-exam-year").html(html);
+	}
+	
+	function loadExamMonth(){
+		var _year = $("#update-exam-year").val().trim();
+		var url = "/admin/exam/month?year=" + _year;
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_loadExamMonth(data, xhr, status);
+	        },
+	        fail: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
+	
+	function _cb_loadExamMonth(data, xhr, status){
+		$("#update-exam-month").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i] + "'>" + data[i] + "</option>";
+		}
+		$("#update-exam-month").html(html);
+		$("#update-exam-month").removeAttr("disabled");
+	}
+	
+	function loadExamType(){
+		var _year = $("#update-exam-year").val().trim();
+		var _month = $("#update-exam-month").val().trim();
+		var url = "/admin/exam/types?year=" + _year + "&month=" + _month;
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_loadExamType(data, xhr, status);
+	        },
+	        fail: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
+	
+	function _cb_loadExamType(data, xhr, status){
+		$("#update-exam-pre-type").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
+		}
+		$("#update-exam-pre-type").html(html);
+		$("#update-exam-pre-type").removeAttr("disabled");
+	}
+
+	
+	function loadAllExamType(){
+		var url = "/admin/exam/types/all";
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_loadAllExamType(data, xhr, status);
+	        },
+	        fail: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
+	
+	function _cb_loadAllExamType(data, xhr, status){
+		$("#update-exam-post-type").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i].exam_type + "'>" + data[i].exam_type + "</option>";
+// 			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
+		}
+		$("#update-exam-post-type").html(html);
+		$("#update-exam-post-type").removeAttr("disabled");
+	}
+	
+	
+	function updateExamType(){
+		
+		var examTypeSequenceNo = $("#update-exam-pre-type").val();
+		var changeExamType = $("#update-exam-post-type").val();
+
+		if(examTypeSequenceNo == null || examTypeSequenceNo.trim() == ''){
+			alert("변경할 시험명을 선택해주세요");
+			return ;
+		}
+		
+		if(changeExamType == null || changeExamType.trim() == ''){
+			alert("시험명을 선택해주세요");
+			return ;
+		}
+
+		if(!confirm("변경하시겠습니까?")){
+			return ;
+		}
+		
+		var requestBody = new Object();
+		requestBody.examTypeSequenceNo = examTypeSequenceNo;
+		requestBody.examType = changeExamType; 
+		
+		var url = "/admin/exam";
+	    $.ajax({
+	        url: url,
+	        method: "PUT",
+	        contentType: "application/json",
+	        data: JSON.stringify(requestBody),
+	        success: function(data, xhr, status){
+	        	alert(data);
+	        	$("#update-exam-cancel-btn").click();
+	        }, 
+	        fail: function(xhr, xhrStatus, err){
+	        	alert(a.responseText);
+	        }
+        });
+	}
+	
+
+	
+	function deleteExamType(){
+		
+	}
+	
+
+	function cancelUpdateExam(){
+		$("#update-exam-year").html("");
+		resetUpdateExamMonth();
+		resetUpdateExamPreType();
+		resetUpdateExamPostType();
+	}
+	
+	function resetUpdateExamMonth(){
+		$("#update-exam-month").html("");
+		$("#update-exam-month").attr("disabled", true);
+	}
+	
+	function resetUpdateExamPreType(){
+		$("#update-exam-pre-type").html("");
+		$("#update-exam-pre-type").attr("disabled", true);
+		
+	}
+	
+	function resetUpdateExamPostType(){
+		$("#update-exam-post-type").html("");
+		$("#update-exam-post-type").attr("disabled", true);
+		
+	}
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

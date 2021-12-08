@@ -17,7 +17,7 @@
 				<button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal" data-target="#popup-enroll-exam">
 				  기출 등록
 				</button>
-				<button type="button" class="btn btn-warning btn-sm mr-1" data-toggle="modal" data-target="#popupEnroll">
+				<button type="button" class="btn btn-warning btn-sm mr-1" data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn">
 				  기출 수정
 				</button>
 				<button type="button" class="btn btn-primary btn-sm mr-1" data-toggle="modal" data-target="#popupEnroll">
@@ -50,30 +50,11 @@
 	</div>
 	
 	<div th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam"></div>
+	<div th:replace="layout/exam-update-fragment.html :: popup-update-exam"></div>
 	
 
 
 
-	<!-- Modal -->
-	<div class="modal fade" id="popupUpdate" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="staticBackdropLabel2">오답 수정 팝업</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	        ...
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">오답 수정 팝업</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
 
 
 	<!-- Modal -->
@@ -112,6 +93,7 @@
 </html>
 
 <script th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam-event"></script>
+<script th:replace="layout/exam-update-fragment.html :: popup-update-exam-event"></script>
 <script th:inline="javascript">
 // <script type="application/javascript">
 // 	console.log(data);	

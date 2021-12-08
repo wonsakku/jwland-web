@@ -1,10 +1,12 @@
 package com.jwland.web.admin.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.jwland.domain.exam.ExamEnrollDto;
+import com.jwland.domain.exam.ExamUpdateDto;
 
 @Mapper
 public interface AdminExamMapper {
@@ -12,4 +14,14 @@ public interface AdminExamMapper {
 	void enrollExam(ExamEnrollDto examEnrollDto);
 
 	Map<String, String> checkExamExist(ExamEnrollDto examEnrollDto);
+
+	List<Integer> getExamYear();
+
+	List<Integer> getExamMonth(String year);
+
+	List<Map> getExamTypes(Map<String, String> parameter);
+
+	List<Map> getAllExamTypes();
+
+	void updateExamType(ExamUpdateDto examUpdateDto);
 }

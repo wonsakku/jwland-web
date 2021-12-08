@@ -23,4 +23,5 @@ public interface VariableConstant {
 	
 	// exam enroll message
 	public static final String EXAM_ENROLL_SUCCESS_MESSAGE = "기출 등록이 완료되었습니다.";
+	public static final String EXAM_UPDATE_SUCCESS = "기출 수정이 완료되었습니다.";
 }
