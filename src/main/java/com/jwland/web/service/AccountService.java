@@ -48,7 +48,6 @@ public class AccountService{
 				.approved(loginAccount.getApproved())
 				.role(loginAccount.getRole())
 				.build();
-		
 		session.setAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME, loginInfo);
 	}
 

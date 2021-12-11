@@ -20,21 +20,78 @@ values('관리자 페이지', 6, '/admin/page', 'Y')
 --values('클리닉/보충', 8, , 'Y');
 
 
+
+-- 시험 기관
+insert into jwland.exam_organization(exam_organization_name)
+values('수능');
+insert into jwland.exam_organization(exam_organization_name)
+values('평가원');
+insert into jwland.exam_organization(exam_organization_name)
+values('교육청');
+insert into jwland.exam_organization(exam_organization_name)
+values('대성');
+insert into jwland.exam_organization(exam_organization_name)
+values('종로');
+
 -- 시험 종류
-insert into jwland.exam_type(year, month, grade, exam_type)
-values(2020,3,3,'전국 모의고사');
+-- 수능
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,11,1);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,11,1);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,11,1);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,11,1);
+-- 평가원
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,9,2);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,6,2);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,9,2);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,6,2);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,9,2);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,6,2);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,9,2);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,6,2);
+-- 교육청
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,10,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,7,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,4,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,3,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,10,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,7,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,4,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,3,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,10,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,7,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,4,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,3,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,10,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,7,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,4,3);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,3,3);
 
-insert into jwland.exam_type(year, month, grade, exam_type)
-values(2020,3,4,'대성');
-
-insert into jwland.exam_type(year, month, grade, exam_type)
-values(2020,4,3,'경기도 모의고사');
-
-insert into jwland.exam_type(year, month, grade, exam_type)
-values(2020,5,3,'종로');
-
-insert into jwland.exam_type(year, month, grade, exam_type)
-values(2020,6,3,'6월 평가원 모의고사');
+--사설
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,10,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,9,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,8,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,7,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,5,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,4,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,10,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,9,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,8,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,7,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,5,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,4,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,10,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,9,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,8,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,7,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,5,5); 
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,4,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,10,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,9,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,8,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,7,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,5,5);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,4,4);
+ 
 
 
 -- 과목 종류

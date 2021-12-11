@@ -38,35 +38,6 @@ public class AdminExamController {
 		adminExamService.enrollExam(examEnrollDto);
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_ENROLL_SUCCESS_MESSAGE);
 	}
-
-	
-	@GetMapping("/years")
-	public ResponseEntity<List<Integer>> getExamYear(){
-		List<Integer> years =  adminExamService.getExamYear();
-		return ResponseEntity.status(HttpStatus.OK).body(years);
-	}
-	
-	
-	@GetMapping("/month")
-	public ResponseEntity<List<Integer>> getExamMonth(@RequestParam(value = "year") String year){
-		List<Integer> month = adminExamService.getExamMonth(year);
-		return ResponseEntity.status(HttpStatus.OK).body(month);
-	}
-	
-	
-	@GetMapping("/types")
-	public ResponseEntity<List<Map>> getExamTypes(@RequestParam(value = "year") String year,
-			@RequestParam(value = "month") String month){
-		List<Map> examTypes = adminExamService.getExamTypes(year, month);
-		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
-	}
-	
-	@GetMapping("/organization")
-	public ResponseEntity<List<Map>> getExamOrganzations(){
-		List<Map> examTypes = adminExamService.getExamOrganzations();
-		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
-	}
-	
 	
 	@PutMapping
 	public ResponseEntity<String> updateExamType(@RequestBody @Validated ExamUpdateDto examUpdateDto, Errors errors){

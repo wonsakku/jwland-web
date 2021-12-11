@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head th:fragment="head">
     <meta charset="UTF-8">
     <title>jwLand</title>
@@ -16,7 +14,9 @@
 <body>
 
 <!-- Modal -->
-<div class="modal fade" id="popup-update-exam" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true" th:fragment="popup-update-exam">
+<div class="modal fade" id="popup-update-exam" data-backdrop="static" 
+	 data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" 
+	 aria-hidden="true" th:fragment="popup-update-exam">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -116,14 +116,14 @@
 	})();
 
 	function loadExamYear(){
-		var url = "/admin/exam/years";
+		var url = "/exam/years";
 	    $.ajax({
 	        url: url,
 	        method: "GET",
 	        success: function(data, xhr, status){
 	          _cb_loadExamYear(data, xhr, status);
 	        },
-	        fail: function(xhr, xhrStatus, err){
+	        error: function(xhr, xhrStatus, err){
 	          alert(JSON.stringify(xhr));
 	        }
         });
@@ -142,14 +142,14 @@
 	
 	function loadExamMonth(){
 		var _year = $("#update-exam-year").val().trim();
-		var url = "/admin/exam/month?year=" + _year;
+		var url = "/exam/month?year=" + _year;
 	    $.ajax({
 	        url: url,
 	        method: "GET",
 	        success: function(data, xhr, status){
 	          _cb_loadExamMonth(data, xhr, status);
 	        },
-	        fail: function(xhr, xhrStatus, err){
+	        error: function(xhr, xhrStatus, err){
 	          alert(JSON.stringify(xhr));
 	        }
         });
@@ -171,14 +171,14 @@
 		
 		var _year = $("#update-exam-year").val().trim();
 		var _month = $("#update-exam-month").val().trim();
-		var url = "/admin/exam/types?year=" + _year + "&month=" + _month;
+		var url = "/exam/types?year=" + _year + "&month=" + _month;
 	    $.ajax({
 	        url: url,
 	        method: "GET",
 	        success: function(data, xhr, status){
 	          _cb_loadExamType(data, xhr, status);
 	        },
-	        fail: function(xhr, xhrStatus, err){
+	        error: function(xhr, xhrStatus, err){
 	          alert(JSON.stringify(xhr));
 	        }
         });
@@ -186,6 +186,8 @@
 	
 	function _cb_loadExamType(data, xhr, status){
 		$("#update-enrolled-exam-type").html("");
+		
+		console.log(data);
 		
 		var html = "<option value=''>=== 선 택 ===</option>";
 		
@@ -198,7 +200,7 @@
 
 	
 	function loadExamOrganization(){
-		var url = "/admin/exam/organization";
+		var url = "/exam/organization";
 	    $.ajax({
 	        url: url,
 	        method: "GET",
@@ -323,6 +325,7 @@
 	        success: function(data, xhr, status){
 	        	alert(data);
 	        	$("#update-exam-cancel-btn").click();
+	        	showExamList();
 	        }, 
 	        error: function(xhr, xhrStatus, err){
 	        	alert(xhr.responseText);
@@ -352,7 +355,6 @@
 	function resetUpdateExamPostType(){
 		$("#update-exam-organization").html("");
 		$("#update-exam-organization").attr("disabled", true);
-		
 	}
 	
 </script>

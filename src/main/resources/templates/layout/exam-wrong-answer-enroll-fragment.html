@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>jwLand</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+<!--     <link rel="stylesheet" href="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" /> -->
+    <link rel="stylesheet" href="/node_modules/jquery/dist/jquery.min.js" />
+    <style>
+		
+    </style>
+</head>
+
+<body>
+
+
+
+<!-- Modal -->
+<div  th:fragment="popup-enroll-wronganswer">
+	<!-- select-boxes -->
+	<div class="modal fade" id="popup-enroll-wronganswer" data-backdrop="static" 
+		data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1"  aria-hidden="true">
+		
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="staticBackdropLabel1">오답 등록 팝업</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeEnrollWrongAnswer()" >
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	<form>
+				<div class="form-group row">
+					<label for="enrolled-exam-year" class="col-sm-2 col-form-label text-center">시험 연도</label>
+				    <div class="col-sm-10">
+				      <select class="form-control" id="enrolled-exam-year">
+				      </select>
+				    </div>
+				</div>
+				<hr>
+				<div class="form-group row">
+					<label for="enrolled-exam-month" class="col-sm-2 col-form-label text-center">시험 월</label>
+				    <div class="col-sm-10">
+				      <select class="form-control" id="enrolled-exam-month" disabled>
+				      </select>
+				    </div>
+				</div>
+				<hr>
+				<div class="form-group row">
+					<label for="enrolled-exam-type" class="col-sm-2 col-form-label text-center">시험 기관</label>
+				    <div class="col-sm-10">
+				      <select class="form-control" id="enrolled-exam-type" disabled>
+				      </select>
+				    </div>
+				</div>
+				<hr>
+				<div class="form-group row">
+					<label for="not-enrolled-subject" class="col-sm-2 col-form-label text-center">과목</label>
+				    <div class="col-sm-10">
+				      <select class="form-control" id="not-enrolled-subject" disabled>
+				      </select>
+				    </div>
+				</div>
+			</form>
+	      </div>
+	      
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-success" style="display:none;" 
+	        		data-toggle="modal" data-target="#select-problem-number" id="select-problem-number-btn" onclick="selectSavedNumbers()">번호선택</button>
+	        <button type="button" class="btn btn-primary" onclick="enrollWrongAnswer()">등록</button>
+	        <button type="button" class="btn btn-warning" onclick="closeEnrollWrongAnswer()" data-dismiss="modal" id="enroll-wrong-answer-cancel-btn">취소</button>
+	      </div>
+	      
+	    </div>
+	  </div>
+	  
+	</div>
+	
+	
+	<!-- 번호선택 이중 팝업 -->
+	<div class="modal fade" id="select-problem-number" 
+		 data-backdrop="static" data-keyboard="false" 
+		 tabindex="-2" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+		 
+	  <div class="modal-dialog  modal-dialog-scrollable">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="staticBackdropLabel3">번호 선택</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	       
+	      <div class="modal-body">
+	      	<ul class="list-group font-weight-bold" id="problem-number-list">
+	      	  <th:block th:each="m : ${#numbers.sequence(1,20)}">
+	      	  <li class="list-group-item">
+	      	  	<input type="checkbox" th:name="|problem-number-${m}|" th:id="|problem-number-${m}|" 
+	      	  	class="mr-2" aria-label="Checkbox for following text input" th:value="${m}">
+	      	  	<label th:for="|problem-number-${m}|" th:text="${m}" style="width:90%; height: 100%;"></label>
+	      	  </li>
+	      	  </th:block>
+			</ul>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="number-save-btn" onclick="saveSelectedNumbers()">저장</button>
+	        <button type="button" class="btn btn-danger" data-dismiss="modal" id="number-select-cancel-btn" onclick="resetNumberCheckbox()">취소</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+</body>
+</html>
+
+
+<script th:inline="javascript"  th:fragment="popup-enroll-wrong-answer-event">
+
+	var selectedNumbers = new Array();
+
+	(function(){
+		
+		$("#popup-enroll-wronganswer-btn").on("click", function(e){
+			loadEnrolledExamYear();	
+		});
+		
+		$("#enrolled-exam-year").on("change", function(e){
+			if($(this).val() == null || $(this).val().trim() == ''){
+// 				resetEnrolledExamMonth();
+// 				resetEnrolledExamPreType();
+// 				resetEnrolledExamPostType();
+			}else{
+				loadEnrolledExamMonth();
+// 				resetEnrolledExamPreType();
+// 				resetEnrolledExamPostType();
+			}
+		});
+		
+		$("#enrolled-exam-month").on("change", function(e){
+			if($(this).val() == null || $(this).val().trim() == ''){
+// 				resetUpdateExamPreType();
+// 				resetUpdateExamPostType();
+			}else{
+				loadEnrolledExamType();
+// 				resetUpdateExamPostType();S
+			}
+		});
+		
+		$("#enrolled-exam-type").on("change", function(e){
+			if($(this).val() == null || $(this).val().trim() == ''){
+				resetUpdateExamPostType();
+			}else{
+				loadNotEnrolledSubject();
+			}
+		});
+
+		$("#not-enrolled-subject").on("change", function(e){
+			
+			selectedNumbers = new Array();
+			
+			if($(this).val() == null || $(this).val().trim() == ''){
+				$("#select-problem-number-btn").css("display", "none");		
+			}else{
+				$("#select-problem-number-btn").css("display", "");		
+			}
+			
+		});
+	})();
+
+	function loadEnrolledExamYear(){
+		var url = "/exam/years";
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_loadEnrolledExamYear(data, xhr, status);
+	        },
+	        error: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
+	
+	function _cb_loadEnrolledExamYear(data, xhr, status){
+		console.log(data);
+		$("#enrolled-exam-year").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i] + "'>" + data[i] + "</option>";
+		}
+		$("#enrolled-exam-year").html(html);
+	}
+	
+	function loadEnrolledExamMonth(){
+		var _year = $("#enrolled-exam-year").val().trim();
+		var url = "/exam/month?year=" + _year;
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_loadEnrolledExamMonth(data, xhr, status);
+	        },
+	        fail: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
+	
+	function _cb_loadEnrolledExamMonth(data, xhr, status){
+		$("#enrolled-exam-month").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i] + "'>" + data[i] + "</option>";
+		}
+		
+		$("#enrolled-exam-month").html(html);
+		$("#enrolled-exam-month").removeAttr("disabled");
+	}
+	
+	
+	function loadEnrolledExamType(){
+		
+		var _year = $("#enrolled-exam-year").val().trim();
+		var _month = $("#enrolled-exam-month").val().trim();
+		
+		var url = "/exam/types?year=" + _year 
+				+ "&month=" + _month; 
+		
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	        	_cb_loadEnrolledExamType(data, xhr, status);        	
+	        },
+	        error: function(xhr, xhrStatus, err){
+	          alert(xhr.responseText);
+	        }
+        });
+	}
+	
+	function _cb_loadEnrolledExamType(data, xhr, status){
+		$("#enrolled-exam-type").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_organization_name + "</option>";
+		}
+		$("#enrolled-exam-type").html(html);
+		$("#enrolled-exam-type").removeAttr("disabled");
+	}
+
+	
+	function loadNotEnrolledSubject(){
+		
+		var examTypeSequenceNo = $("#enrolled-exam-type").val();
+		var _accountSequenceNo = accountSequenceNo;
+		
+		var url = "/exam/subjects/not-enrolled?examTypeSequenceNo=" + examTypeSequenceNo
+				+ "&accountSequenceNo=" + accountSequenceNo;
+		
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	        	_cb_loadNotEnrolledSubject(data, xhr, status);
+	        },
+	        
+	        error: function(xhr, xhrStatus, err){
+	          alert(xhr.responseText);
+	        }
+        });
+	}
+
+	function _cb_loadNotEnrolledSubject(data, xhr, status){
+		$("#not-enrolled-subject").html("");
+		var html = "<option value=''>원하는 과목이 없다면 오답 수정 버튼을 클릭하세요</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i].exam_subject_sequence_no + "'>" + data[i].subject + "</option>";
+		}
+		$("#not-enrolled-subject").html(html);
+		$("#not-enrolled-subject").removeAttr("disabled");
+	}
+
+	
+	function saveSelectedNumbers(){
+		
+		if(!confirm("선택한 번호를 저장하시겠습니까?")){
+			return ;
+		}
+		
+		selectedNumbers = new Array();
+		
+		var $checkedNumbers = $("#problem-number-list").find("input:checkbox:checked");
+		
+		for(var i = 0 ; i < $checkedNumbers.length ; i++){
+			selectedNumbers.push($checkedNumbers[i].value);
+		}
+		
+		$("#number-select-cancel-btn").click();
+	}
+	
+	
+	function selectSavedNumbers(){
+		
+		if(selectedNumbers.length < 1){
+			return ;
+		}
+
+		$("#problem-number-list").find("input:checkbox").prop("checked", false);
+		console.log(selectedNumbers);
+		for(var i = 0 ; i < selectedNumbers.length ; i++){
+			$("#problem-number-" + selectedNumbers[i]).prop("checked", true);
+		}
+	}
+	
+	function resetNumberCheckbox(){
+		$("#problem-number-list").find("input:checkbox:checked").prop("checked", false);
+	}
+	
+	
+	function enrollWrongAnswer(){
+		var url = "/exam";
+		
+		var enrolledExamType = $("#enrolled-exam-type").val();
+		var selectedSubjectType = $("#not-enrolled-subject").val();
+		var _accountSequenceNo = accountSequenceNo;
+		var problemNumberList = selectedNumbers;
+		
+		if(enrolledExamType == null || enrolledExamType.trim() == ''){
+			alert("시험명을 선택해주세요");
+			return ;
+		}
+		if(selectedSubjectType == null || selectedSubjectType.trim() == ''){
+			alert("과목을 선택해주세요");
+			return ;
+		}
+		if(problemNumberList.length < 1){
+			alert("선택한 번호가 없습니다.");
+			return ;
+		}
+		
+		if(!confirm("등록하시겠습니까?")){
+			return ;
+		}
+		
+		var requestBody = new Object();
+		requestBody.examTypeSequenceNo = enrolledExamType;
+		requestBody.examSubjectSequenceNo = selectedSubjectType;
+		requestBody.accountSequenceNo = _accountSequenceNo;
+		requestBody.problemNumberList = problemNumberList;
+		
+		
+	    $.ajax({
+	        url: url,
+	        method: "POST",
+	        contentType: "application/json",
+	        data: JSON.stringify(requestBody),
+	        success: function(data, xhr, status){
+	        	alert(data);
+	        	$("#enroll-wrong-answer-cancel-btn").click();
+	        },
+	        error: function(xhr, xhrStatus, err){
+	          alert(xhr.responseText);
+	        }
+        });
+	}
+	
+	
+	function closeEnrollWrongAnswer(){
+		$("#enrolled-exam-year").html("");
+		resetEnrolledExamMonth();
+		resetEnrolledExamType();
+		resetNotEnrolledSubject();
+	}
+	
+	function resetEnrolledExamMonth(){
+		$("#enrolled-exam-month").html("");
+		$("#enrolled-exam-month").attr("disabled", true);;
+	}
+	
+	function resetEnrolledExamType(){
+		$("#enrolled-exam-type").html("");
+		$("#enrolled-exam-type").attr("disabled", true);;
+	}
+	
+	function resetNotEnrolledSubject(){
+		selectedNumbers = new Array();
+		$("#not-enrolled-subject").html("");
+		$("#not-enrolled-subject").attr("disabled", true);;
+	}
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

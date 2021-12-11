@@ -23,4 +23,54 @@
 		ORDER BY wrong_count desc
 	</select>
 
+	<select id="getExamYear" resultType="int">
+		SELECT DISTINCT year FROM jwland.exam_type
+		ORDER BY year
+	</select>
+
+	<select id="getExamMonth" resultType="int">
+		SELECT DISTINCT month FROM jwland.exam_type
+		WHERE year = #{year}::INT
+		ORDER BY month
+	</select>
+
+	<select id="getExamTypes" parameterType="map" resultType="map">
+		SELECT et.exam_type_sequence_no, eo.exam_organization_name
+		FROM jwland.exam_type et
+		LEFT JOIN jwland.exam_organization eo
+		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
+		WHERE year = #{year}::INT
+		AND   month = #{month}::INT
+		ORDER BY et.exam_type_sequence_no
+	</select>
+
+
+	<select id="getExamOrganzations" resultType="map">
+		SELECT exam_organization_sequence_no, exam_organization_name
+		FROM jwland.exam_organization
+		ORDER BY exam_organization_sequence_no
+	</select>
+	
+	<select id="getNotEnrolledSubjects" resultType="map" parameterType="map">
+		SELECT exam_subject_sequence_no, subject 
+		FROM jwland.exam_subject 
+		WHERE exam_subject_sequence_no NOT IN (
+			SELECT exam_subject_sequence_no
+			FROM jwland.exam_master
+			WHERE exam_type_sequence_no = #{examTypeSequenceNo}::INT
+			AND account_sequence_no = #{accountSequenceNo}::INT
+		)
+		ORDER BY exam_subject_sequence_no
+	</select>
+	
+	<insert id="enrollWrongAnswer" parameterType="map">
+		INSERT INTO jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no)
+		VALUES(#{examTypeSequenceNo}, #{examSubjectSequenceNo}, #{problemNumber}, #{accountSequenceNo})
+	</insert>
+	
+
 </mapper>
+
+
+
+

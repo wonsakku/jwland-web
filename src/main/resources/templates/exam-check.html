@@ -14,19 +14,24 @@
           <h1 class="h2">모의고사 체크</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             	<!-- Button trigger modal -->
-				<button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal" data-target="#popup-enroll-exam" id="popup-enroll-exam-btn">
+				<button type="button" class="btn btn-info btn-sm mr-1" 
+						data-toggle="modal" data-target="#popup-enroll-exam" id="popup-enroll-exam-btn">
 				  기출 등록
 				</button>
-				<button type="button" class="btn btn-warning btn-sm mr-1" data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn">
+				<button type="button" class="btn btn-warning btn-sm mr-1" 
+						data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn">
 				  기출 수정
 				</button>
-				<button type="button" class="btn btn-primary btn-sm mr-1" data-toggle="modal" data-target="#popupEnroll">
+				<button type="button" class="btn btn-primary btn-sm mr-1" 
+						data-toggle="modal" data-target="#popup-enroll-wronganswer" id="popup-enroll-wronganswer-btn">
 				  오답 등록
 				</button>
-				<button type="button" class="btn btn-success btn-sm mr-1" data-toggle="modal" data-target="#popupUpdate">
+				<button type="button" class="btn btn-success btn-sm mr-1" 
+						data-toggle="modal" data-target="#popupUpdate">
 				  오답 수정
 				</button>
-				<button type="button" class="btn btn-secondary btn-sm mr-1" data-toggle="modal" data-target="#popupUpdate">
+				<button type="button" class="btn btn-secondary btn-sm mr-1" 
+						data-toggle="modal" data-target="#popupUpdate">
 				  내가 틀린 문제
 				</button>
           </div>
@@ -51,42 +56,11 @@
 	
 	<div th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam"></div>
 	<div th:replace="layout/exam-update-fragment.html :: popup-update-exam"></div>
+	<div th:replace="layout/exam-wrong-answer-enroll-fragment.html :: popup-enroll-wronganswer"></div>
 	
 
 
 
-
-
-	<!-- Modal -->
-	<div class="modal fade" id="selectProblemNumber" data-backdrop="static" data-keyboard="false" tabindex="-2" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
-	  <div class="modal-dialog  modal-dialog-scrollable">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="staticBackdropLabel3">번호 선택</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	       
-	      <div class="modal-body">
-	      	<ul class="list-group font-weight-bold" id="problem-number-list">
-	      	  <th:block th:each="m : ${#numbers.sequence(1,20)}">
-	      	  <li class="list-group-item">
-	      	  	<input type="checkbox" th:name="|problem-number-${m}|" th:id="|problem-number-${m}|" 
-	      	  	class="mr-2" aria-label="Checkbox for following text input" th:value="${m}">
-	      	  	<label th:for="|problem-number-${m}|" th:text="${m}" style="width:90%; height: 100%;"></label>
-	      	  </li>
-	      	  </th:block>
-			</ul>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Understood</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	
 
 </main>
 </body>
@@ -94,10 +68,15 @@
 
 <script th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam-event"></script>
 <script th:replace="layout/exam-update-fragment.html :: popup-update-exam-event"></script>
+<script th:replace="layout/exam-wrong-answer-enroll-fragment.html :: popup-enroll-wrong-answer-event"></script>
 <script th:inline="javascript">
 // <script type="application/javascript">
 // 	console.log(data);	
 // 	console.log(2);
+	
+	var loginInfo = [[${session.loginInfo}]];
+	const accountSequenceNo = loginInfo == null ? null : loginInfo.accountSequenceNo;
+
 	(function(){
 		showExamList();
 	})();
@@ -128,7 +107,7 @@
 			html += "<th scope='row'>" + (i+1) + "</th>";
 			html += "<td>" + data[i].year + "년</td>";
 			html += "<td>" + data[i].month + "월</td>";
-			html += "<td>" + data[i].examType + "</td>";
+			html += "<td>" + data[i].examOrganizationName + "</td>";
 			html += "<td>" + data[i].subject + "</td>";
 			html += "<td>" + data[i].problemNumber + "번</td>";
 			html += "<td>" + data[i].wrongCount + "명</td>";
@@ -136,7 +115,6 @@
 		}
 		
 		$("#exam-table-body").html(html);
-		
 	}
 	
 	

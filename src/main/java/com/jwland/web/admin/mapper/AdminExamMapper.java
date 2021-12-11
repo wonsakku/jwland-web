@@ -16,14 +16,6 @@ public interface AdminExamMapper {
 
 	Map<String, String> checkExamExist(ExamDuplicationValidateParameter examEnrollDto);
 
-	List<Integer> getExamYear();
-
-	List<Integer> getExamMonth(String year);
-
-	List<Map> getExamTypes(Map<String, String> parameter);
-
-	List<Map> getExamOrganzations();
-
 	void updateExamType(ExamUpdateDto examUpdateDto);
 
 	int deleteExamType(int examTypeSequenceNo);

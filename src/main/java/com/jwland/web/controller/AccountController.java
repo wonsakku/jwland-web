@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,7 +46,7 @@ public class AccountController {
 	}
 	
 	@PostMapping("/login")
-	public ModelAndView login(@ModelAttribute(value = VariableConstant.FORM_LOGIN_DTO) @Validated FormLoginDto formLoginDto,
+	public ModelAndView login(@ModelAttribute @Validated FormLoginDto formLoginDto,
 			HttpServletRequest request) {
 		
 		accountService.login(formLoginDto, request);

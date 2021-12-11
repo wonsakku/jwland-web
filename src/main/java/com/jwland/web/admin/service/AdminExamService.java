@@ -31,25 +31,6 @@ public class AdminExamService {
 		adminExamMapper.enrollExam(examEnrollDto);
 	}
 
-	public List<Integer> getExamYear() {
-		return adminExamMapper.getExamYear();
-	}
-
-	public List<Integer> getExamMonth(String year) {
-		return adminExamMapper.getExamMonth(year);
-	}
-
-	public List<Map> getExamTypes(String year, String month) {
-		Map<String, String> parameter = new HashMap<>();
-		parameter.put("year", year);
-		parameter.put("month", month);
-		return adminExamMapper.getExamTypes(parameter);
-	}
-
-	public List<Map> getExamOrganzations() {
-		return adminExamMapper.getExamOrganzations();
-	}
-
 	public void updateExamType(ExamUpdateDto examUpdateDto) {
 		examDuplicationCheck( modelMapper.map(examUpdateDto, ExamDuplicationValidateParameter.class) );
 		adminExamMapper.updateExamType(examUpdateDto);

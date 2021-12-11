@@ -16,34 +16,6 @@
 		AND   exam_organization_sequence_no = #{examOrganizationSequenceNo}
 	</select>
 
-	<select id="getExamYear" resultType="int">
-		SELECT DISTINCT year FROM jwland.exam_type
-		ORDER BY year
-	</select>
-
-	<select id="getExamMonth" resultType="int">
-		SELECT DISTINCT month FROM jwland.exam_type
-		WHERE year = #{year}::INT
-		ORDER BY month
-	</select>
-
-	<select id="getExamTypes" parameterType="map" resultType="map">
-		SELECT et.exam_type_sequence_no, eo.exam_organization_name
-		FROM jwland.exam_type et
-		LEFT JOIN jwland.exam_organization eo
-		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
-		WHERE year = #{year}::INT
-		AND   month = #{month}::INT
-		ORDER BY et.exam_type_sequence_no
-	</select>
-
-
-	<select id="getExamOrganzations" resultType="map">
-		SELECT exam_organization_sequence_no, exam_organization_name
-		FROM jwland.exam_organization
-		ORDER BY exam_organization_sequence_no
-	</select>
-
 	<update id="updateExamType" parameterType="com.jwland.domain.exam.ExamUpdateDto">
 		UPDATE jwland.exam_type
 		SET exam_organization_sequence_no = #{examOrganizationSequenceNo}

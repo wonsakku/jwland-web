@@ -89,7 +89,8 @@ create table jwland.exam_type(
 	exam_organization_sequence_no BIGINT NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
-	constraint exam_type_primary_key PRIMARY KEY("exam_type_sequence_no")
+	constraint exam_type_primary_key PRIMARY KEY("exam_type_sequence_no"),
+	constraint exam_type_unique_info_key UNIQUE(year, month, exam_organization_sequence_no)	
 );
 
 
