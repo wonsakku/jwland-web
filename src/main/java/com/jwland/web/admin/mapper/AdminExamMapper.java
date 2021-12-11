@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.jwland.domain.exam.ExamDuplicationValidateParameter;
 import com.jwland.domain.exam.ExamEnrollDto;
 import com.jwland.domain.exam.ExamUpdateDto;
 
@@ -13,7 +14,7 @@ public interface AdminExamMapper {
 
 	void enrollExam(ExamEnrollDto examEnrollDto);
 
-	Map<String, String> checkExamExist(ExamEnrollDto examEnrollDto);
+	Map<String, String> checkExamExist(ExamDuplicationValidateParameter examEnrollDto);
 
 	List<Integer> getExamYear();
 
@@ -21,7 +22,9 @@ public interface AdminExamMapper {
 
 	List<Map> getExamTypes(Map<String, String> parameter);
 
-	List<Map> getAllExamTypes();
+	List<Map> getExamOrganzations();
 
 	void updateExamType(ExamUpdateDto examUpdateDto);
+
+	int deleteExamType(int examTypeSequenceNo);
 }

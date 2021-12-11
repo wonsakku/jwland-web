@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,9 +61,9 @@ public class AdminExamController {
 		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
 	}
 	
-	@GetMapping("/types/all")
-	public ResponseEntity<List<Map>> getAllExamTypes(){
-		List<Map> examTypes = adminExamService.getAllExamTypes();
+	@GetMapping("/organization")
+	public ResponseEntity<List<Map>> getExamOrganzations(){
+		List<Map> examTypes = adminExamService.getExamOrganzations();
 		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
 	}
 	
@@ -72,6 +74,11 @@ public class AdminExamController {
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_UPDATE_SUCCESS);
 	}
 	
+	@DeleteMapping("/{examTypeSequenceNo}")
+	public ResponseEntity<String> deleteExamType(@PathVariable int examTypeSequenceNo){
+		adminExamService.deleteExamType(examTypeSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_DELETE_SUCCESS);
+	}
 	
 }
 

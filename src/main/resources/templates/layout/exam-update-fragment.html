@@ -44,17 +44,17 @@
 			</div>
 			<hr>
 			<div class="form-group row">
-				<label for="update-exam-pre-type" class="col-sm-2 col-form-label text-center">변경할 시험명</label>
+				<label for="update-enrolled-exam-type" class="col-sm-2 col-form-label text-center">변경할 시험명</label>
 			    <div class="col-sm-10">
-			      <select class="form-control" id="update-exam-pre-type" disabled>
+			      <select class="form-control" id="update-enrolled-exam-type" disabled>
 			      </select>
 			    </div>
 			</div>
 			<hr>
 			<div class="form-group row">
-				<label for="update-exam-pre-type" class="col-sm-2 col-form-label text-center">시험명</label>
+				<label for="update-enrolled-exam-type" class="col-sm-2 col-form-label text-center">시험 기관</label>
 			    <div class="col-sm-10">
-			      <select class="form-control" id="update-exam-post-type" disabled>
+			      <select class="form-control" id="update-exam-organization" disabled>
 			      </select>
 			    </div>
 			</div>
@@ -104,11 +104,11 @@
 			}
 		});
 		
-		$("#update-exam-pre-type").on("change", function(e){
+		$("#update-enrolled-exam-type").on("change", function(e){
 			if($(this).val() == null || $(this).val().trim() == ''){
 				resetUpdateExamPostType();
 			}else{
-				loadAllExamType();
+				loadExamOrganization();
 			}
 		});
 		
@@ -168,6 +168,7 @@
 	}
 	
 	function loadExamType(){
+		
 		var _year = $("#update-exam-year").val().trim();
 		var _month = $("#update-exam-month").val().trim();
 		var url = "/admin/exam/types?year=" + _year + "&month=" + _month;
@@ -184,25 +185,25 @@
 	}
 	
 	function _cb_loadExamType(data, xhr, status){
-		$("#update-exam-pre-type").html("");
+		$("#update-enrolled-exam-type").html("");
 		
 		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
+			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_organization_name + "</option>";
 		}
-		$("#update-exam-pre-type").html(html);
-		$("#update-exam-pre-type").removeAttr("disabled");
+		$("#update-enrolled-exam-type").html(html);
+		$("#update-enrolled-exam-type").removeAttr("disabled");
 	}
 
 	
-	function loadAllExamType(){
-		var url = "/admin/exam/types/all";
+	function loadExamOrganization(){
+		var url = "/admin/exam/organization";
 	    $.ajax({
 	        url: url,
 	        method: "GET",
 	        success: function(data, xhr, status){
-	          _cb_loadAllExamType(data, xhr, status);
+	          _cb_loadExamOrganization(data, xhr, status);
 	        },
 	        fail: function(xhr, xhrStatus, err){
 	          alert(JSON.stringify(xhr));
@@ -210,42 +211,59 @@
         });
 	}
 	
-	function _cb_loadAllExamType(data, xhr, status){
-		$("#update-exam-post-type").html("");
+	function _cb_loadExamOrganization(data, xhr, status){
+		$("#update-exam-organization").html("");
 		
 		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html +="<option value='" + data[i].exam_type + "'>" + data[i].exam_type + "</option>";
+			html +="<option value='" + data[i].exam_organization_sequence_no + "'>" + data[i].exam_organization_name + "</option>";
 // 			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
 		}
-		$("#update-exam-post-type").html(html);
-		$("#update-exam-post-type").removeAttr("disabled");
+		$("#update-exam-organization").html(html);
+		$("#update-exam-organization").removeAttr("disabled");
 	}
 	
 	
 	function updateExamType(){
 		
-		var examTypeSequenceNo = $("#update-exam-pre-type").val();
-		var changeExamType = $("#update-exam-post-type").val();
+		var updateExamYear = $("#update-exam-year").val();
+		var updateExamMonth = $("#update-exam-month").val();
+		
+		var examTypeSequenceNo = $("#update-enrolled-exam-type").val();
+		var changeExamOrganizationSequenceNo = $("#update-exam-organization").val();
+		
 
+		if(updateExamYear == null || updateExamYear.trim() == ''){
+			alert("시험 연도을 선택해주세요");
+			return ;
+		}
+		
+		if(updateExamMonth == null || updateExamMonth.trim() == ''){
+			alert("시험 월을 선택해주세요");
+			return ;
+		}
+		
 		if(examTypeSequenceNo == null || examTypeSequenceNo.trim() == ''){
 			alert("변경할 시험명을 선택해주세요");
 			return ;
 		}
 		
-		if(changeExamType == null || changeExamType.trim() == ''){
-			alert("시험명을 선택해주세요");
+		if(changeExamOrganizationSequenceNo == null || changeExamOrganizationSequenceNo.trim() == ''){
+			alert("시험 기관을 선택해주세요");
 			return ;
 		}
 
-		if(!confirm("변경하시겠습니까?")){
+		if(!confirm("수정하시겠습니까?")){
 			return ;
 		}
 		
 		var requestBody = new Object();
+		requestBody.year = updateExamYear;
+		requestBody.month = updateExamMonth;
 		requestBody.examTypeSequenceNo = examTypeSequenceNo;
-		requestBody.examType = changeExamType; 
+		requestBody.examOrganizationSequenceNo = changeExamOrganizationSequenceNo; 
+		
 		
 		var url = "/admin/exam";
 	    $.ajax({
@@ -257,8 +275,9 @@
 	        	alert(data);
 	        	$("#update-exam-cancel-btn").click();
 	        }, 
-	        fail: function(xhr, xhrStatus, err){
-	        	alert(a.responseText);
+	        error: function(xhr, xhrStatus, err){
+// 	        	console.log(xhr);
+	        	alert(xhr.responseText);
 	        }
         });
 	}
@@ -267,6 +286,48 @@
 	
 	function deleteExamType(){
 		
+		var deleteExamYear = $("#update-exam-year").val();
+		var deleteExamMonth = $("#update-exam-month").val();
+		
+		var examTypeSequenceNo = $("#update-enrolled-exam-type").val();
+		var examOrganizationName = $("#update-enrolled-exam-type").find("option:selected").text().trim();
+		
+		if(deleteExamYear == null || deleteExamYear.trim() == ''){
+			alert("시험 연도을 선택해주세요");
+			return ;
+		}
+		
+		if(deleteExamMonth == null || deleteExamMonth.trim() == ''){
+			alert("시험 월을 선택해주세요");
+			return ;
+		}
+		
+		if(examTypeSequenceNo == null || examTypeSequenceNo.trim() == ''){
+			alert("변경할 시험명을 선택해주세요");
+			return ;
+		}
+		
+		var checkRealDelete = prompt("삭제를 원하신다면 시험 연,월,시험명을 입력해주세요 : " + deleteExamYear + "," + deleteExamMonth + "," + examOrganizationName, "");
+		var checkInputValue = deleteExamYear + "," + deleteExamMonth + "," + examOrganizationName;
+		
+		if(checkRealDelete.trim() != checkInputValue.trim()){
+			alert("입력값이 올바르지 않습니다.");
+			return;
+		}
+		
+		var url = "/admin/exam/" + examTypeSequenceNo;
+	    $.ajax({
+	        url: url,
+	        method: "DELETE",
+	        contentType: "application/json",
+	        success: function(data, xhr, status){
+	        	alert(data);
+	        	$("#update-exam-cancel-btn").click();
+	        }, 
+	        error: function(xhr, xhrStatus, err){
+	        	alert(xhr.responseText);
+	        }
+        });
 	}
 	
 
@@ -283,14 +344,14 @@
 	}
 	
 	function resetUpdateExamPreType(){
-		$("#update-exam-pre-type").html("");
-		$("#update-exam-pre-type").attr("disabled", true);
+		$("#update-enrolled-exam-type").html("");
+		$("#update-enrolled-exam-type").attr("disabled", true);
 		
 	}
 	
 	function resetUpdateExamPostType(){
-		$("#update-exam-post-type").html("");
-		$("#update-exam-post-type").attr("disabled", true);
+		$("#update-exam-organization").html("");
+		$("#update-exam-organization").attr("disabled", true);
 		
 	}
 	

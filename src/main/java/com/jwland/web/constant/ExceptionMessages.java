@@ -14,7 +14,8 @@ public enum ExceptionMessages {
 	WRONG_ACCESS_ERROR("접근 방식이 올바르지 않습니다."),
 
 	
-	ALREADY_ENROLLED_EXAM("이미 등록된 기출입니다.")
+	ALREADY_ENROLLED_EXAM("이미 등록된 기출입니다."),
+	NO_MATCHED_EXAM("일치하는 시험 정보가 없습니다.")
 	;
 
 	private String message;

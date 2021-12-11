@@ -5,15 +5,15 @@
 <mapper namespace="com.jwland.web.admin.mapper.AdminExamMapper">
 
 	<insert id="enrollExam" parameterType="com.jwland.domain.exam.ExamEnrollDto">
-		INSERT INTO jwland.exam_type(year, month, exam_type)
-		VALUES(#{year}, #{month}, #{examType})
+		INSERT INTO jwland.exam_type(year, month, exam_organization_sequence_no)
+		VALUES(#{year}, #{month}, #{examOrganizationSequenceNo})
 	</insert>
 
-	<select id="checkExamExist" resultType="map" parameterType="com.jwland.domain.exam.ExamEnrollDto">
+	<select id="checkExamExist" resultType="map" parameterType="com.jwland.domain.exam.ExamDuplicationValidateParameter">
 		SELECT * FROM jwland.exam_type
 		WHERE year = #{year}
 		AND   month = #{month}
-		AND   exam_type = #{examType}
+		AND   exam_organization_sequence_no = #{examOrganizationSequenceNo}
 	</select>
 
 	<select id="getExamYear" resultType="int">
@@ -28,26 +28,32 @@
 	</select>
 
 	<select id="getExamTypes" parameterType="map" resultType="map">
-		SELECT exam_type_sequence_no, exam_type
-		FROM jwland.exam_type
+		SELECT et.exam_type_sequence_no, eo.exam_organization_name
+		FROM jwland.exam_type et
+		LEFT JOIN jwland.exam_organization eo
+		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
 		WHERE year = #{year}::INT
 		AND   month = #{month}::INT
-		ORDER BY exam_type
+		ORDER BY et.exam_type_sequence_no
 	</select>
 
 
-	<select id="getAllExamTypes" resultType="map">
-		SELECT '' AS exam_type_sequence_no, exam_type
-		FROM jwland.exam_type
-		GROUP BY exam_type
-		ORDER BY exam_type
+	<select id="getExamOrganzations" resultType="map">
+		SELECT exam_organization_sequence_no, exam_organization_name
+		FROM jwland.exam_organization
+		ORDER BY exam_organization_sequence_no
 	</select>
 
 	<update id="updateExamType" parameterType="com.jwland.domain.exam.ExamUpdateDto">
 		UPDATE jwland.exam_type
-		SET exam_type = #{examType}
+		SET exam_organization_sequence_no = #{examOrganizationSequenceNo}
 		WHERE exam_type_sequence_no = #{examTypeSequenceNo}
 	</update>
+	
+	<delete id="deleteExamType" parameterType="int">
+		DELETE FROM jwland.exam_type
+		WHERE exam_type_sequence_no = #{examTypeSequenceNo}
+	</delete>
 
 </mapper>
 

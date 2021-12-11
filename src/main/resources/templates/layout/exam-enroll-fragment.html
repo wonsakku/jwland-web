@@ -28,46 +28,26 @@
       </div>
       <div class="modal-body">
       	<form>
-		<table class="table text-center  table-bordered">
-		  <thead class="thead-dark">
-		    <tr>
-		      <th scope="col">항목</th>
-		      <th scope="col">입력</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		  	<tr>
-	  			<div class="form-group">
-			  		<th scope="row"  class="align-middle"> <label for="exam-year">년 도</label> </th>
-			  		<td><input type="text" class="form-control" id="exam-year"></td>
-	  			</div>
-		  	</tr>
-		  	<tr>
-		  		<div class="form-group">
-			  		<th scope="row"  class="align-middle"> <label for="exam-month">월</label> </th>
-			  		<td><input type="text" class="form-control" id="exam-month"></td>
-		  		</div>
-		  	</tr>
-		  	<tr>
-		  		<th scope="row"  class="align-middle">시험 종류</th>
-		  		<td>
-					<div class="input-group">
-					  <div class="input-group-prepend" style="width:100%;" >
-					    <button class="btn btn-outline-secondary dropdown-toggle" type="button" style="width:100%;"  data-toggle="dropdown" aria-expanded="false" id="enroll-exam-select-exam">시험 선택</button>
-					    <input type="hidden" id="selected-enroll-exam-type">
-					    <div class="dropdown-menu">
-					      <a class="dropdown-item" data-value="평가원">평가원</a>
-					      <a class="dropdown-item" data-value="교육청">교육청</a>
-					      <a class="dropdown-item" data-value="대성">대성</a>
-					      <a class="dropdown-item" data-value="종로">종로</a>
-					      <a class="dropdown-item" data-value="비상">비상</a>
-					    </div>
-					  </div>
-					</div>
-		  		</td>
-		  	</tr>
-		  </tbody>
-		</table>
+      		<div class="form-group row">
+				<label for="enroll-exam-year" class="col-sm-2 col-form-label text-center">년</label>
+			    <div class="col-sm-10">
+			      <input class="form-control" id="enroll-exam-year">
+      			</div>
+      		</div>
+      		<hr>
+      		<div class="form-group row">
+      			<label for="enroll-exam-month" class="col-sm-2 col-form-label text-center">월</label>
+      			<div class="col-sm-10">
+	      			<input class="form-control" id="enroll-exam-month">
+      			</div>
+      		</div>
+      		<hr>
+      		<div class="form-group row">
+      			<label for="enroll-exam-organization" class="col-sm-2 col-form-label text-center">시험기관</label>
+      			<div class="col-sm-10">
+      				<select id="enroll-exam-organization" style="width:100%;height:100%;"></select>
+      			</div>
+      		</div>
 		</form>
       </div>
       <div class="modal-footer">
@@ -85,23 +65,65 @@
 <script th:inline="javascript"  th:fragment="popup-enroll-exam-event">
 
 	(function(){
-		$(".dropdown-item").on("click", function(e){
-			var value = $(this).data("value");
-			$("#enroll-exam-select-exam").text(value);
-			$("#selected-enroll-exam-type").val(value);
+		$("#popup-enroll-exam-btn").on("click", function(e){
+			loadExamOrganizationInExamEnroll();
 		});
 	})();
 
+	
+	function loadExamOrganizationInExamEnroll(){
+		var url = "/admin/exam/organization";
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	          _cb_loadExamOrganizationInExamEnroll(data, xhr, status);
+	        },
+	        fail: function(xhr, xhrStatus, err){
+	          alert(JSON.stringify(xhr));
+	        }
+        });
+	}
+	
+	function _cb_loadExamOrganizationInExamEnroll(data, xhr, status){
+		$("#enroll-exam-organization").html("");
+		
+		var html = "<option value=''>=== 선 택 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i].exam_organization_sequence_no + "'>" + data[i].exam_organization_name + "</option>";
+// 			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
+		}
+		$("#enroll-exam-organization").html(html);
+	}
+	
+	
+	
 	function enroll() {
 		
-		var examYear = $("#exam-year").val();
-		var examMonth = $("#exam-month").val();
-		var examType = $("#selected-enroll-exam-type").val();
+		var examYear = $("#enroll-exam-year").val();
+		var examMonth = $("#enroll-exam-month").val();
+		var examOrganizationSequenceNo = $("#enroll-exam-organization").val();
+
+		if(examYear == null || examYear.trim() == ''){
+			alert("시험 연도를 입력해주세요");
+			return ;
+		}
+		if(examMonth == null || examMonth.trim() == ''){
+			alert("시험 월를 입력해주세요");
+			return ;
+		}
+		if(examOrganizationSequenceNo == null || examOrganizationSequenceNo.trim() == ''){
+			alert("시험 기관을 선택해주세요");
+			return ;
+		}
 		
+
 		var examInfo = new Object();
 		examInfo.year = examYear;
 		examInfo.month = examMonth;
-		examInfo.examType = examType;
+		examInfo.examOrganizationSequenceNo = examOrganizationSequenceNo;
+		
 		
 		var url = "/admin/exam/enroll";
 		
@@ -127,9 +149,8 @@
 	}
 
 	function cancelEnrollExam(){
-		$("#enroll-exam-select-exam").text("시험선택");
-		$("#exam-year").val("");
-		$("#exam-month").val("");
+		$("#enroll-exam-year").val("");
+		$("#enroll-exam-month").val("");
 	}
 	
 </script>

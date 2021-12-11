@@ -5,9 +5,10 @@
 <mapper namespace="com.jwland.web.mapper.ExamCheckMapper">
 
 	<select id="getExamCheckList" resultType="com.jwland.domain.exam.ExamTotalInfoDto">
-		SELECT et.year, 
+		SELECT em.exam_master_sequence_no,
+			   et.year, 
 		       et.month, 
-		       et.exam_type, 
+		       eo.exam_organization_name, 
 		       es.subject, 
 		       em.problem_number, 
 		       count(*) AS wrong_count
@@ -16,7 +17,9 @@
 		ON em.exam_type_sequence_no = et.exam_type_sequence_no
 		LEFT JOIN jwland.exam_subject es
 		ON em.exam_subject_sequence_no = es.exam_subject_sequence_no
-		GROUP BY et.year, et.month, et.exam_type, es.subject, em.problem_number
+		LEFT JOIN jwland.exam_organization eo
+		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
+		GROUP BY em.exam_master_sequence_no, et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number
 		ORDER BY wrong_count desc
 	</select>
 

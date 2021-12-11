@@ -4,6 +4,7 @@ drop table if exists jwland.account;
 drop table if exists jwland.exam_subject;
 drop table if exists jwland.exam_type;
 drop table if exists jwland.exam_master;
+drop table if exists jwland.exam_organization;
 drop table if exists jwland.class;
 drop table if exists jwland.account_class_map;
 
@@ -15,6 +16,7 @@ drop sequence if exists jwland.account_sequence;
 drop sequence if exists jwland.exam_subject_sequence;
 drop sequence if exists jwland.exam_type_sequence;
 drop sequence if exists jwland.exam_master_sequence;
+drop sequence if exists jwland.exam_organization_sequence;
 drop sequence if exists jwland.class_sequence;
 
 
@@ -26,7 +28,9 @@ create sequence jwland.account_sequence;
 create sequence jwland.exam_subject_sequence;
 create sequence jwland.exam_type_sequence;
 create sequence jwland.exam_master_sequence;
+create sequence jwland.exam_organization_sequence;
 create sequence jwland.class_sequence;
+
 
 
 
@@ -69,11 +73,20 @@ create table jwland.exam_subject(
 );
 
 
+create table jwland.exam_organization(
+	exam_organization_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_organization_sequence'),
+	exam_organization_name VARCHAR(20) NOT NULL UNIQUE,
+	created_at TIMESTAMP NOT NULL DEFAULT now(),
+	modify_at TIMESTAMP NOT NULL DEFAULT now(),
+	constraint exam_organization_primary_key PRIMARY KEY("exam_organization_sequence_no")
+);
+
+
 create table jwland.exam_type(
 	exam_type_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_type_sequence'),
 	year BIGINT NOT NULL,
 	month BIGINT NOT NULL,
-	exam_type VARCHAR(20) NOT NULL,
+	exam_organization_sequence_no BIGINT NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	constraint exam_type_primary_key PRIMARY KEY("exam_type_sequence_no")
