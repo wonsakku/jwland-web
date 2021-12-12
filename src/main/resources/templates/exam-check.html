@@ -14,14 +14,14 @@
           <h1 class="h2">모의고사 체크</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             	<!-- Button trigger modal -->
-				<button type="button" class="btn btn-info btn-sm mr-1" 
-						data-toggle="modal" data-target="#popup-enroll-exam" id="popup-enroll-exam-btn">
-				  기출 등록
-				</button>
-				<button type="button" class="btn btn-warning btn-sm mr-1" 
-						data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn">
-				  기출 수정
-				</button>
+<!-- 				<button type="button" class="btn btn-info btn-sm mr-1"  -->
+<!-- 						data-toggle="modal" data-target="#popup-enroll-exam" id="popup-enroll-exam-btn"> -->
+<!-- 				  기출 등록 -->
+<!-- 				</button> -->
+<!-- 				<button type="button" class="btn btn-warning btn-sm mr-1"  -->
+<!-- 						data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn"> -->
+<!-- 				  기출 수정 -->
+<!-- 				</button> -->
 				<th:block th:if="${session.loginInfo != null && session.loginInfo.accountSequenceNo != null}">
 					<button type="button" class="btn btn-primary btn-sm mr-1" 
 							data-toggle="modal" data-target="#popup-enroll-wronganswer" id="popup-enroll-wronganswer-btn">
@@ -55,8 +55,8 @@
 		</table>
 	</div>
 	
-	<div th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam"></div>
-	<div th:replace="layout/exam-update-fragment.html :: popup-update-exam"></div>
+<!-- 	<div th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam"></div> -->
+<!-- 	<div th:replace="layout/exam-update-fragment.html :: popup-update-exam"></div> -->
 	<div th:replace="layout/exam-wrong-answer-enroll-fragment.html :: popup-enroll-wronganswer"></div>
 	<div th:replace="layout/exam-wrong-answer-update-fragment.html :: popup-update-wronganswer"></div>
 	
@@ -68,8 +68,8 @@
 </body>
 </html>
 
-<script th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam-event"></script>
-<script th:replace="layout/exam-update-fragment.html :: popup-update-exam-event"></script>
+<!-- <script th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam-event"></script> -->
+<!-- <script th:replace="layout/exam-update-fragment.html :: popup-update-exam-event"></script> -->
 <script th:replace="layout/exam-wrong-answer-enroll-fragment.html :: popup-enroll-wrong-answer-event"></script>
 <script th:replace="layout/exam-wrong-answer-update-fragment.html :: popup-update-wrong-answer-event"></script>
 <script th:inline="javascript">

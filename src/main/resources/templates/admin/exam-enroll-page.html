@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sd="http://www.thymeleaf.org/spring-data"
+	layout:decorator="layout/layout.html"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title></title>
+
+<script src="/js/form-validation.js"></script>
+<link href="/css/form-validation.css" rel="stylesheet">
+
+<style>
+.bd-placeholder-img {
+	font-size: 1.125rem;
+	text-anchor: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+</style>
+
+</head>
+<body>
+	<main layout:fragment="content">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel1">기출 등록 팝업</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" onclick="cancelEnrollExam()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group row">
+							<label for="enroll-exam-year"
+								class="col-sm-2 col-form-label text-center">년</label>
+							<div class="col-sm-10">
+								<input class="form-control" id="enroll-exam-year">
+							</div>
+						</div>
+						<hr>
+						<div class="form-group row">
+							<label for="enroll-exam-month"
+								class="col-sm-2 col-form-label text-center">월</label>
+							<div class="col-sm-10">
+								<input class="form-control" id="enroll-exam-month">
+							</div>
+						</div>
+						<hr>
+						<div class="form-group row">
+							<label for="enroll-exam-organization"
+								class="col-sm-2 col-form-label text-center">시험기관</label>
+							<div class="col-sm-10">
+								<select id="enroll-exam-organization"
+									style="width: 100%; height: 100%;"></select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="enroll()">등록</button>
+					<button type="button" class="btn btn-danger"
+						onclick="historyBack()" data-dismiss="modal"
+						id="enroll-exam-cancel-btn">뒤로가기</button>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>
+
+<script th:inline="javascript">
+
+	(function() {
+		loadExamOrganizationInExamEnroll();
+	})();
+
+	function loadExamOrganizationInExamEnroll() {
+		var url = "/exam/organization";
+		$.ajax({
+			url : url,
+			method : "GET",
+			success : function(data, xhr, status) {
+				_cb_loadExamOrganizationInExamEnroll(data, xhr, status);
+			},
+			fail : function(xhr, xhrStatus, err) {
+				alert(JSON.stringify(xhr));
+			}
+		});
+	}
+
+	function _cb_loadExamOrganizationInExamEnroll(data, xhr, status) {
+		console.log(data);
+		$("#enroll-exam-organization").html("");
+
+		var html = "<option value=''>=== 선 택 ===</option>";
+
+		for (var i = 0; i < data.length; i++) {
+			html += "<option value='" + data[i].exam_organization_sequence_no + "'>"
+					+ data[i].exam_organization_name + "</option>";
+			//			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
+		}
+		$("#enroll-exam-organization").html(html);
+	}
+
+	function enroll() {
+
+		var examYear = $("#enroll-exam-year").val();
+		var examMonth = $("#enroll-exam-month").val();
+		var examOrganizationSequenceNo = $("#enroll-exam-organization").val();
+
+		if (examYear == null || examYear.trim() == '') {
+			alert("시험 연도를 입력해주세요");
+			return;
+		}
+		if (examMonth == null || examMonth.trim() == '') {
+			alert("시험 월를 입력해주세요");
+			return;
+		}
+		if (examOrganizationSequenceNo == null
+				|| examOrganizationSequenceNo.trim() == '') {
+			alert("시험 기관을 선택해주세요");
+			return;
+		}
+
+		var examInfo = new Object();
+		examInfo.year = examYear;
+		examInfo.month = examMonth;
+		examInfo.examOrganizationSequenceNo = examOrganizationSequenceNo;
+
+		var url = "/admin/exam/enroll";
+
+		if (!confirm("등록하시겠습니까?")) {
+			return;
+		}
+
+		$.ajax({
+			url : url,
+			method : "POST",
+			contentType : "application/json",
+			data : JSON.stringify(examInfo),
+			timeout : 10000,
+			success : function(data, a, b) {
+				alert(data);
+				location.href = "/admin/manage-page";
+			},
+			error : function(a, b, c) {
+				alert(a.responseText);
+			}
+		});
+	}
+
+	function historyBack() {
+		history.back(-1);
+	}
+</script>
+
+
+

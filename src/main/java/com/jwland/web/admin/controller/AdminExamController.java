@@ -1,8 +1,5 @@
 package com.jwland.web.admin.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -16,8 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.jwland.domain.exam.ExamEnrollDto;
 import com.jwland.domain.exam.ExamUpdateDto;
@@ -32,6 +29,17 @@ import lombok.RequiredArgsConstructor;
 public class AdminExamController {
 
 	private final AdminExamService adminExamService;
+	
+	
+	@GetMapping("/enroll-page")
+	public ModelAndView enrollExamPage() {
+		return new ModelAndView("admin/exam-enroll-page");
+	}
+	
+	@GetMapping("/update-page")
+	public ModelAndView updateExamPage() {
+		return new ModelAndView("admin/exam-update-page");
+	}
 	
 	@PostMapping("/enroll")
 	public ResponseEntity<String> enrollExam(@RequestBody @Valid ExamEnrollDto examEnrollDto, Errors errors) {
