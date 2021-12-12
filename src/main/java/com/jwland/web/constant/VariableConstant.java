@@ -26,4 +26,6 @@ public interface VariableConstant {
 	public static final String EXAM_UPDATE_SUCCESS = "기출 수정이 완료되었습니다.";
 	public static final String EXAM_DELETE_SUCCESS = "기출 삭제가 완료되었습니다.";
 	public static final String EXAM_ENROLL_WRONG_ANSWER_SUCCESS = "오답 등록이 완료되었습니다.";
+	public static final String EXAM_UPDATE_WRONG_ANSWER_SUCCESS = "오답 수정이 완료되었습니다.";
+	public static final String EXAM_DELETE_WRONG_ANSWER_SUCCESS = "오답 삭제가 완료되었습니다.";
 }

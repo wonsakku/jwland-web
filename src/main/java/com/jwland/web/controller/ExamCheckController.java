@@ -9,15 +9,19 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jwland.domain.exam.EnrollWrongAnswerDto;
+import com.jwland.domain.exam.ExamWrongAnswerDto;
 import com.jwland.domain.exam.ExamTotalInfoDto;
+import com.jwland.domain.exam.ExamWrongAnswerDeleteDto;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.service.ExamCheckService;
 
@@ -40,9 +44,10 @@ public class ExamCheckController {
 	}
 	
 	@GetMapping("/exam-check")
-	public ResponseEntity<List<ExamTotalInfoDto>> examCheckList() {
+	public ResponseEntity<List<ExamTotalInfoDto>> examCheckList(
+			@RequestParam(value = "accountSequenceNo", required = false, defaultValue = "") String accountSequenceNo) {
 		log.info("----- ExamCheckController.examCheckList() -----");
-		List<ExamTotalInfoDto> examTotalInfoList = examCheckService.getExamCheckList();
+		List<ExamTotalInfoDto> examTotalInfoList = examCheckService.getExamCheckList(accountSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(examTotalInfoList);
 	}
 	
@@ -82,11 +87,57 @@ public class ExamCheckController {
 	}
 
 	@PostMapping("/exam")
-	public ResponseEntity<String> enrollWrongAnswer(@RequestBody @Validated EnrollWrongAnswerDto enrollWrongAnswerDto){
+	public ResponseEntity<String> enrollWrongAnswer(@RequestBody @Validated ExamWrongAnswerDto enrollWrongAnswerDto){
 		examCheckService.enrollWrongAnswer(enrollWrongAnswerDto);
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_ENROLL_WRONG_ANSWER_SUCCESS);
 	}
 	
+	@GetMapping("/exam/wrong-answer/years")
+	public ResponseEntity<List<Integer>> getWrongAsnwerExamYears(@RequestParam(value = "accountSequenceNo") String accountSequenceNo){
+		List<Integer> wrongAsnwerExamYearList = examCheckService.getWrongAsnwerExamYears(accountSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(wrongAsnwerExamYearList);
+	}
+	
+	@GetMapping("/exam/wrong-answer/month")
+	public ResponseEntity<List<Integer>> getWrongAsnwerExamMonth(@RequestParam(value = "accountSequenceNo") String accountSequenceNo,
+			@RequestParam(value = "year") String year){
+		List<Integer> wrongAsnwerExamMonthList = examCheckService.getWrongAsnwerExamMonth(accountSequenceNo, year);
+		return ResponseEntity.status(HttpStatus.OK).body(wrongAsnwerExamMonthList);
+	}
+	
+	@GetMapping("/exam/wrong-answer/types")
+	public ResponseEntity<List<Map>> getWrongAsnwerExamTypes(@RequestParam(value = "accountSequenceNo") String accountSequenceNo,
+			@RequestParam(value = "year") String year, @RequestParam(value = "month") String month){
+		List<Map> wrongAsnwerExamMonthList = examCheckService.getWrongAsnwerExamTypes(accountSequenceNo, year, month);
+		return ResponseEntity.status(HttpStatus.OK).body(wrongAsnwerExamMonthList);
+	}
+	
+	@GetMapping("/exam/wrong-answer/subjects")
+	public ResponseEntity<List<Map>> getWrongAsnwerSubjects(@RequestParam(value = "accountSequenceNo") String accountSequenceNo,
+			@RequestParam(value = "examTypeSequenceNo") String examTypeSequenceNo){
+		List<Map> wrongAsnwerExamMonthList = examCheckService.getWrongAsnwerSubjects(accountSequenceNo, examTypeSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(wrongAsnwerExamMonthList);
+	}
+	
+	@GetMapping("/exam/wrong-answer/exam-types/{examTypeSequenceNo}/subjects/{examSubjectSequenceNo}")
+	public ResponseEntity<List<Integer>> getWrongAsnwerNumbers(@RequestParam(value = "accountSequenceNo") String accountSequenceNo,
+			@PathVariable(value = "examTypeSequenceNo") String examTypeSequenceNo,
+			@PathVariable(value = "examSubjectSequenceNo") String examSubjectSequenceNo){
+		List<Integer> wrongAsnwerNumberList = examCheckService.getWrongAsnwerNumbers(accountSequenceNo, examTypeSequenceNo, examSubjectSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(wrongAsnwerNumberList);
+	}
+	
+	@PutMapping("/exam")
+	public ResponseEntity<String> updateWrongAsnwerNumbers(@RequestBody @Validated ExamWrongAnswerDto examWrongAnswerDto){
+		examCheckService.updateWrongAnswerNumbers(examWrongAnswerDto);
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_UPDATE_WRONG_ANSWER_SUCCESS);
+	}
+	
+	@DeleteMapping("/exam")
+	public ResponseEntity<String> updateWrongAsnwerNumbers(@RequestBody @Validated ExamWrongAnswerDeleteDto examWrongAnswerDeleteDto){
+		examCheckService.deleteWrongAnswerNumbers(examWrongAnswerDeleteDto);
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_DELETE_WRONG_ANSWER_SUCCESS);
+	}
 	
 }
 

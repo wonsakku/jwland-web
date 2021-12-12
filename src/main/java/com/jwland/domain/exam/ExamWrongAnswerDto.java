@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class EnrollWrongAnswerDto {
+public class ExamWrongAnswerDto {
 
 	@NotNull
 	private int accountSequenceNo;

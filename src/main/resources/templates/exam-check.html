@@ -22,18 +22,19 @@
 						data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn">
 				  기출 수정
 				</button>
-				<button type="button" class="btn btn-primary btn-sm mr-1" 
-						data-toggle="modal" data-target="#popup-enroll-wronganswer" id="popup-enroll-wronganswer-btn">
-				  오답 등록
-				</button>
-				<button type="button" class="btn btn-success btn-sm mr-1" 
-						data-toggle="modal" data-target="#popupUpdate">
-				  오답 수정
-				</button>
-				<button type="button" class="btn btn-secondary btn-sm mr-1" 
-						data-toggle="modal" data-target="#popupUpdate">
-				  내가 틀린 문제
-				</button>
+				<th:block th:if="${session.loginInfo != null && session.loginInfo.accountSequenceNo != null}">
+					<button type="button" class="btn btn-primary btn-sm mr-1" 
+							data-toggle="modal" data-target="#popup-enroll-wronganswer" id="popup-enroll-wronganswer-btn">
+					  오답 등록
+					</button>
+					<button type="button" class="btn btn-success btn-sm mr-1" 
+							data-toggle="modal" data-target="#popup-update-wrongasnwer" id="popup-update-wrongasnwer-btn">
+					  오답 수정
+					</button>
+					<button type="button" class="btn btn-danger btn-sm mr-1" id="my-wrong-answer-btn" onclick="showMyExamList()">내가 틀린 문제</button>
+	<!-- 				<button type="button" class="btn btn-info btn-sm mr-1" style="display:none;">오답 전체</button> -->
+					<button type="button" class="btn btn-info btn-sm mr-1" id="all-wrong-answer-btn" style="display:none;" onclick="showExamList()">오답 전체</button>
+				</th:block>
           </div>
         </div>
 
@@ -57,6 +58,7 @@
 	<div th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam"></div>
 	<div th:replace="layout/exam-update-fragment.html :: popup-update-exam"></div>
 	<div th:replace="layout/exam-wrong-answer-enroll-fragment.html :: popup-enroll-wronganswer"></div>
+	<div th:replace="layout/exam-wrong-answer-update-fragment.html :: popup-update-wronganswer"></div>
 	
 
 
@@ -69,20 +71,34 @@
 <script th:replace="layout/exam-enroll-fragment.html :: popup-enroll-exam-event"></script>
 <script th:replace="layout/exam-update-fragment.html :: popup-update-exam-event"></script>
 <script th:replace="layout/exam-wrong-answer-enroll-fragment.html :: popup-enroll-wrong-answer-event"></script>
+<script th:replace="layout/exam-wrong-answer-update-fragment.html :: popup-update-wrong-answer-event"></script>
 <script th:inline="javascript">
 // <script type="application/javascript">
 // 	console.log(data);	
 // 	console.log(2);
 	
-	var loginInfo = [[${session.loginInfo}]];
-	const accountSequenceNo = loginInfo == null ? null : loginInfo.accountSequenceNo;
-
 	(function(){
 		showExamList();
+		
+		$("#my-wrong-answer-btn").on("click", function(e){
+			$(this).css("display", "none");
+			$("#all-wrong-answer-btn").css("display", "");
+		});
+		$("#all-wrong-answer-btn").on("click", function(e){
+			$(this).css("display", "none");
+			$("#my-wrong-answer-btn").css("display", "");
+		});
+		
 	})();
 	
 	function showExamList(){
 		var url = "/exam-check";
+		
+		if(arguments[0] != null){
+			var _accountSequenceNo = arguments[0];
+			url += "?accountSequenceNo=" + _accountSequenceNo;
+		}
+		
 	    $.ajax({
 	        url: url,
 	        method: "GET",
@@ -97,7 +113,6 @@
 	
 	
 	function _cb_showEaxmList(data){
-		console.log(data);
 		
 		$("#exam-table-body").html("");
 		var html = "";
@@ -117,6 +132,11 @@
 		$("#exam-table-body").html(html);
 	}
 	
+	
+	function showMyExamList(){
+		var _accountSequenceNo = accountSequenceNo;
+		showExamList(_accountSequenceNo);
+	}
 	
 </script>
 

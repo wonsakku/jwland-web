@@ -5,8 +5,7 @@
 <mapper namespace="com.jwland.web.mapper.ExamCheckMapper">
 
 	<select id="getExamCheckList" resultType="com.jwland.domain.exam.ExamTotalInfoDto">
-		SELECT em.exam_master_sequence_no,
-			   et.year, 
+		SELECT et.year, 
 		       et.month, 
 		       eo.exam_organization_name, 
 		       es.subject, 
@@ -19,8 +18,38 @@
 		ON em.exam_subject_sequence_no = es.exam_subject_sequence_no
 		LEFT JOIN jwland.exam_organization eo
 		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
-		GROUP BY em.exam_master_sequence_no, et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number
-		ORDER BY wrong_count desc
+		
+		GROUP BY et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number
+		ORDER BY wrong_count desc, et.year desc, et.month desc
+	</select>
+	
+	<select id="getMyWrongAnswers" parameterType="map" resultType="com.jwland.domain.exam.ExamTotalInfoDto">
+		SELECT  et.year,
+				et.month,
+				eo.exam_organization_name,
+				es.subject,
+				em.problem_number,
+				t1.wrong_count
+		FROM jwland.exam_master em
+		LEFT JOIN jwland.exam_type et
+		ON em.exam_type_sequence_no = et.exam_type_sequence_no
+		LEFT JOIN jwland.exam_subject es
+		ON em.exam_subject_sequence_no = es.exam_subject_sequence_no
+		LEFT JOIN jwland.exam_organization eo
+		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
+		LEFT JOIN (
+			SELECT exam_type_sequence_no, exam_subject_sequence_no, problem_number, COUNT(*) AS wrong_count
+			FROM jwland.exam_master
+			GROUP BY exam_type_sequence_no, exam_subject_sequence_no, problem_number
+		) t1
+		ON em.exam_type_sequence_no = t1.exam_type_sequence_no
+		AND em.exam_subject_sequence_no = t1.exam_subject_sequence_no
+		AND em.problem_number = t1.problem_number
+		WHERE em.account_sequence_no = #{accountSequenceNo}::INT
+		GROUP BY et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number, t1.wrong_count
+		ORDER BY t1.wrong_count DESC, et.year DESC, et.month DESC, es.subject DESC, em.problem_number DESC
+		;
+		
 	</select>
 
 	<select id="getExamYear" resultType="int">
@@ -68,8 +97,87 @@
 		VALUES(#{examTypeSequenceNo}, #{examSubjectSequenceNo}, #{problemNumber}, #{accountSequenceNo})
 	</insert>
 	
+	<select id="getWrongAsnwerExamYears" parameterType="String" resultType="int">
+		SELECT DISTINCT year FROM jwland.exam_type
+		WHERE exam_type_sequence_no IN (
+		  SELECT DISTINCT exam_type_sequence_no FROM jwland.exam_master
+		  WHERE account_sequence_no = #{accountSequenceNo}::INT
+		)
+		GROUP BY year
+		;
+	</select>
+	
+	<select id="getWrongAsnwerExamMonth" parameterType="map" resultType="int">
+		SELECT DISTINCT month FROM jwland.exam_type
+		WHERE exam_type_sequence_no IN (
+		  SELECT DISTINCT exam_type_sequence_no FROM jwland.exam_master
+		  WHERE account_sequence_no = #{accountSequenceNo}::INT
+		)
+		AND year = #{year}::INT
+		ORDER BY month
+	</select>
+	
+	
+	<select id="getWrongAsnwerExamTypes" parameterType="map" resultType="map">
+		SELECT et.exam_type_sequence_no, eo.exam_organization_name 
+		FROM jwland.exam_type et
+		LEFT JOIN jwland.exam_organization eo
+		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
+		WHERE  exam_type_sequence_no IN (
+			SELECT DISTINCT exam_type_sequence_no 
+			FROM jwland.exam_master
+			WHERE account_sequence_no = #{accountSequenceNo}::INT
+		) 
+		AND et.year = #{year} ::INT
+		AND et.month = #{month}::INT
+		ORDER BY et.exam_type_sequence_no
+		;
+	</select>
 
+	<select id="getWrongAsnwerSubjects" parameterType="map" resultType="map">
+		SELECT em.exam_subject_sequence_no, es.subject
+		FROM jwland.exam_master em
+		LEFT JOIN jwland.exam_subject es
+		ON em.exam_subject_sequence_no = es.exam_subject_sequence_no
+		WHERE exam_type_sequence_no = #{examTypeSequenceNo}::INT
+		AND account_sequence_no =  #{accountSequenceNo}::INT
+		GROUP BY em.exam_subject_sequence_no, es.subject
+		;
+	</select>
+
+	<select id="getWrongAsnwerNumbers" parameterType="map" resultType="int">
+		SELECT problem_number FROM jwland.exam_master
+		WHERE exam_type_sequence_no = #{examTypeSequenceNo}::INT
+		AND exam_subject_sequence_no = #{examSubjectSequenceNo}::INT
+		AND account_sequence_no = #{accountSequenceNo}::INT
+		;
+	</select>
+	
+	<delete id="deleteWrongAsnwerNumbers" parameterType="com.jwland.domain.exam.ExamWrongAnswerDeleteDto">
+		DELETE FROM jwland.exam_master
+		WHERE exam_type_sequence_no = #{examTypeSequenceNo}
+		AND exam_subject_sequence_no =  #{examSubjectSequenceNo}
+		AND account_sequence_no =  #{accountSequenceNo}
+	</delete>
+	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

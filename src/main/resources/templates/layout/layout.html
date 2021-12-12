@@ -72,6 +72,10 @@
 </body>
 <script th:inline="javascript">
 
+	var loginInfo = [[${session.loginInfo}]];
+	const accountSequenceNo = loginInfo == null ? null : loginInfo.accountSequenceNo;
+
+
     (function () {
 		load_menu();
     }());

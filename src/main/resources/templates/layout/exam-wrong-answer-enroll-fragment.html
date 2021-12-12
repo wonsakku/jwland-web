@@ -128,29 +128,29 @@
 		
 		$("#enrolled-exam-year").on("change", function(e){
 			if($(this).val() == null || $(this).val().trim() == ''){
-// 				resetEnrolledExamMonth();
-// 				resetEnrolledExamPreType();
-// 				resetEnrolledExamPostType();
+				resetEnrolledExamMonth();
+				resetEnrolledExamType();
+				resetNotEnrolledSubject();
 			}else{
 				loadEnrolledExamMonth();
-// 				resetEnrolledExamPreType();
-// 				resetEnrolledExamPostType();
+				resetEnrolledExamType();
+				resetNotEnrolledSubject();
 			}
 		});
 		
 		$("#enrolled-exam-month").on("change", function(e){
 			if($(this).val() == null || $(this).val().trim() == ''){
-// 				resetUpdateExamPreType();
-// 				resetUpdateExamPostType();
+				resetEnrolledExamType();  
+				resetNotEnrolledSubject();
 			}else{
 				loadEnrolledExamType();
-// 				resetUpdateExamPostType();S
+				resetNotEnrolledSubject();
 			}
 		});
 		
 		$("#enrolled-exam-type").on("change", function(e){
 			if($(this).val() == null || $(this).val().trim() == ''){
-				resetUpdateExamPostType();
+				resetNotEnrolledSubject();
 			}else{
 				loadNotEnrolledSubject();
 			}
@@ -366,6 +366,7 @@
 	        success: function(data, xhr, status){
 	        	alert(data);
 	        	$("#enroll-wrong-answer-cancel-btn").click();
+	        	showExamList();
 	        },
 	        error: function(xhr, xhrStatus, err){
 	          alert(xhr.responseText);
