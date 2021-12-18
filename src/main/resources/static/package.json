@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^4.5.3",
+    "fullcalendar": "^5.10.1",
     "jquery": "^3.5.1"
   }
 }

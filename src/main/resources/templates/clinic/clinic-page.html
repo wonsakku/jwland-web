@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sd="http://www.thymeleaf.org/spring-data"
+	layout:decorator="layout/layout.html"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title></title>
+
+<link rel='stylesheet' href='/node_modules/fullcalendar/main.min.css'  />
+<script src='/node_modules/fullcalendar/main.js'></script>
+
+
+<style>
+
+	html, body {
+	  overflow: hidden; /* don't do scrollbars */
+	  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+	  font-size: 14px;
+	}
+	
+	#calendar-container {
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  padding-top: 48px;
+	  padding-left: 16.666667%;
+	}
+	
+	
+	.fc-header-toolbar {
+	  /*
+	  the calendar will be butting up against the edges,
+	  but let's scoot in the header's buttons
+	  */
+	  padding-top: 1em;
+	  padding-left: 1em;
+	  padding-right: 1em;
+	}
+	
+	a{
+	    color: black !important;
+	}
+	
+	@media(max-width: 990px){
+		#calendar-container{
+			padding-top: 48px;
+			padding-left: 25%;
+		}
+	}
+	
+	
+	@media(max-width: 768px){
+		#calendar-container{
+			padding-top: 144px;
+			padding-left: 0%;
+		}
+	}
+	
+</style>
+</head>
+<body>
+<main layout:fragment="content"  role="main">
+
+	<button type="button" data-toggle="modal" data-target="#popup-enroll-clinic" 
+	id="popup-enroll-clinic-btn" style="display: none;"></button>
+
+	<div id='calendar-container'>
+		<div id='calendar'></div>
+	</div>
+
+  <div class="modal fade" id="popup-enroll-clinic" data-backdrop="static" 
+  data-keyboard="false" tabindex="-1" aria-labelledby="enroll-clinic-title"  aria-hidden="true">
+  
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="enroll-clinic-title"></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    	<table class="table table-striped">
+    		<thead>
+    			<tr>
+    				<th scope="col"></th>
+    				<th scope="col">시간</th>
+    				<th scope="col">수업명</th>
+    				<th scope="col">신청인원</th>
+    				<th scope="col">신청여부</th>
+    				<th scope="col">신청</th>
+    				<th scope="col">삭제</th>
+    			</tr>
+    		</thead>
+    		<tbody id="clnic-status"></tbody>
+    	</table>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary">등록</button>
+      <button type="button" class="btn btn-warning"data-dismiss="modal" id="enroll-wrong-answer-cancel-btn">취소</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</main>
+</body>
+
+</html>
+
+
+
+
+<script th:inline="javascript">
+	
+
+	
+	(function() {
+		
+	})();
+	
+    let dateLinkIdPrefix = "fc-dom";
+    let clinicEnrollTitle = "클리닉&보충 신청 현황";
+
+    var selectedDate = "";
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+  
+      var eventList = new Array();
+      var obj1 = new Object();
+      obj1.title = "test001";
+      obj1.start = "2021-12-01";
+      
+      var obj2 = new Object();
+      obj2.title = "test002";
+      obj2.start = "2021-12-10";
+
+      var obj3 = new Object();
+      obj3.title = "test003";
+      obj3.start = "2021-12-12T16:00:00";
+      obj3.end = "2021-12-12T16:30:00";
+
+      var obj4 = new Object();
+      obj4.title = "test004";
+      obj4.start = "2021-12-16T17:00:00";
+
+      var obj5 = new Object();
+      obj5.title = "test005";
+      obj5.start = "2021-12-16T18:00:00";
+      obj5.end = "2021-12-16T19:30:00";
+
+      var obj6 = new Object();
+      obj6.title = "[보충]고3 생1";
+      obj6.start = "2021-12-12T16:30:00";
+      obj6.end = "2021-12-12T17:00:00";
+
+      eventList.push(obj1);
+      eventList.push(obj2);
+      eventList.push(obj3);
+      eventList.push(obj4);
+      eventList.push(obj5);
+      eventList.push(obj6);
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        height: '100%',
+        expandRows: true,
+        slotMinTime: '08:00',
+        slotMaxTime: '24:00',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        initialView: 'dayGridMonth',
+        initialDate: timeUtil.getDefaultTodayDate,
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        selectable: true,
+        nowIndicator: true,
+        dayMaxEvents: true, // allow "more" link when too many events
+        events: eventList
+      });
+  
+      calendar.render();
+      addClickEvent();
+
+      document.querySelector(".fc-header-toolbar").addEventListener("click", function(e){
+          addClickEvent();
+      });
+
+    });
+
+    function addClickEvent(){
+        var dayGrid = document.querySelectorAll(".fc-daygrid-day");
+
+        dayGrid.forEach((cell)=>{
+            cell.addEventListener("click", function(e){
+                e.stopPropagation();
+
+                var _id = e.target.getAttribute("id");
+                
+
+                if(_id == null || _id.indexOf(dateLinkIdPrefix) < 0){
+                    document.getElementById("popup-enroll-clinic-btn").click();
+                    clicktest(this.getAttribute("data-date"));
+                }
+            });
+        });
+    }
+
+    function clicktest(date){
+        selectedDate = date;
+        var clinicTitle = document.querySelector("#enroll-clinic-title");
+        var titleDate = "[ " + date + " ] ";
+        clinicTitle.innerText = titleDate + clinicEnrollTitle;
+    }
+
+
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ drop table if exists jwland.exam_master;
 drop table if exists jwland.exam_organization;
 drop table if exists jwland.class;
 drop table if exists jwland.account_class_map;
+drop table if exists jwland.clinic_master;
 
 
 
@@ -18,6 +19,7 @@ drop sequence if exists jwland.exam_type_sequence;
 drop sequence if exists jwland.exam_master_sequence;
 drop sequence if exists jwland.exam_organization_sequence;
 drop sequence if exists jwland.class_sequence;
+drop sequence if exists jwland.clinic_master_sequence;
 
 
 
@@ -30,6 +32,7 @@ create sequence jwland.exam_type_sequence;
 create sequence jwland.exam_master_sequence;
 create sequence jwland.exam_organization_sequence;
 create sequence jwland.class_sequence;
+create sequence jwland.clinic_master_sequence;
 
 
 
@@ -146,6 +149,35 @@ create table jwland.class_attendance_management(
 	modify_account_id varchar(20) NOT NULL,
 	constraint class_attendance_management_primary_key PRIMARY KEY("class_sequence_no", "account_sequence_no", "class_date")
 );
+
+
+create table jwland.clinic_master(
+	clinic_master_sequence_no BIGINT DEFAULT NEXTVAL('jwland.clinic_master_sequence'),
+	class_sequence_no BIGINT NOT NULL,
+	clinic_type_sequence_no BIGINT NOT NULL,
+	date varchar(8) NOT NULL,
+	hour varchar(2) NOT NULL,
+	minute varchar(2) NOT NULL,
+	CONSTRAINT clinic_master_primary_key PRIMARY KEY("clinic_master_sequence_no"),
+	CONSTRAINT clinic_master_unique_key UNIQUE("date", "hour", "minute")
+);
+
+
+create table jwland.clinic_type(
+	clinic_type_sequence_no BIGINT NOT NULL,
+	clinic_type VARCHAR(3) NOT NULL,
+	CONSTRAINT clinic_type_primary_key PRIMARY KEY("clinic_type_sequence_no")	
+);
+
+
+create table jwland.clinic_account_map(
+	clinic_master_sequence_no BIGINT,
+	account_sequence_no BIGINT,
+	CONSTRAINT clinic_account_map_primary_key PRIMARY KEY("clinic_master_sequence_no", "account_sequence_no")
+);
+
+
+
 
 
 

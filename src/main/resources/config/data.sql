@@ -176,5 +176,8 @@ insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, 
 
 
 
+-- clinic type
+insert into jwland.clinic_type values(1, '클리닉');
+insert into jwland.clinic_type values(2, '보충');
 
 
