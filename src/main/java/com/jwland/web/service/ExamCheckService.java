@@ -24,14 +24,12 @@ public class ExamCheckService {
 	private final ExamCheckMapper examCheckMapper;
 	private final ModelMapper modelMapper;
 	
-	public List<ExamTotalInfoDto> getExamCheckList(String accountSequenceNo) {
+	public List<ExamTotalInfoDto> getExamCheckList(String examSubjectSequenceNo, String accountSequenceNo) {
 		
-		if(accountSequenceNo != null && !"".equals(accountSequenceNo)) {
-			Map<String, String> parameter = new HashMap<>();
-			parameter.put("accountSequenceNo", accountSequenceNo);
-			return examCheckMapper.getMyWrongAnswers(parameter);
-		}
-		return examCheckMapper.getExamCheckList();
+		Map<String, String> parameter = new HashMap<>();
+		parameter.put("accountSequenceNo", accountSequenceNo);
+		parameter.put("examSubjectSequenceNo", examSubjectSequenceNo);
+		return examCheckMapper.getExamCheckList(parameter);
 	}
 
 	public List<Integer> getExamYear() {
@@ -131,6 +129,10 @@ public class ExamCheckService {
 	@Transactional
 	public void deleteWrongAnswerNumbers(ExamWrongAnswerDeleteDto examWrongAnswerDeleteDto) {
 		examCheckMapper.deleteWrongAsnwerNumbers(examWrongAnswerDeleteDto);
+	}
+
+	public List<Map> getExamSubjects() {
+		return examCheckMapper.getExamSubjects();
 	}
 	
 }

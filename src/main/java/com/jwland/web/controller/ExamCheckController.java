@@ -45,9 +45,10 @@ public class ExamCheckController {
 	
 	@GetMapping("/exam-check")
 	public ResponseEntity<List<ExamTotalInfoDto>> examCheckList(
-			@RequestParam(value = "accountSequenceNo", required = false, defaultValue = "") String accountSequenceNo) {
+			@RequestParam(value = "accountSequenceNo", required = false, defaultValue = "") String accountSequenceNo,
+			@RequestParam(value = "examSubjectSequenceNo", required = false, defaultValue = "") String examSubjectSequenceNo) {
 		log.info("----- ExamCheckController.examCheckList() -----");
-		List<ExamTotalInfoDto> examTotalInfoList = examCheckService.getExamCheckList(accountSequenceNo);
+		List<ExamTotalInfoDto> examTotalInfoList = examCheckService.getExamCheckList(examSubjectSequenceNo, accountSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(examTotalInfoList);
 	}
 	
@@ -70,6 +71,12 @@ public class ExamCheckController {
 			@RequestParam(value = "month") String month){
 		List<Map> examTypes = examCheckService.getExamTypes(year, month);
 		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
+	}
+	
+	@GetMapping("/exam/subjects")
+	public ResponseEntity<List<Map>> getExamSubjects(){
+		List<Map> examSubjects = examCheckService.getExamSubjects();
+		return ResponseEntity.status(HttpStatus.OK).body(examSubjects);
 	}
 	
 	@GetMapping("/exam/organization")

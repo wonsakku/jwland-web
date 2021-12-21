@@ -29,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
 //			.addPathPatterns(UrlPathConstant.studentAccessablePath())
 //			;
 		
-		registry.addInterceptor(devLoginInterceptor);
+//		registry.addInterceptor(devLoginInterceptor);
 	}
 	
 

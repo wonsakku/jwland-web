@@ -8,6 +8,7 @@ drop table if exists jwland.exam_organization;
 drop table if exists jwland.class;
 drop table if exists jwland.account_class_map;
 drop table if exists jwland.clinic_master;
+drop table if exists jwland.school;
 
 
 
@@ -20,6 +21,7 @@ drop sequence if exists jwland.exam_master_sequence;
 drop sequence if exists jwland.exam_organization_sequence;
 drop sequence if exists jwland.class_sequence;
 drop sequence if exists jwland.clinic_master_sequence;
+drop sequence if exists jwland.school_sequence;
 
 
 
@@ -33,6 +35,7 @@ create sequence jwland.exam_master_sequence;
 create sequence jwland.exam_organization_sequence;
 create sequence jwland.class_sequence;
 create sequence jwland.clinic_master_sequence;
+create sequence jwland.school_sequence;
 
 
 
@@ -120,13 +123,14 @@ create table jwland.class(
 	start_date varchar(8) NOT NULL,
 	total_class_count SMALLINT NOT NULL,
 	complete_class_count SMALLINT NOT NULL DEFAULT 0,
-	open varchar(5) NOT NULL DEFAULT 'OPEN',
+	open varchar(10) NOT NULL DEFAULT 'OPEN',
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	create_account_id varchar(20) NOT NULL,
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_account_id varchar(20) NOT NULL,
 	constraint class_primary_key PRIMARY KEY("class_sequence_no")
 );
+
 
 
 
@@ -175,6 +179,24 @@ create table jwland.clinic_account_map(
 	account_sequence_no BIGINT,
 	CONSTRAINT clinic_account_map_primary_key PRIMARY KEY("clinic_master_sequence_no", "account_sequence_no")
 );
+
+
+create table jwland.school(
+	school_sequence_no BIGINT DEFAULT NEXTVAL('jwland.school_sequence'),
+	school_name varchar(10) NOT NULL UNIQUE,
+	CONSTRAINT school_primary_key PRIMARY KEY("school_sequence_no")
+);
+
+
+
+create table jwland.subject(
+	subject_sequence_no INT NOT NULL,
+	subject_name varchar(10) NOT NULL UNIQUE,
+	CONSTRAINT subject_primary_key PRIMARY KEY("subject_sequence_no")
+);
+
+
+
 
 
 

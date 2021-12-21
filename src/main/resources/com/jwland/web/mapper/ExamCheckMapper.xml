@@ -4,13 +4,14 @@
 
 <mapper namespace="com.jwland.web.mapper.ExamCheckMapper">
 
-	<select id="getExamCheckList" resultType="com.jwland.domain.exam.ExamTotalInfoDto">
-		SELECT et.year, 
-		       et.month, 
-		       eo.exam_organization_name, 
-		       es.subject, 
-		       em.problem_number, 
-		       count(*) AS wrong_count
+<!-- 	<select id="getExamCheckList" resultType="com.jwland.domain.exam.ExamTotalInfoDto"> -->
+	<select id="getExamCheckList" resultType="com.jwland.domain.exam.ExamTotalInfoDto" parameterType="map">
+		SELECT  et.year,
+				et.month,
+				eo.exam_organization_name,
+				es.subject,
+				em.problem_number,
+				t1.wrong_count
 		FROM jwland.exam_master em
 		LEFT JOIN jwland.exam_type et
 		ON em.exam_type_sequence_no = et.exam_type_sequence_no
@@ -18,9 +19,46 @@
 		ON em.exam_subject_sequence_no = es.exam_subject_sequence_no
 		LEFT JOIN jwland.exam_organization eo
 		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
-		
-		GROUP BY et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number
-		ORDER BY wrong_count desc, et.year desc, et.month desc
+		LEFT JOIN (
+			SELECT exam_type_sequence_no, exam_subject_sequence_no, problem_number, COUNT(*) AS wrong_count
+			FROM jwland.exam_master
+			<if test="examSubjectSequenceNo != null and examSubjectSequenceNo != ''">
+				WHERE exam_subject_sequence_no = #{examSubjectSequenceNo}::INT
+			</if>
+			GROUP BY exam_type_sequence_no, exam_subject_sequence_no, problem_number
+		) t1
+		ON em.exam_type_sequence_no = t1.exam_type_sequence_no
+		AND em.exam_subject_sequence_no = t1.exam_subject_sequence_no
+		AND em.problem_number = t1.problem_number
+		<if test="accountSequenceNo != null and accountSequenceNo != ''">
+			WHERE em.account_sequence_no = #{accountSequenceNo}::INT
+		</if>
+		GROUP BY et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number, t1.wrong_count
+		ORDER BY t1.wrong_count DESC, et.year DESC, et.month DESC, es.subject DESC, em.problem_number DESC
+		;
+
+<!-- 		SELECT et.year,  -->
+<!-- 		       et.month,  -->
+<!-- 		       eo.exam_organization_name,  -->
+<!-- 		       es.subject,  -->
+<!-- 		       em.problem_number,  -->
+<!-- 		       count(*) AS wrong_count -->
+<!-- 		FROM jwland.exam_master em -->
+<!-- 		LEFT JOIN jwland.exam_type et -->
+<!-- 		ON em.exam_type_sequence_no = et.exam_type_sequence_no -->
+<!-- 		LEFT JOIN jwland.exam_subject es -->
+<!-- 		ON em.exam_subject_sequence_no = es.exam_subject_sequence_no -->
+<!-- 		LEFT JOIN jwland.exam_organization eo -->
+<!-- 		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no -->
+<!-- 		GROUP BY et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number -->
+<!-- 		ORDER BY wrong_count desc, et.year desc, et.month desc -->
+	</select>
+	
+	
+	<select id="getExamSubjects" resultType="map">
+		SELECT exam_subject_sequence_no, subject 
+		FROM jwland.exam_subject
+		ORDER BY exam_subject_sequence_no;
 	</select>
 	
 	<select id="getMyWrongAnswers" parameterType="map" resultType="com.jwland.domain.exam.ExamTotalInfoDto">

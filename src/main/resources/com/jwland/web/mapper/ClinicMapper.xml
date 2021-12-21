@@ -1,0 +1,17 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jwland.web.mapper.ClinicMapper">
+
+	<select id="loadClinicData" resultType="map" parameterType="string">
+		SELECT cm.clinic_master_sequence_no, c.class_name, cm.date, cm.hour, cm.minute
+		FROM jwland.clinic_master cm
+		LEFT JOIN jwland.class c
+		ON cm.class_sequence_no = c.class_sequence_no
+		WHERE date = '20211218'
+		ORDER BY hour, minute
+		;
+	</select>
+
+</mapper>

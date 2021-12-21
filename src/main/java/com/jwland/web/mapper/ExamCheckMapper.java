@@ -11,9 +11,9 @@ import com.jwland.domain.exam.ExamWrongAnswerDeleteDto;
 @Mapper
 public interface ExamCheckMapper {
 
-	public List<ExamTotalInfoDto> getExamCheckList();
+	public List<ExamTotalInfoDto> getExamCheckList(Map<String, String> parameter);
 	
-	public List<ExamTotalInfoDto> getMyWrongAnswers(Map<String, String> parameter);
+//	public List<ExamTotalInfoDto> getMyWrongAnswers(Map<String, String> parameter);
 	
 	List<Integer> getExamYear();
 
@@ -38,4 +38,6 @@ public interface ExamCheckMapper {
 	public List<Integer> getWrongAsnwerNumbers(Map<String, String> parameter);
 
 	public void deleteWrongAsnwerNumbers(ExamWrongAnswerDeleteDto examWrongAnswerDeleteDto);
+
+	public List<Map> getExamSubjects();
 }

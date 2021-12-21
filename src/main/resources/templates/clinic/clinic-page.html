@@ -82,7 +82,7 @@
       </button>
     </div>
     <div class="modal-body">
-    	<table class="table table-striped">
+    	<table class="table table-striped text-center">
     		<thead>
     			<tr>
     				<th scope="col"></th>
@@ -91,10 +91,12 @@
     				<th scope="col">신청인원</th>
     				<th scope="col">신청여부</th>
     				<th scope="col">신청</th>
+    				<th:block th:if="${session.loginInfo.role == 'admin'}">
     				<th scope="col">삭제</th>
+    				</th:block>
     			</tr>
     		</thead>
-    		<tbody id="clnic-status"></tbody>
+    		<tbody id="clinic-status"></tbody>
     	</table>
     </div>
     
@@ -117,7 +119,6 @@
 
 <script th:inline="javascript">
 	
-
 	
 	(function() {
 		
@@ -158,13 +159,14 @@
       obj6.title = "[보충]고3 생1";
       obj6.start = "2021-12-12T16:30:00";
       obj6.end = "2021-12-12T17:00:00";
-
+      
       eventList.push(obj1);
       eventList.push(obj2);
       eventList.push(obj3);
       eventList.push(obj4);
       eventList.push(obj5);
       eventList.push(obj6);
+
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
         height: '100%',
@@ -203,7 +205,6 @@
                 e.stopPropagation();
 
                 var _id = e.target.getAttribute("id");
-                
 
                 if(_id == null || _id.indexOf(dateLinkIdPrefix) < 0){
                     document.getElementById("popup-enroll-clinic-btn").click();
@@ -218,8 +219,49 @@
         var clinicTitle = document.querySelector("#enroll-clinic-title");
         var titleDate = "[ " + date + " ] ";
         clinicTitle.innerText = titleDate + clinicEnrollTitle;
+        
+		loadClinicData(date);        
+        
     }
-
+    
+    function loadClinicData(date){
+    	var url = "/clinic?date=" + date;
+    	
+    	$.ajax({
+    		url: url,
+    		method: "GET",
+    		success: function(data, a, b){
+    			_cb_loadClinicData(data, a, b);
+    		}    		
+    	});
+    }
+    
+	
+    function _cb_loadClinicData(data, a, b){
+    	console.log(data);
+    	
+    	var html = "";
+    	
+    	$("#clinic-status").html("");
+    	
+    	for(var i = 0 ; i < data.length ; i++){
+    		html += "<tr>";
+    		html += "<td><input type='hidden' value='" + data[i].clinic_master_sequence_no + "'></td>";
+    		html += "<td>" + data[i].hour + " : " + data[i].minute + "</td>";
+    		html += "<td>" + data[i].class_name + "</td>";
+    		html += "<td>준비중...</td>";
+    		html += "<td>준비중...</td>";
+    		html += "<td><button class='btn btn-primary'>신청</button></td>";
+    		
+    		if(loginInfo.role == 'admin'){
+    			html += "<td><button class='btn btn-danger'>삭제</button></td>";
+    		}
+    		
+    		html += "</tr>";
+    	}
+    	
+    	$("#clinic-status").html(html);
+    }
 
 	
 </script>

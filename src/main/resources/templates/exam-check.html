@@ -12,7 +12,7 @@
 	<div class="container">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">모의고사 체크</h1>
-          <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-toolbar mb-2 mb-md-0 row">
             	<!-- Button trigger modal -->
 <!-- 				<button type="button" class="btn btn-info btn-sm mr-1"  -->
 <!-- 						data-toggle="modal" data-target="#popup-enroll-exam" id="popup-enroll-exam-btn"> -->
@@ -22,6 +22,8 @@
 <!-- 						data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn"> -->
 <!-- 				  기출 수정 -->
 <!-- 				</button> -->
+		      <select id="exam-subject" class="mr-1">
+		      </select>
 				<th:block th:if="${session.loginInfo != null && session.loginInfo.accountSequenceNo != null}">
 					<button type="button" class="btn btn-primary btn-sm mr-1" 
 							data-toggle="modal" data-target="#popup-enroll-wronganswer" id="popup-enroll-wronganswer-btn">
@@ -79,7 +81,7 @@
 	
 	(function(){
 		showExamList();
-		
+		loadExamSubjects();
 		$("#my-wrong-answer-btn").on("click", function(e){
 			$(this).css("display", "none");
 			$("#all-wrong-answer-btn").css("display", "");
@@ -89,14 +91,23 @@
 			$("#my-wrong-answer-btn").css("display", "");
 		});
 		
+		$("#exam-subject").on("change", function(e){
+			showExamListInSelectedSubject();
+		});
+		
 	})();
 	
 	function showExamList(){
-		var url = "/exam-check";
+		var url = "/exam-check?";
 		
 		if(arguments[0] != null){
-			var _accountSequenceNo = arguments[0];
-			url += "?accountSequenceNo=" + _accountSequenceNo;
+			var _examSubjectSequenceNo = arguments[0];
+			url += "examSubjectSequenceNo=" + _examSubjectSequenceNo;
+		}
+		
+		if(arguments[1] != null){
+			var _accountSequenceNo = arguments[1];
+			url += "&accountSequenceNo=" + _accountSequenceNo;
 		}
 		
 	    $.ajax({
@@ -132,26 +143,56 @@
 		$("#exam-table-body").html(html);
 	}
 	
+	function loadExamSubjects(){
+		
+		
+		var url = "/exam/subjects";
+		
+	    $.ajax({
+	        url: url,
+	        method: "GET",
+	        success: function(data, xhr, status){
+	        	_cb_loadExamSubjects(data, xhr, status);
+	        },
+	        
+	        error: function(xhr, xhrStatus, err){
+	          alert(xhr.responseText);
+	        }
+        });	
+	}
+	
+	function _cb_loadExamSubjects(data, xhr, status){
+		$("#exam-subject").html("");
+		var html = "<option value=''>=== 전 체 ===</option>";
+		
+		for(var i = 0 ; i < data.length ; i++){
+			html +="<option value='" + data[i].exam_subject_sequence_no + "'>" + data[i].subject + "</option>";
+		}
+		$("#exam-subject").html(html);
+	}
+
+	function showExamListInSelectedSubject(){
+		var _subject = $("#exam-subject").val();
+		
+		if(loginInfo != null && accountSequenceNo!= null && accountSequenceNo != ''){
+			var _accountSequenceNo = accountSequenceNo;
+			showExamList(_subject, _accountSequenceNo);
+		}else{
+			showExamList(_subject);
+		}
+		
+		
+	}
+
+	
 	
 	function showMyExamList(){
 		var _accountSequenceNo = accountSequenceNo;
-		showExamList(_accountSequenceNo);
+		var _subject = $("#exam-subject").val();
+		showExamList(_subject,_accountSequenceNo);
 	}
 	
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
