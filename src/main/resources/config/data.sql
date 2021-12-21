@@ -15,23 +15,18 @@ insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 values('공지사항', 5, '/notice/page', 'N');
 
 insert into jwland.menu (menu_name, menu_priority, url, admin_page)
-values('관리자 페이지', 6, '/admin/page', 'Y')
+values('관리자 페이지', 6, '/admin/page', 'Y');
 --insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 --values('클리닉/보충', 8, , 'Y');
 
 
 
 -- 시험 기관
-insert into jwland.exam_organization(exam_organization_name)
-values('수능');
-insert into jwland.exam_organization(exam_organization_name)
-values('평가원');
-insert into jwland.exam_organization(exam_organization_name)
-values('교육청');
-insert into jwland.exam_organization(exam_organization_name)
-values('대성');
-insert into jwland.exam_organization(exam_organization_name)
-values('종로');
+insert into jwland.exam_organization(exam_organization_name) values('수능');
+insert into jwland.exam_organization(exam_organization_name) values('평가원');
+insert into jwland.exam_organization(exam_organization_name) values('교육청');
+insert into jwland.exam_organization(exam_organization_name) values('대성');
+insert into jwland.exam_organization(exam_organization_name) values('종로');
 
 -- 시험 종류
 -- 수능
