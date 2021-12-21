@@ -105,11 +105,23 @@
       var html = "";
 
       for(var i = 0 ; i < menu_length ; i++){
-        html += '<li class="nav-item">';
-        html += '<a class="nav-link" href="' + menu[i].url + '">';
-        html += menu[i].menu_name;
-        html += '</a>';
-        html += '</li>';
+    	
+    	if(menu[i].admin_page == 'N'){
+	        html += '<li class="nav-item">';
+	        html += '<a class="nav-link" href="' + menu[i].url + '">';
+	        html += menu[i].menu_name;
+	        html += '</a>';
+	        html += '</li>';
+    	}else{
+    		if(loginInfo != null && loginInfo.role == 'ROLE_ADMIN'){
+		        html += '<li class="nav-item">';
+		        html += '<a class="nav-link" href="' + menu[i].url + '">';
+		        html += menu[i].menu_name;
+		        html += '</a>';
+		        html += '</li>';
+    		}
+    	}
+        
       }
       $sidebar.html(html);
     }

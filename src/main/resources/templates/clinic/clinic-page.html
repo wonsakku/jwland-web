@@ -91,7 +91,7 @@
     				<th scope="col">신청인원</th>
     				<th scope="col">신청여부</th>
     				<th scope="col">신청</th>
-    				<th:block th:if="${session.loginInfo.role == 'admin'}">
+    				<th:block th:if="${session.loginInfo.role == 'ROLE_ADMIN'}">
     				<th scope="col">삭제</th>
     				</th:block>
     			</tr>
@@ -253,7 +253,7 @@
     		html += "<td>준비중...</td>";
     		html += "<td><button class='btn btn-primary'>신청</button></td>";
     		
-    		if(loginInfo.role == 'admin'){
+    		if(loginInfo.role == 'ROLE_ADMIN'){
     			html += "<td><button class='btn btn-danger'>삭제</button></td>";
     		}
     		
