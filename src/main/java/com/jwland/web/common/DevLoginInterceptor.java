@@ -25,40 +25,40 @@ public class DevLoginInterceptor  implements HandlerInterceptor{
 	private final Environment env;
 	
 	@Override
-		public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-				throws Exception {
-	
-			HttpSession session = request.getSession();
-			
-			if(session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME) != null) {
-				return HandlerInterceptor.super.preHandle(request, response, handler);
-			}
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+
+		HttpSession session = request.getSession();
 		
-			String accountId = env.getProperty("login-id");
-			String accountPassword = env.getProperty("login-password");
-			
-			FormLoginDto formLoginDto = FormLoginDto.builder()
-					.name(accountId)
-					.birth(accountPassword)
-					.build();
-		
-			AccountVO loginAccount = accountMapper.login(formLoginDto).orElseThrow(NoAccountException::new);
-			
-			// 생일 일치 여부 확인
-			if(!formLoginDto.getBirth().equals(loginAccount.getBirth())) {
-				throw new NoAccountException();
-			}
-			
-			LoginSuccessDto loginInfo = LoginSuccessDto.builder()
-					.nickName(loginAccount.getNickName())
-					.accountSequenceNo(loginAccount.getAccountSequenceNo())
-					.approved(loginAccount.getApproved())
-					.role(loginAccount.getRole())
-					.build();
-			session.setAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME, loginInfo);
-		
+		if(session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME) != null) {
 			return HandlerInterceptor.super.preHandle(request, response, handler);
 		}
+	
+		String accountId = env.getProperty("login-id");
+		String accountPassword = env.getProperty("login-password");
+		
+		FormLoginDto formLoginDto = FormLoginDto.builder()
+				.name(accountId)
+				.birth(accountPassword)
+				.build();
+	
+		AccountVO loginAccount = accountMapper.login(formLoginDto).orElseThrow(NoAccountException::new);
+		
+		// 생일 일치 여부 확인
+		if(!formLoginDto.getBirth().equals(loginAccount.getPassword())) {
+			throw new NoAccountException();
+		}
+		
+		LoginSuccessDto loginInfo = LoginSuccessDto.builder()
+				.nickName(loginAccount.getId())
+				.accountSequenceNo(loginAccount.getAccountSequenceNo())
+				.approved(loginAccount.getApproved())
+				.role(loginAccount.getRole())
+				.build();
+		session.setAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME, loginInfo);
+	
+		return HandlerInterceptor.super.preHandle(request, response, handler);
+	}
 	
 
 }

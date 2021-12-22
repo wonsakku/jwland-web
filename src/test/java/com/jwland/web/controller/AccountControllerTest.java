@@ -193,8 +193,8 @@ class AccountControllerTest {
 		assertThat(newAccount).isNotNull();
 		assertThat(newAccount.getAccountSequenceNo()).isNotNull();
 		assertThat(newAccount.getName()).isEqualTo(name);
-		assertThat(newAccount.getNickName()).isEqualTo(nickName);
-		assertThat(newAccount.getBirth()).isEqualTo(birth);
+		assertThat(newAccount.getId()).isEqualTo(nickName);
+		assertThat(newAccount.getPassword()).isEqualTo(birth);
 		assertThat(newAccount.getApproved()).isEqualTo(DEFAULT_APPROVED);
 		assertThat(newAccount.getRole()).isEqualTo(DEFAULT_ROLE);
 	}

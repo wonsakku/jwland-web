@@ -2,9 +2,11 @@ package com.jwland.web.controller;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,14 +66,23 @@ public class AccountController {
 	
 	
 	@PostMapping("/join")
-	public ModelAndView join(@ModelAttribute(value = VariableConstant.JOIN_ACCOUNT_DTO) @Validated JoinAccountDto joinAccountDto, 
-			RedirectAttributes rttr,  Errors errors) {
-		
+	public ResponseEntity<String> join(@RequestBody @Valid JoinAccountDto joinAccountDto) {
 		accountService.join(joinAccountDto);
-		rttr.addFlashAttribute(VariableConstant.MESSAGE, joinAccountDto.getNickName() + VariableConstant.JOIN_SUCCESS_MESSAGE_SURFFIX);
-		
-		return new ModelAndView(UrlPathConstant.REDIRECT_LOGIN_PAGE);
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.MESSAGE);
 	}
+	
+	@GetMapping("/join/schools")
+	public ResponseEntity<List<Map>> getSchoolInfo(){
+		List<Map> schoolInfo = accountService.getSchoolInfo();
+		return ResponseEntity.status(HttpStatus.OK).body(schoolInfo);
+	}
+	
+	@GetMapping("/join/grades")
+	public ResponseEntity<List<Map>> getGradeInfo(){
+		List<Map> gradeInfo = accountService.getGradeInfo();
+		return ResponseEntity.status(HttpStatus.OK).body(gradeInfo);
+	}
+	
 	
 	
 	@PostMapping("/logout")

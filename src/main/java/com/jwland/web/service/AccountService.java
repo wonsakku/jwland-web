@@ -15,7 +15,9 @@ import com.jwland.domain.account.dto.AccountInfoDto;
 import com.jwland.domain.account.dto.FormLoginDto;
 import com.jwland.domain.account.dto.JoinAccountDto;
 import com.jwland.domain.account.dto.LoginSuccessDto;
+import com.jwland.web.constant.ExceptionMessages;
 import com.jwland.web.constant.VariableConstant;
+import com.jwland.web.exception.AlreadyEnrolledException;
 import com.jwland.web.exception.NoAccountException;
 import com.jwland.web.mapper.AccountMapper;
 
@@ -37,13 +39,13 @@ public class AccountService{
 		AccountVO loginAccount = accountMapper.login(formLoginDto).orElseThrow(NoAccountException::new);
 		
 		// 생일 일치 여부 확인
-		if(!formLoginDto.getBirth().equals(loginAccount.getBirth())) {
+		if(!formLoginDto.getBirth().equals(loginAccount.getPassword())) {
 			throw new NoAccountException();
 		}
 		
 		HttpSession session = request.getSession();
 		LoginSuccessDto loginInfo = LoginSuccessDto.builder()
-				.nickName(loginAccount.getNickName())
+				.nickName(loginAccount.getId())
 				.accountSequenceNo(loginAccount.getAccountSequenceNo())
 				.approved(loginAccount.getApproved())
 				.role(loginAccount.getRole())
@@ -52,6 +54,11 @@ public class AccountService{
 	}
 
 	public void join(JoinAccountDto joinAccountDto) {
+		
+		if(!accountMapper.idDuplicationCheck(joinAccountDto).isEmpty()) {
+			throw new AlreadyEnrolledException(ExceptionMessages.ALREADY_ENROLLED_ID);
+		}
+		
 		accountMapper.join(joinAccountDto);
 	}
 
@@ -59,6 +66,14 @@ public class AccountService{
 		Map<String, String> parameter = new HashMap<>();
 		parameter.put("name", name);
 		return accountMapper.findAccountsInfo(parameter) ;
+	}
+
+	public List<Map> getSchoolInfo() {
+		return accountMapper.getSchoolInfo();
+	}
+
+	public List<Map> getGradeInfo() {
+		return accountMapper.getGradeInfo();
 	}
 
 

@@ -13,8 +13,10 @@ public class AccountVO {
 
 	private Long accountSequenceNo;
 	private String name;
-	private String birth;
-	private String nickName;
+	private String id;
+	private String password;
+	private int gradeSequenceNo;
+	private int schoolSequenceNo;
 	private String approved;
 	private String role;
 	private LocalDateTime createdAt;

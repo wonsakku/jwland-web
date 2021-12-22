@@ -11,8 +11,8 @@
 	</select>
 
 	<insert id="join" parameterType="com.jwland.domain.account.dto.JoinAccountDto">
-		INSERT INTO jwland.account(name, birth, nick_name)
-		VALUES(#{name}, #{birth}, #{nickName})
+		INSERT INTO jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+		VALUES(#{name}, #{id}, #{password}, #{gradeSequenceNo}, #{schoolSequenceNo})
 	</insert>
 
 	<select id="findByName" resultType="com.jwland.domain.account.AccountVO">
@@ -34,4 +34,35 @@
 		ORDER BY account_sequence_no
 	</select>
 
+	
+	<select id="getSchoolInfo" resultType="map">
+		SELECT school_sequence_no, school_name
+		FROM jwland.school
+		WHERE school_sequence_no > 0
+		ORDER BY school_sequence_no
+		;
+	</select>
+
+	<select id="getGradeInfo" resultType="map">
+		SELECT grade_sequence_no, grade
+		FROM jwland.grade
+		WHERE grade_sequence_no > 0
+		ORDER BY grade_sequence_no
+		;
+	</select>
+	
+	<select id="idDuplicationCheck" parameterType="com.jwland.domain.account.dto.JoinAccountDto" resultType="map">
+		SELECT * FROM jwland.account
+		WHERE id = #{id}
+	</select>
+
+
 </mapper>
+
+
+
+
+
+
+
+

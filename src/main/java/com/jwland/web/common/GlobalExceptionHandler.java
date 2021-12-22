@@ -61,24 +61,24 @@ public class GlobalExceptionHandler {
 	
 
 	@ExceptionHandler(BindException.class)
-	public ModelAndView bindingException(HttpServletRequest request, BindException e, RedirectAttributes rttr) {
+	public ResponseEntity<String> bindingException(HttpServletRequest request, BindException e, RedirectAttributes rttr) {
 		log.error("--- Exception Message : {}", e.getMessage());
 		
 		String requestUri = request.getRequestURI().toString();
 		
 		if(e.hasFieldErrors()) {
-			rttr.addFlashAttribute(VariableConstant.ERROR, e.getFieldErrors().get(0).getDefaultMessage());
-			return new ModelAndView(UrlPathConstant.REDIRECT_PREFIX + requestUri);
+			return errorResponseEntity(HttpStatus.BAD_REQUEST, e.getFieldError().getDefaultMessage());
 		}
-		
 		if(e.hasGlobalErrors()) {
-			rttr.addFlashAttribute(VariableConstant.ERROR, e.getGlobalErrors().get(0).getDefaultMessage());
-			return new ModelAndView(UrlPathConstant.REDIRECT_PREFIX + requestUri);
+			return errorResponseEntity(HttpStatus.BAD_REQUEST,  e.getFieldError().getDefaultMessage());
 		}
-		
-		return new ModelAndView(UrlPathConstant.REDIRECT_PREFIX + requestUri);
+		return errorResponseEntity(HttpStatus.BAD_REQUEST,  e.getFieldError().getDefaultMessage());
 	}
 	
+	
+	private ResponseEntity<String> errorResponseEntity(HttpStatus status, String message){
+		return ResponseEntity.status(status).body(message);
+	}
 	
 }
 

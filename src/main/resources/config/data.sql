@@ -96,33 +96,38 @@ insert into jwland.exam_subject(subject)
 values('화학1');
 
 
-
+-- 학년 데이터
+insert into jwland.grade values(0, '강사');
+insert into jwland.grade values(9, '중3');
+insert into jwland.grade values(10, '고1');
+insert into jwland.grade values(11, '고2');
+insert into jwland.grade values(12, '고3');
 
 -- 회원 임시 데이터
-insert into jwland.account(name, birth, nick_name)
-values('루피', '0505', '밀집모자');
-insert into jwland.account(name, birth, nick_name)
-values('조로', '1111', '해적사냥꾼');
-insert into jwland.account(name, birth, nick_name)
-values('나미', '0703', '도둑고양이');
-insert into jwland.account(name, birth, nick_name)
-values('상디', '0302', '검은다리');
-insert into jwland.account(name, birth, nick_name)
-values('비비', '0202', '미스 웬즈데이');
-insert into jwland.account(name, birth, nick_name)
-values('블라디레나 밀리제', '0712', '선혈의 여왕');
-insert into jwland.account(name, birth, nick_name)
-values('신에이 노우젠', '0519', '언더테이커');
-insert into jwland.account(name, birth, nick_name)
-values('라이덴 슈가', '0825', '베어볼프(늑대인간)');
-insert into jwland.account(name, birth, nick_name)
-values('세오토 릿카', '0420', '래핑 폭스');
-insert into jwland.account(name, birth, nick_name)
-values('앙쥬 에마', '1002', '스노우 위치');
-insert into jwland.account(name, birth, nick_name)
-values('크레나 쿠쿠밀라', '0506', '건슬링거');
-insert into jwland.account(name, birth, nick_name, approved, role)
-values('admin', '0000', 'admin', 'Y', 'ROLE_ADMIN');
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('루피', '루피', '1q1q1q', 9, 9);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('조로', '조로','1q1q1q', 10, 7);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('나미', '나미','1q1q1q', 10, 8);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('상디', '상대','1q1q1q', 10, 7);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('비비', '비비','1q1q1q', 11, 8);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('블라디레나 밀리제', '블라디레나 밀리제','1q1q1q', 12, 7);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('신에이 노우젠', '신에이 노우젠','1q1q1q', 12, 6);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('라이덴 슈가', '라이덴 슈가','1q1q1q', 11, 5);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('세오토 릿카', '세오토 릿카','1q1q1q', 10, 4);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('앙쥬 에마', '앙쥬 에마','1q1q1q', 11, 3);
+insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
+values('크레나 쿠쿠밀라', '크루나 쿠쿠밀라','1q1q1q', 10, 1);
+insert into jwland.account(name, id, password, grade_sequence_no, role, school_sequence_no, approved)
+values('admin', 'admin','1q1q1q', 0, 'ROLE_ADMIN', 0,'Y');
 
 
 
@@ -205,6 +210,7 @@ insert into jwland.clinic_type values(2, '보충');
 
 
 -- school
+insert into jwland.school(school_sequence_no, school_name) values(0, 'jwland');
 insert into jwland.school(school_name) values('영동고');
 insert into jwland.school(school_name) values('경기고');
 insert into jwland.school(school_name) values('청담고');
@@ -213,10 +219,15 @@ insert into jwland.school(school_name) values('진선여고');
 insert into jwland.school(school_name) values('숙명여고');
 insert into jwland.school(school_name) values('휘문고');
 insert into jwland.school(school_name) values('경기여고');
+insert into jwland.school(school_name) values('중학교');
 
-
-
--- 
+-- class type
+insert into jwland.class_type(class_type_name) values('중3 과학');
+insert into jwland.class_type(class_type_name) values('고1 공통과학');
+insert into jwland.class_type(class_type_name) values('고2 화학1');
+insert into jwland.class_type(class_type_name) values('고2 생명과학1');
+insert into jwland.class_type(class_type_name) values('고3 화학1');
+insert into jwland.class_type(class_type_name) values('고3 생명과학1');
 
 
 
