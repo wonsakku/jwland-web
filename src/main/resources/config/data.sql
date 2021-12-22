@@ -15,7 +15,7 @@ insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 values('공지사항', 5, '/notice/page', 'N');
 
 insert into jwland.menu (menu_name, menu_priority, url, admin_page)
-values('관리자 페이지', 6, '/admin/page', 'Y');
+values('관리자 페이지', 6, '/admin/manage-page', 'Y');
 --insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 --values('클리닉/보충', 8, , 'Y');
 
