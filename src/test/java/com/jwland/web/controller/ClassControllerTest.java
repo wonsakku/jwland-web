@@ -118,7 +118,7 @@ class ClassControllerTest {
 		
 		// given
 		LoginSuccessDto login = getLoginInfo();
-		String nickName = login.getNickName();
+		String id = login.getId();
 		
 		String className = "클래스 등록 테스트";
 		String openYear = "2021";
@@ -155,9 +155,9 @@ class ClassControllerTest {
 		assertThat(clz.getCompleteClassCount()).isEqualTo(0);
 		assertThat(clz.getOpen()).isEqualTo("OPEN");
 		assertThat(clz.getCreatedAt()).isNotNull();
-		assertThat(clz.getCreateAccountId()).isEqualTo(nickName);
+		assertThat(clz.getCreateAccountId()).isEqualTo(id);
 		assertThat(clz.getModifyAt()).isNotNull();
-		assertThat(clz.getModifyAccountId()).isEqualTo(nickName);
+		assertThat(clz.getModifyAccountId()).isEqualTo(id);
 		
 	}
 
@@ -208,9 +208,9 @@ class ClassControllerTest {
 	
 	private LoginSuccessDto getLoginInfo() {
 
-		String nickName = "test";
+		String id = "test";
 		return LoginSuccessDto.builder()
-				.nickName(nickName)
+				.id(id)
 				.approved(APPROVED)
 				.role(ROLE_ADMIN)
 				.accountSequenceNo(1L)
@@ -218,9 +218,9 @@ class ClassControllerTest {
 	}
 	
 	private LoginSuccessDto getStudentLoginInfo() {
-		String nickName = "just test";
+		String id = "just test";
 		return LoginSuccessDto.builder()
-				.nickName(nickName)
+				.id(id)
 				.approved(APPROVED)
 				.role(ROLE_STUDENT)
 				.accountSequenceNo(0L)

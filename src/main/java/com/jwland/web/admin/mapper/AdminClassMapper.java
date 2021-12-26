@@ -35,4 +35,6 @@ public interface AdminClassMapper {
 	void enrollAttendanceInfo(ClassAttendanceManagementVO vo);
 
 	List<PersonalClassAttendanceDto> findAttendanceInfoByDate(Map<String, String> parameter);
+
+	List<Map> getClassTypes();
 }

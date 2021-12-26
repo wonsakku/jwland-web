@@ -1,6 +1,7 @@
 package com.jwland.web.admin.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,27 +42,25 @@ public class AdminClassController {
 	@GetMapping("/enroll-page")
 	public ModelAndView classEnrollPage() {
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("createClassDto", new CreateClassDto());
 		mav.setViewName("admin/class/class-enroll");
 		return mav;
 	}
 	
-//	@GetMapping("/manage-page")
-//	public ModelAndView classManagePage() {
-//		return new ModelAndView("admin/class/class-manage");
-//	}
+
+	@GetMapping("/types")
+	public ResponseEntity<List<Map>> getClassTypes(){
+		List<Map> classTypes = classService.getClassTypes();
+		return ResponseEntity.status(HttpStatus.OK).body(classTypes);
+	}
 	
 	
 	@PostMapping("/enroll")
-	public ModelAndView enrollClass(@ModelAttribute(value = "createClassDto") 
-									@Validated CreateClassDto createClassDto, 
+	public ResponseEntity<String> enrollClass(@RequestBody @Validated CreateClassDto createClassDto, 
 									HttpServletRequest request,
 									RedirectAttributes rttr) {
 		
 		classService.enrollClass(createClassDto, request);
-		rttr.addFlashAttribute(VariableConstant.MESSAGE, "강의가 등록되었습니다.");
-		
-		return new ModelAndView("redirect:/admin/manage-page");
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.CLASS_ENROLL_SUCCESS);
 	}
 	
 	@GetMapping("/detail-manage-page")

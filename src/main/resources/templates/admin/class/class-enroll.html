@@ -36,52 +36,43 @@
 			
 		    <div class="col-md-8">
 		      <h4 class="mb-3">수업 등록 페이지</h4>
-		      <form class="needs-validation" th:object="${createClassDto}" th:action="@{/admin/class/enroll}" method="post">
+		      <form class="needs-validation" th:action="@{/admin/class/enroll}" method="post" id="class-enroll-form">
+		        
 		        <div class="mb-3">
 		          <label for="className">수업명</label>
 		          <div class="input-group">
 		            <div class="input-group-prepend">
 		              <span class="input-group-text">@</span>
 		            </div>
-		            <input type="text" class="form-control" id="name" placeholder="수업명" th:field="*{className}" required>
+		            <input type="text" class="form-control" id="className" placeholder="수업명" required>
 		            <div class="invalid-feedback" style="width: 100%;">
 		              Your className is required.
 		            </div>
 		          </div>
 		        </div>
-		
+				
 		        <div class="mb-3">
-		          <label for="openYear">수업 시작 연도</label>
-		          <input type="text" class="form-control" id="openYear" placeholder="수업 시작 연도 (YYYY)"  th:field="*{openYear}" required>
-		          <div class="invalid-feedback">
-		            Please enter class Open Year.
+		          <label for="classType">수업 분류</label>
+		          <div class="input-group">
+		            <div class="input-group-prepend">
+		              <span class="input-group-text">@</span>
+		            </div>
+<!-- 		            <input type="text" class="form-control" id="classType" placeholder="수업명" required> -->
+		            <select class="form-control" id="classType" required></select>
+		            <div class="invalid-feedback" style="width: 100%;">
+		              Your classType is required.
+		            </div>
 		          </div>
 		        </div>
 		
 		        <div class="mb-3">
-		          <label for="openMonth">수업 시작 월</label>
-		          <input type="text" class="form-control" id="openMonth" placeholder="수업 시작 월 (MM)"  th:field="*{openMonth}" required>
+		          <label for="startDate">수업 시작 연&월</label>
+		          <input type="text" class="form-control" id="startDate" placeholder="수업 시작 연&월 (YYYYMM)" required>
 		          <div class="invalid-feedback">
-		            Please enter Class Open Month.
+		            Please enter class start Date.
 		          </div>
 		        </div>
-		        
-		        <div class="mb-3">
-		          <label for="startDate">개강 날짜</label>
-		          <input type="text" class="form-control" id="startDate" placeholder="개강 날짜 (YYYYMMDD)"  th:field="*{startDate}" required>
-		          <div class="invalid-feedback">
-		            Please enter Class Start Date.
-		          </div>
-		        </div>
-		        
-		        <div class="mb-3">
-		          <label for="totalClassCount">전체 강의 수</label>
-		          <input type="text" class="form-control" id="totalClassCount" placeholder="전체 강의 수"  th:field="*{totalClassCount}" required>
-		          <div class="invalid-feedback">
-		            Please enter Total Class Count.
-		          </div>
-		        </div>
-		        
+		        		        
 		        <hr class="mb-4">
 		        <button class="btn btn-primary btn-lg btn-block" type="submit">수업 등록하기</button>
 		      </form>
@@ -95,12 +86,111 @@
 		</div>
 		
 	</main>
-</body>
 
+</body>
+</html>
 
 <script th:inline="javascript">
-	(function() {
 
-	})();
+(function(){
+	
+  	window.addEventListener('load', function () {
+
+		var form = document.getElementById('class-enroll-form');
+		form.addEventListener("submit", function(e){
+			e.preventDefault();
+			enrollClass();
+		});
+
+	    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+	    var forms = document.getElementsByClassName('needs-validation');
+
+	    // Loop over them and prevent submission
+	    Array.prototype.filter.call(forms, function (form) {
+	      form.addEventListener('submit', function (event) {
+	        if (form.checkValidity() === false) {
+	          event.preventDefault();
+	          event.stopPropagation();
+	        }
+	        form.classList.add('was-validated');
+	      }, false)
+	    })
+	  }, false);
+  	
+  	renderClassType();
+})();
+
+function renderClassType(){
+	var url = "/admin/class/types";
+	$.ajax({
+		url: url,
+		method: "GET",
+		timeout: 50000,
+		success: function(data, a, b){
+			_cb_renderClassType(data, a, b);
+		},
+		error: function(a, b, c){
+			alert(a.responseText);
+		}
+	});
+}
+
+function _cb_renderClassType(data, a, b){
+	console.log(data);	
+	
+	$("#classType").html("");
+	var html = "<option value=''>=== 선 택 ===</option>";
+	
+	for(var i = 0 ; i < data.length ; i++){
+		html += "<option value='" + data[i].class_type_sequence_no + "'>" + data[i].class_type_name + "</option>";	
+	}
+	
+	$("#classType").html(html);
+}
+
+function enrollClass(){
+	
+	if(!confirm("등록하시겠습니까?")){
+		return ;
+	}
+	
+	var className = $("#className").val();
+	var classTypeSequenceNo = $("#classType").val();
+	var startDate = $("#startDate").val();
+	
+	var requestBody = new Object();
+	requestBody.className = className;
+	requestBody.classTypeSequenceNo = classTypeSequenceNo;
+	requestBody.startDate = startDate;
+
+	var url = "/admin/class/enroll";
+	
+	$.ajax({
+		url: url,
+		method: "POST",
+		contentType: "application/json",
+		timeout: 50000,
+		data: JSON.stringify(requestBody),
+		success: function(message, a, b){
+			alert(message);
+			location.href = "/admin/manage-page";
+		},
+		error: function(a, b, c){
+			alert(a.responseText);
+		}
+	});
+}
+
 </script>
-</html>
+
+
+
+
+
+
+
+
+
+
+
+

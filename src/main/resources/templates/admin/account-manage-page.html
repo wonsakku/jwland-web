@@ -46,8 +46,8 @@
 	            <tr>
 	              <th>선택</th>
 	              <th>이름</th>
-	              <th>생일</th>
-	              <th>닉네임</th>
+	              <th>학년</th>
+	              <th>학교</th>
 	              <th>승인여부</th>
 	            </tr>
 	          </thead>
@@ -117,8 +117,8 @@
 			
 			html += "<td><input type='checkbox' value='" + data[i].accountSequenceNo + "' class='account-sequence-no' onclick='toggleAccountSequenceToList(this)'></td>";
 			html += "<td>" + data[i].name + "</td>";
-			html += "<td>" + data[i].birth + "</td>";
-			html += "<td>" + data[i].nickName + "</td>";
+			html += "<td>" + data[i].grade + "</td>";
+			html += "<td>" + data[i].schoolName + "</td>";
 			html += "<td>" + data[i].approved + "</td>";
 
 			html += "</tr>";

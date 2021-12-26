@@ -38,12 +38,12 @@ public class AdminClassService {
 
 	public void enrollClass(CreateClassDto createClassDto, HttpServletRequest request) {
 		ClassVO clz = modelMapper.map(createClassDto, ClassVO.class);
-		String id = getNickNameFromSession(request);
+		String id = getAccountIdFromSession(request);
 		clz.assignCreateAndModifyAccountId(id);
 		classMapper.enrollClass(clz);
 	}
 
-	private String getNickNameFromSession(HttpServletRequest request) {
+	private String getAccountIdFromSession(HttpServletRequest request) {
 		
 		HttpSession session = request.getSession(false);
 		Object sessionLoginAttr = session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME);
@@ -51,7 +51,6 @@ public class AdminClassService {
 		if(sessionLoginAttr == null) {
 			throw new WrongAccessException();
 		}
-		
 		return ((LoginSuccessDto) sessionLoginAttr).getId();
 	}
 
@@ -118,6 +117,10 @@ public class AdminClassService {
 		parameter.put("classDate", classDate);
 		parameter.put("classSequenceNo", classSequenceNo + "");
 		return classMapper.findAttendanceInfoByDate(parameter);
+	}
+
+	public List<Map> getClassTypes() {
+		return classMapper.getClassTypes();
 	}
 	
 	

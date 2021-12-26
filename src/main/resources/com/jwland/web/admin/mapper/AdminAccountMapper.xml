@@ -5,13 +5,17 @@
 <mapper namespace="com.jwland.web.admin.mapper.AdminAccountMapper">
 
 	<select id="getAccountManagementList" parameterType="map" resultType="com.jwland.domain.account.dto.AccountManagementDto">
-		SELECT account_sequence_no
-			 , name
-			 , birth
-			 , nick_name
-			 , approved
-			 , role
-		FROM jwland.account
+		SELECT a.account_sequence_no
+			 , a.name
+			 , g.grade
+			 , s.school_name
+			 , a.approved
+			 , a.role
+		FROM jwland.account a
+		LEFT JOIN  jwland.grades g
+		ON g.grade_sequence_no = a.grade_sequence_no
+		LEFT JOIN jwland.school s
+		ON s.school_sequence_no = a.school_sequence_no
 		WHERE 1=1
 		<if test="name != '' and name != null">
 			AND name LIKE '%'||#{name}||'%'

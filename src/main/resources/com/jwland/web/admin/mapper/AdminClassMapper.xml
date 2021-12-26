@@ -4,9 +4,15 @@
 
 <mapper namespace="com.jwland.web.admin.mapper.AdminClassMapper">
 
+	<select id="getClassTypes" resultType="map">
+		SELECT 	class_type_sequence_no, class_type_name FROM jwland.class_type
+		ORDER BY class_type_sequence_no
+		;
+	</select>
+
 	<insert id="enrollClass" parameterType="com.jwland.domain.classes.ClassVO">
-		INSERT INTO jwland.class(class_name, open_year, open_month, start_date, total_class_count, created_at, create_account_id, modify_at, modify_account_id)
-		VALUES(#{className}, #{openYear}, #{openMonth}, #{startDate}, #{totalClassCount}, now(), #{createAccountId}, now(), #{modifyAccountId})
+		INSERT INTO jwland.class(class_name, class_type_sequence_no, start_date, created_at, create_account_id, modify_at, modify_account_id)
+		VALUES(#{className}, #{classTypeSequenceNo}, #{startDate}, now(), #{createAccountId}, now(), #{modifyAccountId})
 	</insert>
 
 	<select id="findClassByClassName" parameterType="String" resultType="com.jwland.domain.classes.ClassVO">
@@ -15,7 +21,7 @@
 	</select>
 	
 	<select id="getClassDetails" parameterType="String" resultType="com.jwland.domain.classes.dto.ClassDetailDto">
-		SELECT class_sequence_no, class_name, open_year, open_month, start_date, open
+		SELECT class_sequence_no, class_name, start_date, open
 		FROM jwland.class
 		WHERE open = #{open}
 		ORDER BY open DESC

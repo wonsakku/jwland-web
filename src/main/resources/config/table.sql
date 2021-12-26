@@ -130,6 +130,7 @@ create table jwland.class(
 	class_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_sequence'),
 	class_name varchar(100) NOT NULL,
 	class_type_sequence BIGINT NOT NULL,
+	start_date varchar(6) NOT NULL,
 	open varchar(10) NOT NULL DEFAULT 'OPEN',
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	create_account_id varchar(20) NOT NULL,

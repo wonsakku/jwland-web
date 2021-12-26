@@ -123,7 +123,7 @@ class AccountControllerTest {
 		
 		// given
 		LoginSuccessDto login = LoginSuccessDto.builder()
-				.nickName("도둑 고양이")
+				.id("나미")
 				.approved(DEFAULT_APPROVED)
 				.role(DEFAULT_ROLE)
 				.accountSequenceNo(3L)

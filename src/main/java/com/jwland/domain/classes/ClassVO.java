@@ -19,11 +19,8 @@ public class ClassVO {
 	
 	private Long classSequenceNo;
 	private String className;
-	private String openYear;
-	private String openMonth;
+	private int classTypeSequenceNo;
 	private String startDate;
-	private Integer totalClassCount;
-	private Integer completeClassCount;
 	private String open;
 	private LocalDateTime createdAt;
 	private String createAccountId;
