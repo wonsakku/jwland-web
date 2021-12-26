@@ -20,7 +20,8 @@ public interface VariableConstant {
 	
 	// class
 	public static final String CLASS_ENROLL_SUCCESS = "강의 등록이 완료되었습니다.";
-
+	public static final String ACCOUNT_ENROLL_CLASS_SUCCESS_SUFFIX = "명의 학생이 등록되었습니다.";
+	public static final String ATTENDANCE_ENROLL_SUCCESS = "출석 등록을 완료하였습니다.";
 	
 	// 사용 승인 메세지
 	public static final String USING_APPROVE_MESSAGE = "선택한 학생에 대한 사용 승인이 완료되었습니다.";
@@ -33,4 +34,5 @@ public interface VariableConstant {
 	public static final String EXAM_ENROLL_WRONG_ANSWER_SUCCESS = "오답 등록이 완료되었습니다.";
 	public static final String EXAM_UPDATE_WRONG_ANSWER_SUCCESS = "오답 수정이 완료되었습니다.";
 	public static final String EXAM_DELETE_WRONG_ANSWER_SUCCESS = "오답 삭제가 완료되었습니다.";
+	
 }

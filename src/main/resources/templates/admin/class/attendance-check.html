@@ -41,7 +41,8 @@
 	            <tr>
 	              <th></th>
 	              <th>이름</th>
-	              <th>닉네임</th>
+	              <th>학년</th>
+	              <th>학교</th>
 	              <th>출석</th>
 	            </tr>
 	          </thead>
@@ -59,13 +60,6 @@
 
 
 <script th:inline="javascript">
-	
-	
-	var msg = [[${msg}]];
-	if(msg != null && msg != ''){
-		alert(msg);
-	}
-	
 	
 	var accountSequenceList = new Array();
 	const classSequenceNo = [[${classSequenceNo}]];
@@ -126,13 +120,14 @@
 			html += "<tr>";
 			html += "<td><input type='hidden' class='account-sequence-no' id='account-sequence-no-" + data[i].accountSequenceNo + "' value='" + data[i].accountSequenceNo + "'></td>";
 			html += "<td class='name'>" + data[i].name + "</td>";
-			html += "<td>" + data[i].nickName + "</td>";
+			html += "<td>" + data[i].grade + "</td>";
+			html += "<td>" + data[i].schoolName + "</td>";
 			html += "<td>";
-			html += "<select class='status'>";
+			html += "<select class='attendance_status_sequence_no'>";
 			html += "<option disabled selected value=''>선택</option>";
-			html += "<option value='출석'>출석</option>";
-			html += "<option value='지각'>지각</option>";
-			html += "<option value='결석'>결석</option>";
+			html += "<option value='1'>출석</option>";
+			html += "<option value='2'>지각</option>";
+			html += "<option value='3'>결석</option>";
 			html += "</select>";
 			html += "</td>";
 			html += "</tr>";
@@ -178,102 +173,65 @@
 	
 	function enrollAttendance() {
 
-		var formData = document.createElement("form");
-		
-		var hiddenField0 = document.createElement("input");
-		hiddenField0.setAttribute("type", "hidden");
-		hiddenField0.setAttribute("name", "classSequenceNo");
-		hiddenField0.setAttribute("value", classSequenceNo);
-		formData.appendChild(hiddenField0);
-
-		var classDate = today;
+		var classDate = null;
+		var attendanceInfo = new Array();
 		
 		if($("#class-date-select").val() != null || $("#class-date-select").val() != ''){
 			classDate = today;
 		}
-		
-		var hiddenField1 = document.createElement("input");
-		hiddenField1.setAttribute("type", "hidden");
-		hiddenField1.setAttribute("name", "classDate");
-		hiddenField1.setAttribute("value", classDate);
-		formData.appendChild(hiddenField1);
-
-		var hiddenField11 = document.createElement("input");
-		hiddenField11.setAttribute("type", "hidden");
-		hiddenField11.setAttribute("name", "className");
-		hiddenField11.setAttribute("value", className);
-		formData.appendChild(hiddenField1);
 
 		var tableSize= $("#attendance-table-body").find("tr").length;
 
 		for(var i = 0 ; i < tableSize ; i++){
 			
 			var trElem = $("#attendance-table-body").find("tr")[i];
-			var $option = $(trElem).find(".status option:selected");
+			var $option = $(trElem).find(".attendance_status_sequence_no option:selected");
 			
 			if($option.val() == null || $option.val() == ''){
 				alert("출결 상태가 선택되지 않은 학생이 있습니다.");
-				alert($(item).find(".name").text());
 				return false;
 			}
 			
-			var status = $option.val();
 			var accountSequenceNo = $(trElem).find(".account-sequence-no").val();
-
-			var hiddenField2 = document.createElement("input");
-			hiddenField2.setAttribute("type", "hidden");
-			hiddenField2.setAttribute("name", "attendanceInfo[" + i + "].status");
-			hiddenField2.setAttribute("value", status);
-
-			var hiddenField3 = document.createElement("input");
-			hiddenField3.setAttribute("type", "hidden");
-			hiddenField3.setAttribute("name", "attendanceInfo[" + i + "].accountSequenceNo");
-			hiddenField3.setAttribute("value", accountSequenceNo);
-
-			formData.appendChild(hiddenField2);
-			formData.appendChild(hiddenField3);
+			var attendanceStatusSequenceNo = $option.val();
+			
+			var obj = new Object();
+			obj.accountSequenceNo = accountSequenceNo;
+			obj.attendanceStatusSequenceNo = attendanceStatusSequenceNo;
+			
+			attendanceInfo.push(obj);
 		}
 		
 		if(!confirm("등록하시겠습니까?")){
 			return ;
 		}
+
+		var requestBody = new Object();
+		requestBody.classSequenceNo = classSequenceNo;
+		requestBody.classDate = classDate;
+		requestBody.attendanceInfo = attendanceInfo;
 		
-		formData.setAttribute("charset", "UTF-8");
-		formData.setAttribute("method", "post");
-		formData.setAttribute("action", "/admin/class/classes/attendance/enroll");
+		console.log(requestBody);
 		
-		document.body.appendChild(formData);
+		var url = "/admin/class/classes/attendance/enroll";
 		
-		formData.submit();
+		$.ajax({
+			url: url,
+			method: "POST",
+			contentType: "application/json",
+			timeout: 5000,
+			data: JSON.stringify(requestBody),
+			success: function(message, a, b){
+				alert(message);
+				loadEnrolledStudents();
+				loadClassDate();
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+		});
 	}
 	
-	
-	function addStudents(){
-		
-		var formData = document.createElement("form");
-		
-		var hiddenField = document.createElement("input");
-		hiddenField.setAttribute("type", "hidden");
-		hiddenField.setAttribute("name", "classSequenceNo");
-		hiddenField.setAttribute("value", classSequenceNo);
-		formData.appendChild(hiddenField);
-		
-		for(var i = 0 ; i < accountSequenceList.length ; i++){
-			var hiddenField2 = document.createElement("input");
-			hiddenField2.setAttribute("type", "hidden");
-			hiddenField2.setAttribute("name", "accountSequenceList[" + i + "]");
-			hiddenField2.setAttribute("value", accountSequenceList[i]);
-			formData.appendChild(hiddenField2);
-		}
-		
-		formData.setAttribute("charset", "UTF-8");
-		formData.setAttribute("method", "post");
-		formData.setAttribute("action", "/class/classes/student/enroll");
-		
-		document.body.appendChild(formData);
-		
-		formData.submit();
-	}
 	
 	function findAttendanceInfoByDate(selectedDate){
 // 		console.log(selectedDate);
@@ -293,11 +251,13 @@
 	}
 	
 	function _cb_findAttendanceInfoByDate(data, xhrStatus, xhr){
-
+		
+		console.log(data);
+		
 		for(var i = 0 ; i < data.length ; i++){
-			var _status = data[i].status;
+			var _status = data[i].attendanceStatusSequenceNo;
 			var $tr = $("#account-sequence-no-" + data[i].accountSequenceNo).closest("tr");
-			$tr.find(".status option").each(function(index, item){
+			$tr.find(".attendance_status_sequence_no option").each(function(index, item){
 				if($(item).val() == _status){
 					$(item).prop("selected", "selected");
 					return false;

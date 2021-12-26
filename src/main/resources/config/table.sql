@@ -74,7 +74,7 @@ create table jwland.account(
 	constraint account_primary_key PRIMARY KEY("account_sequence_no")
 );
 
-create table jwland.grade(
+create table jwland.grades(
 	grade_sequence_no INT NOT NULL,
 	grade varchar(5) NOT NULL,
 	CONSTRAINT grade_primary_key PRIMARY KEY("grade_sequence_no")
@@ -129,7 +129,7 @@ create table jwland.exam_master(
 create table jwland.class(
 	class_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_sequence'),
 	class_name varchar(100) NOT NULL,
-	class_type_sequence BIGINT NOT NULL,
+	class_type_sequence_no BIGINT NOT NULL,
 	start_date varchar(6) NOT NULL,
 	open varchar(10) NOT NULL DEFAULT 'OPEN',
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
@@ -154,12 +154,17 @@ create table jwland.account_class_map(
 );
 
 
+create table jwland.attendance_status(
+	attendance_status_sequence_no INT NOT NULL,
+	attendance_status VARCHAR(2) NOT NULL,
+	CONSTRAINT attendance_status_primary_key PRIMARY KEY("attendance_status_sequence_no")	
+);
 
 create table jwland.class_attendance_management(
 	class_sequence_no BIGINT,
 	account_sequence_no BIGINT,
 	class_date varchar(8),
-	status varchar(5),
+	attendance_status_sequence_no INT NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	create_account_id varchar(20) NOT NULL,
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),

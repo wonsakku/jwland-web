@@ -23,12 +23,19 @@
 	</select>
 
 	<select id="findAccountsInfo" resultType="com.jwland.domain.account.dto.AccountInfoDto">
-		SELECT account_sequence_no, name, birth, nick_name
-		FROM jwland.account
+		SELECT a.account_sequence_no
+			 , a.name
+			 , g.grade
+			 , s.school_name
+		FROM jwland.account a
+		LEFT JOIN jwland.grades g
+		ON a.grade_sequence_no = g.grade_sequence_no
+		LEFT JOIN jwland.school s
+		ON s.school_sequence_no = a.school_sequence_no
 		WHERE 1=1
 		AND	  role != 'ROLE_ADMIN'
 		<if test="name != null and name != ''">
-			AND name LIKE '%' || #{id} || '%'
+			AND name LIKE '%' || #{name} || '%'
 		</if>
 		AND approved = 'Y'
 		ORDER BY account_sequence_no

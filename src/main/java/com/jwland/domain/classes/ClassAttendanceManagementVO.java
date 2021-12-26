@@ -17,7 +17,7 @@ public class ClassAttendanceManagementVO {
 
 	private int classSequenceNo;
 	private int accountSequenceNo;
-	private String status;
+	private int attendanceStatusSequenceNo;
 	private String classDate;
 	private LocalDateTime createdAt;
 	private String createAccountId;

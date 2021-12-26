@@ -94,14 +94,7 @@ insert into jwland.exam_subject(subject)
 values('생명과학1');
 insert into jwland.exam_subject(subject)
 values('화학1');
-
-
--- 학년 데이터
-insert into jwland.grade values(0, '강사');
-insert into jwland.grade values(9, '중3');
-insert into jwland.grade values(10, '고1');
-insert into jwland.grade values(11, '고2');
-insert into jwland.grade values(12, '고3');
+ 
 
 -- 회원 임시 데이터
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
@@ -203,6 +196,10 @@ insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, 
 
 
 
+-- attendance status
+insert into jwland.attendance_status values(1, '출석');
+insert into jwland.attendance_status values(2, '지각');
+insert into jwland.attendance_status values(3, '결석');
 
 -- clinic type
 insert into jwland.clinic_type values(1, '클리닉');

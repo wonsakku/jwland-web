@@ -59,21 +59,23 @@ public class AdminClassService {
 	}
 
 	@Transactional
-	public void enrollStudentToClass(ClassAccountMapDto classAccountMapDto) {
+	public int enrollStudentToClass(ClassAccountMapDto classAccountMapDto) {
 		int classSequenceNo = classAccountMapDto.getClassSequenceNo();
 		List<Integer> accountSequenceList = classAccountMapDto.getAccountSequenceList();
 		classMapper.deleteMapTableWithClassSequenceNo(classSequenceNo);
 		
 		accountSequenceList.sort(Comparator.naturalOrder());
 		
+		int updateCnt = 0;
 		for(int i = 0 ; i < accountSequenceList.size() ; i++) {
 			Map<String, Integer> parameter = new HashMap<>();
 			parameter.put("classSequenceNo", classSequenceNo);
 			parameter.put("accountSequenceNo", accountSequenceList.get(i));
-			classMapper.enrollStudentToClass(parameter);
+			updateCnt += classMapper.enrollStudentToClass(parameter);
 			parameter = null;
 		}
 		
+		return updateCnt;
 	}
 
 	public List<Integer> getEnrolledAccounts(int classSequenceNo) {

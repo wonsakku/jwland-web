@@ -92,10 +92,9 @@ public class AdminClassController {
 	
 	
 	@PostMapping("/classes/student/enroll")
-	public ModelAndView enrollStudentToClass(@ModelAttribute ClassAccountMapDto classAccountMapDto, RedirectAttributes rttr) {
-		classService.enrollStudentToClass(classAccountMapDto);
-		rttr.addFlashAttribute(VariableConstant.MESSAGE, "등록되었습니다.");
-		return new ModelAndView("redirect:/admin/class/detail-manage-page");
+	public ResponseEntity<String> enrollStudentToClass(@RequestBody @Validated ClassAccountMapDto classAccountMapDto) {
+		int updateCnt = classService.enrollStudentToClass(classAccountMapDto);
+		return ResponseEntity.status(HttpStatus.OK).body(updateCnt + VariableConstant.ACCOUNT_ENROLL_CLASS_SUCCESS_SUFFIX);
 	}
 	
 	
@@ -121,14 +120,13 @@ public class AdminClassController {
 	}
 	
 	@PostMapping("/classes/attendance/enroll")
-	public ModelAndView classAttendanceEnroll
-			(@ModelAttribute @Validated ClassAttendanceEnrollDto classAttendanceEnrollDto, 
-			HttpServletRequest request, RedirectAttributes rttr){
-		int classSequenceNo = classAttendanceEnrollDto.getClassSequenceNo();
-		String className = classAttendanceEnrollDto.getClassName();
+	public ResponseEntity<String> classAttendanceEnroll
+			(@RequestBody @Validated ClassAttendanceEnrollDto classAttendanceEnrollDto, 
+			HttpServletRequest request) {
+//		int classSequenceNo = classAttendanceEnrollDto.getClassSequenceNo();
 		classService.classAttendanceEnroll(classAttendanceEnrollDto, request);
-		rttr.addFlashAttribute(VariableConstant.MESSAGE, "출석 등록이 완료되었습니다.");
-		return new ModelAndView("redirect:/admin/class/classes/" + classSequenceNo + "/check-attendance?className=" + className);
+//		rttr.addFlashAttribute(VariableConstant.MESSAGE, "출석 등록이 완료되었습니다.");
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.ATTENDANCE_ENROLL_SUCCESS);
 	}
 	
 	@GetMapping("/classes/{classSequenceNo}/attendance-info")

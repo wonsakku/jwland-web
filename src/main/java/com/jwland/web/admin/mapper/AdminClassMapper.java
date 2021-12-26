@@ -22,7 +22,7 @@ public interface AdminClassMapper {
 
 	void deleteMapTableWithClassSequenceNo(int classSequenceNo);
 
-	void enrollStudentToClass(Map<String, Integer> parameter);
+	int enrollStudentToClass(Map<String, Integer> parameter);
 
 	List<Integer> getEnrolledAccounts(int classSequenceNo);
 

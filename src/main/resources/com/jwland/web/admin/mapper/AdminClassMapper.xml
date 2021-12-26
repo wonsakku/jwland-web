@@ -15,10 +15,12 @@
 		VALUES(#{className}, #{classTypeSequenceNo}, #{startDate}, now(), #{createAccountId}, now(), #{modifyAccountId})
 	</insert>
 
+
 	<select id="findClassByClassName" parameterType="String" resultType="com.jwland.domain.classes.ClassVO">
 		SELECT * FROM jwland.class
 		WHERE class_name = #{className}
 	</select>
+
 	
 	<select id="getClassDetails" parameterType="String" resultType="com.jwland.domain.classes.dto.ClassDetailDto">
 		SELECT class_sequence_no, class_name, start_date, open
@@ -47,10 +49,17 @@
 	
 		
 	<select id="getEnrolledAccountInfos" parameterType="int" resultType="com.jwland.domain.classes.dto.EnrolledAccountsDto">
-		SELECT acm.account_sequence_no, a.name, a.nick_name
+		SELECT acm.account_sequence_no
+			 , a.name
+			 , g.grade
+			 , s.school_name
 		FROM jwland.account_class_map acm
 		LEFT JOIN jwland.account a
 		ON acm.account_sequence_no = a.account_sequence_no
+		LEFT JOIN jwland.grades g
+		ON a.grade_sequence_no = g.grade_sequence_no
+		LEFT JOIN jwland.school s
+		ON a.school_sequence_no = s.school_sequence_no
 		WHERE acm.class_sequence_no = #{classSequenceNo}
 	</select>
 	
@@ -70,12 +79,14 @@
 	</delete>	
 	
 	<insert id="enrollAttendanceInfo" parameterType="ClassAttendanceManagementVO">
-		INSERT INTO jwland.class_attendance_management(class_sequence_no, account_sequence_no, class_date, status, create_account_id, modify_account_id)
-		VALUES(#{classSequenceNo}, #{accountSequenceNo}, #{classDate}, #{status}, #{createAccountId}, #{modifyAccountId} )
+		INSERT INTO jwland.class_attendance_management(class_sequence_no, account_sequence_no, class_date, attendance_status_sequence_no, create_account_id, modify_account_id)
+		VALUES(#{classSequenceNo}, #{accountSequenceNo}, #{classDate}, #{attendanceStatusSequenceNo}, #{createAccountId}, #{modifyAccountId} )
 	</insert>
 	
 	<select id="findAttendanceInfoByDate" parameterType="map" resultType="PersonalClassAttendanceDto">
-		SELECT account_sequence_no, status FROM jwland.class_attendance_management
+		SELECT account_sequence_no
+			 , attendance_status_sequence_no 
+		FROM jwland.class_attendance_management 
 		WHERE class_sequence_no = #{classSequenceNo}::INT
 		AND class_date = #{classDate}
 	</select>

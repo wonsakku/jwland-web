@@ -7,6 +7,6 @@ public class AccountInfoDto {
 
 	private Long accountSequenceNo;
 	private String name;
-	private String birth;
-	private String nickName;
+	private String grade;
+	private String schoolName;
 }

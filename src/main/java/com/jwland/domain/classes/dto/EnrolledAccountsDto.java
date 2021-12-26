@@ -7,5 +7,6 @@ public class EnrolledAccountsDto {
 
 	private Long accountSequenceNo;
 	private String name;
-	private String nickName;
+	private String grade;
+	private String schoolName;
 }
