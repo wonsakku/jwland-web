@@ -38,19 +38,19 @@ public class DevLoginInterceptor  implements HandlerInterceptor{
 		String accountPassword = env.getProperty("login-password");
 		
 		FormLoginDto formLoginDto = FormLoginDto.builder()
-				.name(accountId)
-				.birth(accountPassword)
+				.id(accountId)
+				.password(accountPassword)
 				.build();
 	
 		AccountVO loginAccount = accountMapper.login(formLoginDto).orElseThrow(NoAccountException::new);
 		
 		// 생일 일치 여부 확인
-		if(!formLoginDto.getBirth().equals(loginAccount.getPassword())) {
+		if(!formLoginDto.getPassword().equals(loginAccount.getPassword())) {
 			throw new NoAccountException();
 		}
 		
 		LoginSuccessDto loginInfo = LoginSuccessDto.builder()
-				.nickName(loginAccount.getId())
+				.id(loginAccount.getId())
 				.accountSequenceNo(loginAccount.getAccountSequenceNo())
 				.approved(loginAccount.getApproved())
 				.role(loginAccount.getRole())

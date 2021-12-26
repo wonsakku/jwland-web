@@ -43,18 +43,13 @@ public class AccountController {
 	@GetMapping("/login")
 	public ModelAndView loginPage(Model model) {
 		ModelAndView mav = new ModelAndView("account/sign-in");
-		mav.addObject(VariableConstant.FORM_LOGIN_DTO, new FormLoginDto());
 		return mav;
 	}
 	
 	@PostMapping("/login")
-	public ModelAndView login(@ModelAttribute @Validated FormLoginDto formLoginDto,
-			HttpServletRequest request) {
-		
+	public ResponseEntity<String> login(@RequestBody @Validated FormLoginDto formLoginDto, HttpServletRequest request) {
 		accountService.login(formLoginDto, request);
-		
-		ModelAndView mav = new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
-		return mav;
+		return ResponseEntity.status(HttpStatus.OK).body(formLoginDto.getId() + VariableConstant.LOGIN_MESSAGE_SUFFIX);
 	}
 	
 	@GetMapping("/join")

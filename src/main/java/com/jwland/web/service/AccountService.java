@@ -37,16 +37,15 @@ public class AccountService{
 
 		// 계정 조회
 		AccountVO loginAccount = accountMapper.login(formLoginDto).orElseThrow(NoAccountException::new);
-		
 		// 생일 일치 여부 확인
-		if(!formLoginDto.getBirth().equals(loginAccount.getPassword())) {
+		if(!formLoginDto.getPassword().equals(loginAccount.getPassword())) {
 			throw new NoAccountException();
 		}
 		
 		HttpSession session = request.getSession();
 		LoginSuccessDto loginInfo = LoginSuccessDto.builder()
-				.nickName(loginAccount.getId())
 				.accountSequenceNo(loginAccount.getAccountSequenceNo())
+				.id(loginAccount.getId())
 				.approved(loginAccount.getApproved())
 				.role(loginAccount.getRole())
 				.build();

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class LoginSuccessDto {
 
 	private Long accountSequenceNo;
-	private String nickName;
+	private String id;
 	private String approved;
 	private String role;
 }

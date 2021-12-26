@@ -38,8 +38,8 @@ public class AdminClassService {
 
 	public void enrollClass(CreateClassDto createClassDto, HttpServletRequest request) {
 		ClassVO clz = modelMapper.map(createClassDto, ClassVO.class);
-		String nickName = getNickNameFromSession(request);
-		clz.assignCreateAndModifyAccountId(nickName);
+		String id = getNickNameFromSession(request);
+		clz.assignCreateAndModifyAccountId(id);
 		classMapper.enrollClass(clz);
 	}
 
@@ -52,7 +52,7 @@ public class AdminClassService {
 			throw new WrongAccessException();
 		}
 		
-		return ((LoginSuccessDto) sessionLoginAttr).getNickName();
+		return ((LoginSuccessDto) sessionLoginAttr).getId();
 	}
 
 	public List<ClassDetailDto> getClassDetails(String open) {
@@ -100,17 +100,17 @@ public class AdminClassService {
 		List<PersonalClassAttendanceDto> attendanceList = classAttendanceEnrollDto.getAttendanceInfo();
 		HttpSession session = request.getSession();
 		LoginSuccessDto loginSuccessDto = (LoginSuccessDto) session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME);
-		String nickName = loginSuccessDto.getNickName();
+		String id = loginSuccessDto.getId();
+		
 		for(int i = 0 ; i < attendanceList.size() ; i++) {
 			PersonalClassAttendanceDto dto = attendanceList.get(i);
 			ClassAttendanceManagementVO vo = modelMapper.map(dto, ClassAttendanceManagementVO.class);
-			vo.assignCreateAndModifyAccountId(nickName);
+			vo.assignCreateAndModifyAccountId(id);
 			vo.setClassSequenceNo(classSequenceNo);
 			vo.setClassDate(classDate);
 			classMapper.enrollAttendanceInfo(vo);
 			
 		}
-		
 	}
 
 	public List<PersonalClassAttendanceDto> findAttendanceInfoByDate(String classDate, int classSequenceNo) {

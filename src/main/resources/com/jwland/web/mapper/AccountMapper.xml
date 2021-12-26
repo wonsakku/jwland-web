@@ -5,9 +5,9 @@
 <mapper namespace="com.jwland.web.mapper.AccountMapper">
 
 	<select id="login" resultType="com.jwland.domain.account.AccountVO">
-		SELECT account_sequence_no, birth, role, approved, nick_name
+		SELECT account_sequence_no, password, role, approved, id
 		FROM jwland.account
-		WHERE name = #{name}
+		WHERE name = #{id}
 	</select>
 
 	<insert id="join" parameterType="com.jwland.domain.account.dto.JoinAccountDto">
@@ -19,7 +19,7 @@
 <!-- 		SELECT account_sequence_no, birth, role, approved, nick_name -->
 		SELECT *
 		FROM jwland.account
-		WHERE name = #{name}
+		WHERE name = #{id}
 	</select>
 
 	<select id="findAccountsInfo" resultType="com.jwland.domain.account.dto.AccountInfoDto">
@@ -28,7 +28,7 @@
 		WHERE 1=1
 		AND	  role != 'ROLE_ADMIN'
 		<if test="name != null and name != ''">
-			AND name LIKE '%' || #{name} || '%'
+			AND name LIKE '%' || #{id} || '%'
 		</if>
 		AND approved = 'Y'
 		ORDER BY account_sequence_no

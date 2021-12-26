@@ -25,10 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(NoAccountException.class)
-	public ModelAndView noAccountException(NoAccountException e, RedirectAttributes rttr) {
+	public ResponseEntity<String> noAccountException(NoAccountException e) {
 		log.error("--- Exception Message : {}", e.getMessage());
-		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
-		return new ModelAndView(UrlPathConstant.REDIRECT_LOGIN_PAGE);
+		return errorResponseEntity(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
  
 	

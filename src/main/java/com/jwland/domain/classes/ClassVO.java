@@ -30,14 +30,14 @@ public class ClassVO {
 	private LocalDateTime modifyAt;
 	private String modifyAccountId;
 	
-	public void assignCreateAndModifyAccountId(String nickName) {
-		this.createAccountId = nickName;
-		this.modifyAccountId = nickName;
+	public void assignCreateAndModifyAccountId(String id) {
+		this.createAccountId = id;
+		this.modifyAccountId = id;
 	}
 
 	
-	public void assignModifyAccountId(String nickName) {
-		this.modifyAccountId = nickName;
+	public void assignModifyAccountId(String id) {
+		this.modifyAccountId = id;
 	}
 	
 }

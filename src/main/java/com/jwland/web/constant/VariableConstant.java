@@ -16,6 +16,7 @@ public interface VariableConstant {
 	
 	// etc message
 	public static final String JOIN_SUCCESS_MESSAGE_SURFFIX = "님의 가입이 완료되었습니다."; 
+	public static final String LOGIN_MESSAGE_SUFFIX = "님이 로그인하였습니다.";
 	
 	// 사용 승인 메세지
 	public static final String USING_APPROVE_MESSAGE = "선택한 학생에 대한 사용 승인이 완료되었습니다.";

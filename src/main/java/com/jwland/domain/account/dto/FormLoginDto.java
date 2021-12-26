@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class FormLoginDto {
 
 	@NotEmpty
-	@Size(min = 2, max = 20, message = "이름의 길이는 2~20자입니다.")
-	private String name;
+	@Size(min = 2, max = 20, message = "ID는 2~20자입니다.")
+	private String id;
 
 	@NotEmpty
-	@Size(min = 4, max = 4, message = "생일은 4자리입니다.")
-	private String birth;
+	@Size(min = 4, max = 20, message = "Password는 4자리입니다.")
+	private String password;
 }
