@@ -54,7 +54,7 @@ public class AccountService{
 
 	public void join(JoinAccountDto joinAccountDto) {
 		
-		if(!accountMapper.idDuplicationCheck(joinAccountDto).isEmpty()) {
+		if(accountMapper.idDuplicationCheck(joinAccountDto) != null) {
 			throw new AlreadyEnrolledException(ExceptionMessages.ALREADY_ENROLLED_ID);
 		}
 		

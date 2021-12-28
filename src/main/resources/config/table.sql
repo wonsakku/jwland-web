@@ -13,7 +13,7 @@ drop table if exists jwland.school;
 drop table if exists jwland.class_type;
 drop table if exists jwland.clinic_type;
 drop table if exists jwland.clinic_account_map;
-drop table if exists jwland.grade;
+drop table if exists jwland.grades;
 drop table if exists jwland.subject;
 
 --drop sequence

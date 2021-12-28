@@ -7,7 +7,7 @@
 	<select id="login" resultType="com.jwland.domain.account.AccountVO">
 		SELECT account_sequence_no, password, role, approved, id
 		FROM jwland.account
-		WHERE name = #{id}
+		WHERE id = #{id}
 	</select>
 
 	<insert id="join" parameterType="com.jwland.domain.account.dto.JoinAccountDto">
@@ -52,7 +52,7 @@
 
 	<select id="getGradeInfo" resultType="map">
 		SELECT grade_sequence_no, grade
-		FROM jwland.grade
+		FROM jwland.grades
 		WHERE grade_sequence_no > 0
 		ORDER BY grade_sequence_no
 		;
