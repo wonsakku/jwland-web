@@ -89,7 +89,6 @@
     				<th scope="col">시간</th>
     				<th scope="col">수업명</th>
     				<th scope="col">신청인원</th>
-    				<th scope="col">신청여부</th>
     				<th scope="col">신청</th>
     				<th:block th:if="${session.loginInfo.role == 'ROLE_ADMIN'}">
     				<th scope="col">삭제</th>
@@ -225,14 +224,22 @@
     }
     
     function loadClinicData(date){
-    	var url = "/clinic?date=" + date;
-    	
+    	var _date = date.replace(/-/gi, "");
+    	if(accountSequenceNo == null){
+    		alert("로그인을 먼저 진행해주세요");
+    		return ;
+    	}
+    	var url = "/clinic?date=" + _date + "&accountSequenceNo=" + accountSequenceNo;
+//     	var url = "/clinic?date=" + _date;
     	$.ajax({
     		url: url,
     		method: "GET",
     		success: function(data, a, b){
     			_cb_loadClinicData(data, a, b);
-    		}    		
+    		},
+    		error: function(a, b, c){
+    			alert(a.responseText);
+    		}
     	});
     }
     
@@ -246,12 +253,18 @@
     	
     	for(var i = 0 ; i < data.length ; i++){
     		html += "<tr>";
-    		html += "<td><input type='hidden' value='" + data[i].clinic_master_sequence_no + "'></td>";
+    		html += "<td><input type='hidden' class='clinic_master_sequence_no' value='" + data[i].clinic_master_sequence_no + "'></td>";
     		html += "<td>" + data[i].hour + " : " + data[i].minute + "</td>";
-    		html += "<td>" + data[i].class_name + "</td>";
-    		html += "<td>준비중...</td>";
-    		html += "<td>준비중...</td>";
-    		html += "<td><button class='btn btn-primary'>신청</button></td>";
+    		html += "<td>" + data[i].class_type_name + "</td>";
+    		html += "<td>" + data[i].account_cnt + "명</td>";
+    		
+    		if(data[i].possible == 'can_apply'){
+    			html += "<td><button class='btn btn-primary' onclick='popupClinicEnroll(this)'>신청</button></td>";
+    		}else if(data[i].possible == 'already_apply'){
+    			html += "<td><button class='btn btn-outline-success' style='cursor:default;'>신청완료</button></td>";
+    		}else{
+    			html += "<td></td>";
+    		}
     		
     		if(loginInfo.role == 'ROLE_ADMIN'){
     			html += "<td><button class='btn btn-danger'>삭제</button></td>";
@@ -261,6 +274,11 @@
     	}
     	
     	$("#clinic-status").html(html);
+    }
+    
+    function popupClinicEnroll(elem){
+    	var clinicMasterSequenceNo = $(elem).closest("tr").find(".clinic_master_sequence_no").val();
+    	alert(clinicMasterSequenceNo);
     }
 
 	

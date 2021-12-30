@@ -26,8 +26,9 @@ public class ClinicController {
 	}
 	
 	@GetMapping("/clinic")
-	public ResponseEntity<List<Map>> loadClinicData(@RequestParam(value = "date", required = true) String date){
-		List<Map> clinicList = clinicService.loadClinicData(date);
+	public ResponseEntity<List<Map>> loadClinicData(@RequestParam(value = "date", required = true) String date,
+			@RequestParam(value = "accountSequenceNo", required = true) String accountSequenceNo){
+		List<Map> clinicList = clinicService.loadClinicData(date, accountSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(clinicList);
 	}
 }

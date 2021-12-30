@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -55,6 +56,12 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AlreadyEnrolledException.class)
 	public ResponseEntity<String> alreayEnrolledException(AlreadyEnrolledException e){
 		log.error("--- Exception Message : {}", e.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
+	
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ResponseEntity<String> missingServletRequestParameterException(MissingServletRequestParameterException e){
+		log.error("--- Exception Message ; {}", e.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 	

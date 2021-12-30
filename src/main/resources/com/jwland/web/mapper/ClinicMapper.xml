@@ -4,13 +4,44 @@
 
 <mapper namespace="com.jwland.web.mapper.ClinicMapper">
 
-	<select id="loadClinicData" resultType="map" parameterType="string">
-		SELECT cm.clinic_master_sequence_no, c.class_name, cm.date, cm.hour, cm.minute
+	<select id="loadClinicData" resultType="map" parameterType="map">
+
+		SELECT cm.clinic_master_sequence_no
+			 , ct.class_type_sequence_no
+			 , ct.class_type_name
+			 , cm.date
+			 , cm.hour
+			 , cm.minute
+			 , COALESCE(t1.account_cnt, 0) AS account_cnt
+			 , CASE WHEN t2.account_sequence_no IS NOT NULL AND cam.account_sequence_no IS NOT NULL THEN 'already_apply'
+				    WHEN t2.account_sequence_no IS NOT NULL AND cam.account_sequence_no IS NULL THEN 'can_apply'
+			   ELSE 'impossible'
+			   END AS possible
 		FROM jwland.clinic_master cm
-		LEFT JOIN jwland.class c
-		ON cm.class_sequence_no = c.class_sequence_no
-		WHERE date = '20211218'
-		ORDER BY hour, minute
+		LEFT JOIN jwland.class_type ct
+		ON cm.class_type_sequence_no = ct.class_type_sequence_no
+		LEFT JOIN 
+		(
+			SELECT clinic_master_sequence_no, COUNT(clinic_master_sequence_no) AS account_cnt
+			FROM jwland.clinic_account_map
+			WHERE clinic_master_sequence_no IN 
+			(SELECT clinic_master_sequence_no FROM jwland.clinic_master WHERE date = #{date})
+			GROUP BY clinic_master_sequence_no		
+		) t1
+		ON cm.clinic_master_sequence_no = t1.clinic_master_sequence_no
+		LEFT JOIN 
+		(
+			SELECT DISTINCT c.class_type_sequence_no, acm.account_sequence_no 
+			FROM jwland.account_class_map acm
+			LEFT JOIN jwland.class c
+			ON c.class_sequence_no = acm.class_sequence_no
+			WHERE c.open = 'OPEN'
+			AND acm.account_sequence_no = #{accountSequenceNo}::INT 
+		) t2
+		ON cm.class_type_sequence_no = t2.class_type_sequence_no
+		LEFT JOIN jwland.clinic_account_map cam
+		ON cm.clinic_master_sequence_no = cam.clinic_master_sequence_no
+		AND cam.account_sequence_no = #{accountSequenceNo}::INT
 		;
 	</select>
 

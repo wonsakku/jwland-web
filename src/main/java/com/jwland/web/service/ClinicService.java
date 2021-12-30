@@ -19,8 +19,12 @@ public class ClinicService {
 	private final ClinicMapper clinicMapper;
 	
 	
-	public List<Map> loadClinicData(String date) {
-		return clinicMapper.loadClinicData(date.replaceAll("-", "").trim());
+	public List<Map> loadClinicData(String date, String accountSequenceNo) {
+		date = date.replaceAll("-", "").trim();
+		Map<String, String> parameter = new HashMap<>();
+		parameter.put("date", date);
+		parameter.put("accountSequenceNo", accountSequenceNo);
+		return clinicMapper.loadClinicData(parameter);
 	}
 
 	

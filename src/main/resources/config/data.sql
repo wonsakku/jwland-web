@@ -230,4 +230,18 @@ insert into jwland.class_type(class_type_name) values('고3 생명과학1');
 
 
 
+-- clinic data
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '12', '30');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '13', '00');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '13', '30');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '14', '00');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '14', '30');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '15', '00');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '15', '30');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '16', '00');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '16', '30');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '17', '00');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '17', '30');
+insert into jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute) values(2, 1, '20211230', '18', '00');
+
 

@@ -8,6 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ClinicMapper {
 
-	List<Map> loadClinicData(String date);
+	List<Map> loadClinicData(Map<String, String> parameter);
 
 }

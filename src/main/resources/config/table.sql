@@ -175,7 +175,7 @@ create table jwland.class_attendance_management(
 
 create table jwland.clinic_master(
 	clinic_master_sequence_no BIGINT DEFAULT NEXTVAL('jwland.clinic_master_sequence'),
-	class_sequence_no BIGINT NOT NULL,
+	class_type_sequence_no BIGINT NOT NULL,
 	clinic_type_sequence_no BIGINT NOT NULL,
 	date varchar(8) NOT NULL,
 	hour varchar(2) NOT NULL,
