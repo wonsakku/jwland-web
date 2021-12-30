@@ -63,7 +63,7 @@ public class AccountController {
 	@PostMapping("/join")
 	public ResponseEntity<String> join(@RequestBody @Valid JoinAccountDto joinAccountDto) {
 		accountService.join(joinAccountDto);
-		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.MESSAGE);
+		return ResponseEntity.status(HttpStatus.OK).body(joinAccountDto.getId() + VariableConstant.JOIN_SUCCESS_MESSAGE_SURFFIX);
 	}
 	
 	@GetMapping("/join/schools")

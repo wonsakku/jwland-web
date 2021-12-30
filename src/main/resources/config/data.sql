@@ -226,8 +226,13 @@ insert into jwland.class_type(class_type_name) values('고2 생명과학1');
 insert into jwland.class_type(class_type_name) values('고3 화학1');
 insert into jwland.class_type(class_type_name) values('고3 생명과학1');
 
-
-
+-- grades
+insert into jwland.grades(grade_sequence_no, grade) values(0, 'jw');
+insert into jwland.grades(grade_sequence_no, grade) values(9, '중3');
+insert into jwland.grades(grade_sequence_no, grade) values(10, '고1');
+insert into jwland.grades(grade_sequence_no, grade) values(11, '고2');
+insert into jwland.grades(grade_sequence_no, grade) values(12, '고3');
+insert into jwland.grades(grade_sequence_no, grade) values(13, 'N수생');
 
 
 -- clinic data
