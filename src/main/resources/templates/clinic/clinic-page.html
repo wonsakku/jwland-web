@@ -125,77 +125,133 @@
 	
     let dateLinkIdPrefix = "fc-dom";
     let clinicEnrollTitle = "클리닉&보충 신청 현황";
+    let today = timeUtil.getDefaultTodayDate;
 
     var selectedDate = "";
 
     document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-  
-      var eventList = new Array();
-      var obj1 = new Object();
-      obj1.title = "test001";
-      obj1.start = "2021-12-01";
-      
-      var obj2 = new Object();
-      obj2.title = "test002";
-      obj2.start = "2021-12-10";
-
-      var obj3 = new Object();
-      obj3.title = "test003";
-      obj3.start = "2021-12-12T16:00:00";
-      obj3.end = "2021-12-12T16:30:00";
-
-      var obj4 = new Object();
-      obj4.title = "test004";
-      obj4.start = "2021-12-16T17:00:00";
-
-      var obj5 = new Object();
-      obj5.title = "test005";
-      obj5.start = "2021-12-16T18:00:00";
-      obj5.end = "2021-12-16T19:30:00";
-
-      var obj6 = new Object();
-      obj6.title = "[보충]고3 생1";
-      obj6.start = "2021-12-12T16:30:00";
-      obj6.end = "2021-12-12T17:00:00";
-      
-      eventList.push(obj1);
-      eventList.push(obj2);
-      eventList.push(obj3);
-      eventList.push(obj4);
-      eventList.push(obj5);
-      eventList.push(obj6);
-
-
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        height: '100%',
-        expandRows: true,
-        slotMinTime: '08:00',
-        slotMaxTime: '24:00',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        initialView: 'dayGridMonth',
-        initialDate: timeUtil.getDefaultTodayDate,
-        navLinks: true, // can click day/week names to navigate views
-        editable: true,
-        selectable: true,
-        nowIndicator: true,
-        dayMaxEvents: true, // allow "more" link when too many events
-        events: eventList
-      });
-  
-      calendar.render();
-      addClickEvent();
-
-      document.querySelector(".fc-header-toolbar").addEventListener("click", function(e){
-          addClickEvent();
-      });
-
+    	selectedDate = timeUtil.getDefaultTodayMonthDate;
+    	var currentMonthDate = selectedDate;
+    	var nextMonthDate = getNextMonthDate();
+    	getClinicList(currentMonthDate, nextMonthDate);
     });
-
+	
+    function renderCalendar(data, initDate){
+    	
+        var calendarEl = document.getElementById('calendar');
+        $("#calendar").html("");
+        
+        var eventList = new Array();
+        for(var i = 0 ; i < data.length ; i++){
+        	var obj = new Object();
+        	obj.title = "    [ " + data[i].clinic_type + " ]    " + data[i].class_type_name;
+        	obj.start = data[i].clinic_date + "T" + data[i].hour + ":" + data[i].minute;
+        	eventList.push(obj);
+        }
+        
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          height: '100%',
+          expandRows: true,
+          slotMinTime: '08:00',
+          slotMaxTime: '24:00',
+          headerToolbar: {
+//             left: 'prev,next today',
+            left: 'prev,next',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          },
+          initialView: 'dayGridMonth',
+          initialDate: initDate,
+          navLinks: true, // can click day/week names to navigate views
+          editable: true,
+          selectable: true,
+          nowIndicator: true,
+          dayMaxEvents: true, // allow "more" link when too many events
+          events: eventList
+        });
+    
+        calendar.render();
+        addClickEvent();
+        addClickEventToMonthSelector();
+        
+        document.querySelector(".fc-header-toolbar").addEventListener("click", function(e){
+            addClickEvent();
+        });
+    }
+    
+    function getClinicList(currentMonthDate, nextMonthDate, initDate){
+    	var url = "/clinic/list?startDate=" + currentMonthDate + "&endDate=" + nextMonthDate;
+    	$.ajax({
+    		url: url,
+    		method: "GET",
+    		contentType: "application/json",
+    		success: function(data){
+    			renderCalendar(data, initDate);
+    		},
+    		error: function(a, b, c){
+    			alert(a.responseText);
+    		}
+    	});
+    }
+    
+    function addClickEventToMonthSelector(){
+    	
+    	$(".fc-next-button.fc-button.fc-button-primary").on("click", function(e){
+    		e.stopPropagation();
+    		selectedDate = getNextMonthDate();
+    		var currentMonthDate = selectedDate;
+    		var nextMonthDate = getNextMonthDate();
+    		getClinicList(currentMonthDate, nextMonthDate, currentMonthDate);
+    	});
+    	
+    	$(".fc-prev-button.fc-button.fc-button-primary").on("click", function(e){
+    		e.stopPropagation();
+    		var nextMonthDate = selectedDate;
+    		selectedDate = getPreviousMonthDate();
+    		var currentMonthDate = selectedDate;
+    		getClinicList(currentMonthDate, nextMonthDate, currentMonthDate);
+    	});
+    }
+    
+    function getNextMonthDate(){
+    	var selectedDateArr = selectedDate.split("-");
+    	
+    	if(selectedDateArr[1] == "12"){
+    		selectedDateArr[0] = (parseInt(selectedDateArr[0]) + 1);
+    		selectedDateArr[1] = "01";
+    		selectedDateArr[2] = "01";
+    	}else{
+			selectedDateArr[1] = (parseInt(selectedDateArr[1])+1);
+			
+			if(selectedDateArr[1] < 10){
+				selectedDateArr[1] = "0" + selectedDateArr[1];
+			}
+			selectedDateArr[2] = "01";
+    	}
+    	
+    	return selectedDateArr[0] + "-" + selectedDateArr[1] + "-" + selectedDateArr[2];
+    }
+    
+    function getPreviousMonthDate(){
+    	var selectedDateArr = selectedDate.split("-");
+    	
+    	if(selectedDateArr[1] == "01"){
+    		selectedDateArr[0] = (parseInt(selectedDateArr[0]) - 1);
+    		selectedDateArr[1] = "12";
+    		selectedDateArr[2] = "01";
+    	}else{
+			selectedDateArr[1] = (parseInt(selectedDateArr[1])-1);
+			
+			if(selectedDateArr[1] < 10){
+				selectedDateArr[1] = "0" + selectedDateArr[1];
+			}
+			selectedDateArr[2] = "01";
+    	}
+    	
+    	return selectedDateArr[0] + "-" + selectedDateArr[1] + "-" + selectedDateArr[2];
+    }
+    
+    
     function addClickEvent(){
         var dayGrid = document.querySelectorAll(".fc-daygrid-day");
 
@@ -282,6 +338,8 @@
     }
 
 	
+    
+    
 </script>
 
 

@@ -42,7 +42,48 @@
 		LEFT JOIN jwland.clinic_account_map cam
 		ON cm.clinic_master_sequence_no = cam.clinic_master_sequence_no
 		AND cam.account_sequence_no = #{accountSequenceNo}::INT
+		WHERE date = #{date}
+		ORDER BY cm.hour, cm.minute
 		;
 	</select>
 
+	<select id="loadClinicList" parameterType="map" resultType="map">
+		
+		<![CDATA[
+			SELECT TO_CHAR(TO_TIMESTAMP(cm.date, 'yyyymmdd'), 'yyyy-mm-dd') AS clinic_date, 
+				   cm.hour, 
+				   cm.minute, 
+				   ct.class_type_name, 
+				   clt.clinic_type
+			FROM jwland.clinic_master cm
+			LEFT JOIN jwland.class_type ct
+			ON cm.class_type_sequence_no = ct.class_type_sequence_no
+			LEFT JOIN jwland.clinic_type clt
+			ON cm.clinic_type_sequence_no = clt.clinic_type_sequence_no
+			WHERE date >= #{startDate} AND date < #{endDate}
+			ORDER BY cm.date, cm.hour, cm.minute
+			;
+		]]>
+	</select>
+
+
+
+
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

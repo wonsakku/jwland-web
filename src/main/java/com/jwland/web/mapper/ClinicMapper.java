@@ -10,4 +10,6 @@ public interface ClinicMapper {
 
 	List<Map> loadClinicData(Map<String, String> parameter);
 
+	List<Map> loadClinicList(Map<String, String> parameter);
+
 }

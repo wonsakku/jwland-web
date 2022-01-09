@@ -74,14 +74,14 @@ create table jwland.account(
 	constraint account_primary_key PRIMARY KEY("account_sequence_no")
 );
 
-create table jwland.grades(
+create table jwland.grades(/*common_table*/
 	grade_sequence_no INT NOT NULL,
 	grade varchar(5) NOT NULL,
 	CONSTRAINT grade_primary_key PRIMARY KEY("grade_sequence_no")
 );
 
 
-create table jwland.exam_subject(
+create table jwland.exam_subject(/*common_table*/
 	exam_subject_sequence_no int DEFAULT NEXTVAL('jwland.exam_subject_sequence'),
 	subject varchar(10) NOT NULL UNIQUE,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
@@ -90,7 +90,7 @@ create table jwland.exam_subject(
 );
 
 
-create table jwland.exam_organization(
+create table jwland.exam_organization(/*common_table*/
 	exam_organization_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_organization_sequence'),
 	exam_organization_name VARCHAR(20) NOT NULL UNIQUE,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
@@ -139,7 +139,8 @@ create table jwland.class(
 	constraint class_primary_key PRIMARY KEY("class_sequence_no")
 );
 
-create table jwland.class_type(
+
+create table jwland.class_type(/*common_table*/
 	class_type_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_type_sequence'),
 	class_type_name varchar(20) NOT NULL,
 	CONSTRAINT class_type_primary_key PRIMARY KEY("class_type_sequence_no")	
@@ -154,7 +155,7 @@ create table jwland.account_class_map(
 );
 
 
-create table jwland.attendance_status(
+create table jwland.attendance_status(/*common_table*/
 	attendance_status_sequence_no INT NOT NULL,
 	attendance_status VARCHAR(2) NOT NULL,
 	CONSTRAINT attendance_status_primary_key PRIMARY KEY("attendance_status_sequence_no")	
@@ -185,7 +186,7 @@ create table jwland.clinic_master(
 );
 
 
-create table jwland.clinic_type(
+create table jwland.clinic_type( /*common_table*/
 	clinic_type_sequence_no BIGINT NOT NULL,
 	clinic_type VARCHAR(3) NOT NULL,
 	CONSTRAINT clinic_type_primary_key PRIMARY KEY("clinic_type_sequence_no")	
@@ -199,7 +200,7 @@ create table jwland.clinic_account_map(
 );
 
 
-create table jwland.school(
+create table jwland.school(/*common_table*/
 	school_sequence_no BIGINT DEFAULT NEXTVAL('jwland.school_sequence'),
 	school_name varchar(10) NOT NULL UNIQUE,
 	CONSTRAINT school_primary_key PRIMARY KEY("school_sequence_no")
@@ -207,7 +208,7 @@ create table jwland.school(
 
 
 
-create table jwland.subject(
+create table jwland.subject(/*common_table*/
 	subject_sequence_no INT NOT NULL,
 	subject_name varchar(10) NOT NULL UNIQUE,
 	CONSTRAINT subject_primary_key PRIMARY KEY("subject_sequence_no")

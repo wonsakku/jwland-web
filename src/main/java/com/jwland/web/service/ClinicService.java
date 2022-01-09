@@ -27,6 +27,16 @@ public class ClinicService {
 		return clinicMapper.loadClinicData(parameter);
 	}
 
+
+	public List<Map> loadClinicList(String startDate, String endDate) {
+		startDate = startDate.replaceAll("-", "").trim();
+		endDate = endDate.replaceAll("-", "").trim();
+		Map<String, String> parameter = new HashMap<>();
+		parameter.put("startDate", startDate);
+		parameter.put("endDate", endDate);
+		return clinicMapper.loadClinicList(parameter);
+	}
+
 	
 	
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jwland.domain.exam.ExamWrongAnswerDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwland.domain.exam.ExamTotalInfoDto;
 import com.jwland.domain.exam.ExamWrongAnswerDeleteDto;
 import com.jwland.web.constant.VariableConstant;
@@ -123,8 +124,11 @@ public class ExamCheckController {
 	public ResponseEntity<List<Map>> getWrongAsnwerSubjects(@RequestParam(value = "accountSequenceNo") String accountSequenceNo,
 			@RequestParam(value = "examTypeSequenceNo") String examTypeSequenceNo){
 		List<Map> wrongAsnwerExamMonthList = examCheckService.getWrongAsnwerSubjects(accountSequenceNo, examTypeSequenceNo);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(wrongAsnwerExamMonthList);
 	}
+	
+	
 	
 	@GetMapping("/exam/wrong-answer/exam-types/{examTypeSequenceNo}/subjects/{examSubjectSequenceNo}")
 	public ResponseEntity<List<Integer>> getWrongAsnwerNumbers(@RequestParam(value = "accountSequenceNo") String accountSequenceNo,

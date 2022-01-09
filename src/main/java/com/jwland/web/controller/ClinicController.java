@@ -31,4 +31,11 @@ public class ClinicController {
 		List<Map> clinicList = clinicService.loadClinicData(date, accountSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(clinicList);
 	}
+	
+	@GetMapping("/clinic/list")
+	public ResponseEntity<List<Map>> loadClinicList(@RequestParam(value = "startDate", required = true) String startDate,
+			@RequestParam(value = "endDate", required = true) String endDate){
+		List<Map> clinicList = clinicService.loadClinicList(startDate, endDate);
+		return ResponseEntity.status(HttpStatus.OK).body(clinicList);
+	}
 }
