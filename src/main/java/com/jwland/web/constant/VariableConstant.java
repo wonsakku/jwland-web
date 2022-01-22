@@ -34,5 +34,15 @@ public interface VariableConstant {
 	public static final String EXAM_ENROLL_WRONG_ANSWER_SUCCESS = "오답 등록이 완료되었습니다.";
 	public static final String EXAM_UPDATE_WRONG_ANSWER_SUCCESS = "오답 수정이 완료되었습니다.";
 	public static final String EXAM_DELETE_WRONG_ANSWER_SUCCESS = "오답 삭제가 완료되었습니다.";
+
+	// 클리닉
+	public static final String CLINIC_ENROLL_SUCCESS = "'클리닉 / 보충'이 등록되었습니다.\n '클리닉 / 보충' 신청을 진행해주시기 바랍니다.";
+	public static final String CLINIC_APPLY_SUCCESS = "'클리닉 / 보충' 신청이 완료되었습니다.";
+	public static final String CLINIC_CANCEL_SUCCESS = "'클리닉 / 보충' 신청이 취소되었습니다.";
 	
+
+
 }
+
+
+

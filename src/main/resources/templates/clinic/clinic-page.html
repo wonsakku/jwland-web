@@ -87,6 +87,7 @@
     			<tr>
     				<th scope="col"></th>
     				<th scope="col">시간</th>
+    				<th scope="col">클리닉 / 보충</th>
     				<th scope="col">수업명</th>
     				<th scope="col">신청인원</th>
     				<th scope="col">신청</th>
@@ -100,13 +101,18 @@
     </div>
     
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary">등록</button>
-      <button type="button" class="btn btn-warning"data-dismiss="modal" id="enroll-wrong-answer-cancel-btn">취소</button>
+		<button type="button" class="btn btn-primary mr-1" 
+			data-toggle="modal" data-target="#clinic-enroll-fragment" id="clinic-enroll-fragment-btn">
+		  등록
+		</button>
+      <button type="button" class="btn btn-warning"data-dismiss="modal" id="clinic-list-cancel-btn">취소</button>
     </div>
   </div>
 </div>
-
 </div>
+<!-- <div th:replace="layout/clinic-enroll-popup-fragment.html :: popup-enroll-wronganswer"></div> -->
+<div th:replace="clinic/clinic-enroll-popup-fragment.html :: clinic-enroll-fragment"></div>
+<div th:replace="clinic/clinic-enroll-popup-fragment.html :: clinic-enroll-event"></div>
 
 </main>
 </body>
@@ -126,7 +132,7 @@
     let dateLinkIdPrefix = "fc-dom";
     let clinicEnrollTitle = "클리닉&보충 신청 현황";
     let today = timeUtil.getDefaultTodayDate;
-
+ 
     var selectedDate = "";
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -310,14 +316,15 @@
     	for(var i = 0 ; i < data.length ; i++){
     		html += "<tr>";
     		html += "<td><input type='hidden' class='clinic_master_sequence_no' value='" + data[i].clinic_master_sequence_no + "'></td>";
-    		html += "<td>" + data[i].hour + " : " + data[i].minute + "</td>";
-    		html += "<td>" + data[i].class_type_name + "</td>";
+    		html += "<td class='clinic-time'>" + data[i].hour + " : " + data[i].minute + "</td>";
+    		html += "<td>" + data[i].clinic_type + "</td>";
+    		html += "<td class='class-name'>" + data[i].class_type_name + "</td>";
     		html += "<td>" + data[i].account_cnt + "명</td>";
     		
     		if(data[i].possible == 'can_apply'){
     			html += "<td><button class='btn btn-primary' onclick='popupClinicEnroll(this)'>신청</button></td>";
     		}else if(data[i].possible == 'already_apply'){
-    			html += "<td><button class='btn btn-outline-success' style='cursor:default;'>신청완료</button></td>";
+    			html += "<td><button class='btn btn-outline-danger' style='cursor:default;' onclick='cancelClinic(this)'>신청취소</button></td>";
     		}else{
     			html += "<td></td>";
     		}
@@ -334,9 +341,70 @@
     
     function popupClinicEnroll(elem){
     	var clinicMasterSequenceNo = $(elem).closest("tr").find(".clinic_master_sequence_no").val();
-    	alert(clinicMasterSequenceNo);
+    	
+    	var checkMsg = "해당 '클리닉 / 보충'을 신청하시겠습니까?\n"
+    			+ "시간 : " + $(elem).closest("tr").find(".clinic-time").text() + "\n"
+    			+ "수업 : " + $(elem).closest("tr").find(".class-name").text();
+    	
+    	if(!confirm(checkMsg)){
+    		return ;
+    	}
+    	
+    	var requestBody = new Object();
+    	requestBody.clinicSequenceNo = clinicMasterSequenceNo;
+    	requestBody.accountSequenceNo = accountSequenceNo;
+    	
+    	var url = "/clinic/apply";
+    	
+    	$.ajax({
+    		url: url,
+    		method: "POST",
+			data: JSON.stringify(requestBody),
+			contentType: "application/json",
+			timeout: 5000,
+			success: function(msg){
+				alert(msg);
+				location.reload();
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+    	});
     }
-
+    
+    
+	function cancelClinic(elem){
+    	var clinicMasterSequenceNo = $(elem).closest("tr").find(".clinic_master_sequence_no").val();
+    	
+    	var checkMsg = "해당 '클리닉 / 보충'을 신청을 취소하시겠습니까?\n"
+    			+ "시간 : " + $(elem).closest("tr").find(".clinic-time").text() + "\n"
+    			+ "수업 : " + $(elem).closest("tr").find(".class-name").text();
+    	
+    	if(!confirm(checkMsg)){
+    		return ;
+    	}
+    	
+    	var requestBody = new Object();
+    	requestBody.clinicSequenceNo = clinicMasterSequenceNo;
+    	requestBody.accountSequenceNo = accountSequenceNo;
+    	
+    	var url = "/clinic/cancel";
+    	
+    	$.ajax({
+    		url: url,
+    		method: "DELETE",
+			data: JSON.stringify(requestBody),
+			contentType: "application/json",
+			timeout: 5000,
+			success: function(msg){
+				alert(msg);
+				location.reload();
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+    	});
+	}
 	
     
     

@@ -8,6 +8,7 @@
 
 		SELECT cm.clinic_master_sequence_no
 			 , ct.class_type_sequence_no
+			 , clinic_type.clinic_type
 			 , ct.class_type_name
 			 , cm.date
 			 , cm.hour
@@ -18,6 +19,8 @@
 			   ELSE 'impossible'
 			   END AS possible
 		FROM jwland.clinic_master cm
+		LEFT JOIN jwland.clinic_type clinic_type
+		ON cm.clinic_type_sequence_no = clinic_type.clinic_type_sequence_no
 		LEFT JOIN jwland.class_type ct
 		ON cm.class_type_sequence_no = ct.class_type_sequence_no
 		LEFT JOIN 
@@ -67,8 +70,40 @@
 	</select>
 
 
+	<select id="getClinicTypes" resultType="map">
+		SELECT clinic_type_sequence_no, clinic_type 
+		FROM jwland.clinic_type
+	</select>
 
+	<select id="getClassTypes" resultType="map" parameterType="String">
+		SELECT * FROM jwland.class_type
+		WHERE class_type_sequence_no IN (
+		 	SELECT class_type_sequence_no FROM jwland.class
+			WHERE class_sequence_no IN (
+				SELECT class_sequence_no FROM jwland.account_class_map
+				WHERE account_sequence_no = #{accountSequenceNo}::INT
+			)
+			AND open = 'OPEN'
+		)
+		;
 
+	</select>
+	
+	<insert id="enrollClinic" parameterType="com.jwland.domain.clinic.EnrollClinicDto">
+		INSERT INTO jwland.clinic_master(class_type_sequence_no, clinic_type_sequence_no, date, hour, minute)
+		VALUES(#{classTypeSequenceNo}, #{clinicTypeSequenceNo}, #{date}, #{hour}, #{minute})
+	</insert>
+
+	<insert id="applyClinic" parameterType="com.jwland.domain.clinic.ClinicAccountMapDto">
+		INSERT INTO jwland.clinic_account_map
+		VALUES(#{clinicSequenceNo}, #{accountSequenceNo})
+	</insert>
+	
+	<delete id="calcelClinic" parameterType="com.jwland.domain.clinic.ClinicAccountMapDto">
+		DELETE FROM jwland.clinic_account_map
+		WHERE clinic_master_sequence_no = #{clinicSequenceNo}
+		AND account_sequence_no = #{accountSequenceNo}
+	</delete>
 </mapper>
 
 

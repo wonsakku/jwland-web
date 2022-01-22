@@ -16,7 +16,11 @@ public enum ExceptionMessages {
 
 	
 	ALREADY_ENROLLED_EXAM("이미 등록된 기출입니다."),
-	NO_MATCHED_EXAM("일치하는 시험 정보가 없습니다.")
+	NO_MATCHED_EXAM("일치하는 시험 정보가 없습니다."),
+	
+	CLINIC_ENROLL_ERROR("'클리닉 / 보충' 등록 중 문제가 발생했습니다."), 
+	CLINIC_APPLY_ERROR("'클리닉 / 보충' 신청 중 문제가 발생했습니다."), 
+	CLINIC_CANCEL_ERROR("'클리닉 / 보충' 취소 중 문제가 발생했습니다.")
 	;
 
 	private String message;

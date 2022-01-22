@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <title>jwLand</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+<!--     <link rel="stylesheet" href="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" /> -->
+    <link rel="stylesheet" href="/node_modules/jquery/dist/jquery.min.js" />
+    <style>
+		
+    </style>
+</head>
+
+<body>
+
+
+
+<!-- Modal -->
+<div  th:fragment="clinic-enroll-fragment">
+	<!-- select-boxes -->
+	
+	<!-- 번호선택 이중 팝업 -->
+	<div class="modal fade" id="clinic-enroll-fragment" 
+		 data-backdrop="static" data-keyboard="false" 
+		 tabindex="-2" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+		 
+	  <div class="modal-dialog  modal-dialog-scrollable">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="staticBackdropLabel3">클리닉 / 보충 등록</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	       
+	      <div class="modal-body">
+			<form>
+			  <div class="form-row">
+			    <div class="form-group col-md-6">
+			      <label for="clinic-hour">시간</label>
+			      <input type="text" class="form-control" id="clinic-hour">
+			    </div>
+			    <div class="form-group col-md-6">
+			      <label for="clinic-minute">분</label>
+			      <input type="text" class="form-control" id="clinic-minute">
+			    </div>
+			  </div>
+			  <div class="form-group">
+			    <label for="clinic-type">클리닉 / 보충</label>
+			    <select class="form-control" id="clinic-type">
+			    </select>
+			  </div>
+			  <div class="form-group">
+			    <label for="clinic-class">수업</label>
+			    <select class="form-control" id="clinic-class">
+			    </select>
+			  </div>
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="enroll-clinic-btn" onclick="enrollClinic()">신청</button>
+	        <button type="button" class="btn btn-danger" data-dismiss="modal" id="enroll-clinic-cancel-btn">취소</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+</body>
+</html>
+
+
+<script th:inline="javascript"  th:fragment="clinic-enroll-event">
+
+	var selectedNumbers = new Array();
+
+	(function(){
+		$("#clinic-enroll-fragment-btn").on("click", function(e){
+			e.preventDefault();
+			loadClinicType();
+			loadClassType();
+		});
+	})();
+	
+	
+	function loadClinicType(){
+		var url = "/clinic/types";
+		$.ajax({
+			url: url,
+			method: "GET",
+			contentType: "application/json",
+			timeout: 5000,
+			success: function(data){
+				_cb_loadClinicType(data);
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+		});
+	}
+	
+	function _cb_loadClinicType(data){
+		$("#clinic-type").html("");
+		
+		var html = "";
+		for(var i = 0 ; i < data.length ; i++){
+			html += "<option value='" + data[i].clinic_type_sequence_no + "'>" + data[i].clinic_type + "</option>";
+		}
+		
+		$("#clinic-type").html(html);
+	}
+	
+	function loadClassType(){
+		
+		var url = "/clinic/class-types?accountSequenceNo=" + accountSequenceNo;
+		$.ajax({
+			url: url,
+			method: "GET",
+			contentType: "application/json",
+			timeout: 5000,
+			success: function(data){
+				_cb_loadClassType(data);
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+		});
+	}
+	
+	function _cb_loadClassType(data){
+		$("#clinic-class").html("");
+		
+		var html = "<option value=''> === 선 택 === </option>";
+		for(var i = 0 ; i < data.length ; i++){
+			html += "<option value='" + data[i].class_type_sequence_no + "'>" + data[i].class_type_name + "</option>";
+		}
+		
+		$("#clinic-class").html(html);
+	}
+	
+	function enrollClinic(){
+		
+		var clinicHour = $("#clinic-hour").val();
+		var clinicMinute = $("#clinic-minute").val();
+		var clinicType =  $("#clinic-type").val();
+		var classType = $("#clinic-class").val();
+		
+		if(clinicHour == null || !$.isNumeric(clinicHour) ){
+			alert("'시간'을 입력해주세요");
+			return ;
+		}
+		
+		if(clinicMinute != "00" && clinicMinute != "30"){
+			alert("'분'은 00 또는 30 으로 입력해주세요");
+			return ;
+		}
+		
+		if(clinicType == null || clinicType == ''){
+			alert("'클리닉 / 보충'을 선택해주세요");
+			return ;
+		}
+		
+		if(classType == null || classType == ''){
+			alert("'수업'을 선택해주세요");
+			return ;
+		}
+		
+		var $clinicTimes = $(".clinic-time");
+		for(var i = 0 ; i < $clinicTimes.length ; i++){
+			var enrolledClinicTime = $clinicTimes[i].innerHTML;
+			var enrolledClinicTimeArr = enrolledClinicTime.split(" : ");
+			var enrolledClinicHour = enrolledClinicTimeArr[0].trim();
+			var enrolledClinicMinute = enrolledClinicTimeArr[1].trim();
+			
+			if(clinicHour == enrolledClinicHour && clinicMinute == enrolledClinicMinute){
+				alert("입력하신 시간에 등록된 클리닉/보충이 있습니다.");
+				return ;
+			}
+		}
+		
+		var checkMsg = "'클리닉 / 보충'을 등록하시겠습니까?\n"
+					+ "날짜 : " + selectedDate + "\n"
+					+ "시간 : " + clinicHour + " : "	+ clinicMinute + "\n"
+					+ "클리닉 / 보충 : " + $("#clinic-type option:checked").text() + "\n"
+					+ "수업 : " + $("#clinic-class option:checked").text();
+		
+		if(!confirm(checkMsg)){
+			return ;
+		}
+		
+		
+		var url = "/clinic/enroll";
+		var requestBody = new Object();
+		requestBody.date = selectedDate.replace(/-/gi, "");
+		requestBody.hour = clinicHour;
+		requestBody.minute = clinicMinute;
+		requestBody.clinicTypeSequenceNo = clinicType;
+		requestBody.classTypeSequenceNo = classType;
+		
+		$.ajax({
+			url: url,
+			method: "POST",
+			contentType: "application/json",
+			timeout: 5000,
+			data: JSON.stringify(requestBody),
+			success: function(msg){
+				alert(msg);
+				location.reload();
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+		});
+	}
+	
+	
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

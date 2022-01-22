@@ -80,7 +80,12 @@ public class GlobalExceptionHandler {
 		}
 		return errorResponseEntity(HttpStatus.BAD_REQUEST,  e.getFieldError().getDefaultMessage());
 	}
+
 	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<String> runtimeException(RuntimeException e){
+		return errorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+	}
 	
 	private ResponseEntity<String> errorResponseEntity(HttpStatus status, String message){
 		return ResponseEntity.status(status).body(message);
