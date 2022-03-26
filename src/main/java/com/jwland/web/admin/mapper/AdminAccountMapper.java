@@ -12,5 +12,6 @@ public interface AdminAccountMapper {
 
 	List<AccountManagementDto> getAccountManagementList(Map<String, String> parameter);
 	void updateApproveStatus(List<Integer> accountSequenceList);
+	void updateApproveStatusAsDisable(List<Integer> accountSequenceList);
 
 }

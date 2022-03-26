@@ -44,6 +44,13 @@ public class AdminAccountController {
 		adminAccountService.updateApproveStatus(accountSequenceList);
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.USING_APPROVE_MESSAGE);
 	}
+	
+	@PutMapping("/use-disable")
+	public ResponseEntity<String> updateApproveStatusAsDisable(@RequestBody List<Integer> accountSequenceList){
+		adminAccountService.updateApproveStatusAsDisable(accountSequenceList);
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.USING_DISABLE_MESSAGE);
+	}
+	
 }
 
 

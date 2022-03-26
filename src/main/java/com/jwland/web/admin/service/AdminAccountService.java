@@ -31,6 +31,10 @@ public class AdminAccountService {
 	public void updateApproveStatus(List<Integer> accountSequenceList) {
 		adminAccountMapper.updateApproveStatus(accountSequenceList);
 	}
+
+	public void updateApproveStatusAsDisable(List<Integer> accountSequenceList) {
+		adminAccountMapper.updateApproveStatusAsDisable(accountSequenceList);
+	}
 	
 	
 }

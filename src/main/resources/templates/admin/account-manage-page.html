@@ -30,14 +30,15 @@
 	  	  <div class="row pb-4">
 		      <h3 class="col-md-6 col-sm-12">학생 관리 페이지</h3>
 		      <div class="col-md-6 col-sm-12 text-right">
-		      		<select id="select-approved">
+		      		<select id="select-approved" class="form-control d-inline w-25">
 		      			<option value="N">미승인</option>
 		      			<option value="Y">승인</option>
 		      			<option value="">전체</option>
 		      		</select>
-		      		<input type="text" id="student-name"/>
+		      		<input type="text" class="form-control d-inline w-25" id="student-name"/>
 		      		<button type="button" class="btn btn-primary" onclick="loadStudents()">검색</button>
 		      		<button type="button" class="btn btn-info" onclick="approveUsing()">사용 승인</button>
+		      		<button type="button" class="btn btn-warning" onclick="diableUsing()">비활성화</button>
 		      </div>
 	  	  </div>
 	      <div class="table-responsive text-center">
@@ -184,12 +185,45 @@
 			timeout: 10000,
 			success: function(message, xhrStatus, xhr){
 				alert(message);
+				accountSequenceList = new Array();
 				loadStudents();
 			},
 			error: function(a, b){
 				alert(a.reponseText);
 // 				console.log(a);
 // 				console.log(b);
+			}
+		});
+	}
+	
+	function diableUsing(){
+		
+		var selectedCount = accountSequenceList.length;
+		
+		if(selectedCount == 0){
+			alert("선택된 학생이 없습니다.");
+			return ;
+		}
+		
+		if(!confirm(selectedCount + "명의 학생 계정을 비활성화시키겠습니까?")){
+			return ;
+		}
+		
+		var url = "/admin/accounts/use-disable";
+		
+		$.ajax({
+			url: url,
+			type: "PUT",
+			contentType: "application/json",
+			data: JSON.stringify(accountSequenceList),
+			timeout: 10000,
+			success: function(message, xhrStatus, xhr){
+				alert(message);
+				accountSequenceList = new Array();
+				loadStudents();
+			},
+			error: function(a, b){
+				alert(a.reponseText);
 			}
 		});
 	}

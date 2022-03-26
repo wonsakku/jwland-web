@@ -40,6 +40,15 @@
 		</foreach>
 	</update>
 
+	<update id="updateApproveStatusAsDisable" parameterType="list">
+		UPDATE jwland.account
+		SET approved = 'N'
+		WHERE account_sequence_no IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
 </mapper>
 
 
