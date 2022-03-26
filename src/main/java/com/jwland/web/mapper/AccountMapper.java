@@ -22,10 +22,6 @@ public interface AccountMapper {
 
 	public List<AccountInfoDto> findAccountsInfo(Map<String, String> paramater);
 
-	public List<Map> getSchoolInfo();
-
-	public List<Map> getGradeInfo();
-
 	public Map idDuplicationCheck(JoinAccountDto joinAccountDto);
 
 }

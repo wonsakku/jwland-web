@@ -20,6 +20,7 @@ public interface VariableConstant {
 	
 	// class
 	public static final String CLASS_ENROLL_SUCCESS = "강의 등록이 완료되었습니다.";
+	public static final String CLASS_UPDATE_SUCCESS = "강의 수정이 완료되었습니다.";
 	public static final String ACCOUNT_ENROLL_CLASS_SUCCESS_SUFFIX = "명의 학생이 등록되었습니다.";
 	public static final String ATTENDANCE_ENROLL_SUCCESS = "출석 등록을 완료하였습니다.";
 	

@@ -65,20 +65,7 @@ public class AccountController {
 		accountService.join(joinAccountDto);
 		return ResponseEntity.status(HttpStatus.OK).body(joinAccountDto.getId() + VariableConstant.JOIN_SUCCESS_MESSAGE_SURFFIX);
 	}
-	
-	@GetMapping("/join/schools")
-	public ResponseEntity<List<Map>> getSchoolInfo(){
-		List<Map> schoolInfo = accountService.getSchoolInfo();
-		return ResponseEntity.status(HttpStatus.OK).body(schoolInfo);
-	}
-	
-	@GetMapping("/join/grades")
-	public ResponseEntity<List<Map>> getGradeInfo(){
-		List<Map> gradeInfo = accountService.getGradeInfo();
-		return ResponseEntity.status(HttpStatus.OK).body(gradeInfo);
-	}
-	
-	
+
 	
 	@PostMapping("/logout")
 	public ModelAndView logout(HttpServletRequest request) {
@@ -97,8 +84,13 @@ public class AccountController {
 	
 
 	@GetMapping("/accounts")
-	public ResponseEntity<List<AccountInfoDto>> findAccountsInfo(@RequestParam(value = "name", required = false, defaultValue = "") String name){
-		List<AccountInfoDto> accountInfos = accountService.findAccountsInfo(name);
+	public ResponseEntity<List<AccountInfoDto>> findAccountsInfo(@RequestParam(value = "name", required = false, defaultValue = "") String name,
+			@RequestParam(value = "gradeSequenceNo", required = false, defaultValue = "") String gradeSequenceNo){
+		
+		log.info("name={}", name);
+		log.info("gradeSequenceNo={}", gradeSequenceNo);
+		
+		List<AccountInfoDto> accountInfos = accountService.findAccountsInfo(name, gradeSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(accountInfos);
 	}
 

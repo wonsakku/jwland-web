@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jwland.domain.classes.dto.ClassAccountMapDto;
 import com.jwland.domain.classes.dto.ClassAttendanceEnrollDto;
 import com.jwland.domain.classes.dto.ClassDetailDto;
+import com.jwland.domain.classes.dto.ClassListDto;
 import com.jwland.domain.classes.dto.CreateClassDto;
 import com.jwland.domain.classes.dto.EnrolledAccountsDto;
 import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
@@ -69,8 +70,27 @@ public class AdminClassController {
 	}
 	
 	@GetMapping("/classes")
-	public List<ClassDetailDto> getClassDetails(@RequestParam(value = "open", required = false, defaultValue = "OPEN") String open){
-		return classService.getClassDetails(open);
+	public List<ClassListDto> getClassList(@RequestParam(value = "open", required = false, defaultValue = "OPEN") String open){
+		return classService.getClassList(open);
+	}
+	
+	
+	@GetMapping("/classes/{classSequenceNo}")
+	public ResponseEntity<ClassDetailDto> getClassDetail(@PathVariable int classSequenceNo){
+		
+		log.info("classSequenceNo={}", classSequenceNo);
+		
+		ClassDetailDto classDetailDto = classService.getClassDetail(classSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(classDetailDto);
+	}
+	
+	@PostMapping("/classes/{classSequenceNo}/update")
+	public ResponseEntity updateClass(@PathVariable int classSequenceNo, @RequestBody ClassDetailDto classDetailDto) {
+		
+		classDetailDto.setClassSequenceNo(classSequenceNo);
+		log.info("classDetailDto={}", classDetailDto);
+		classService.updateClass(classDetailDto);
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.CLASS_UPDATE_SUCCESS);
 	}
 	
 	
@@ -129,6 +149,8 @@ public class AdminClassController {
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.ATTENDANCE_ENROLL_SUCCESS);
 	}
 	
+	
+	
 	@GetMapping("/classes/{classSequenceNo}/attendance-info")
 	public ResponseEntity<List<PersonalClassAttendanceDto>> findAttendanceInfoByDate(@RequestParam(value = "classDate") String classDate,
 			@PathVariable int classSequenceNo) {
@@ -137,12 +159,10 @@ public class AdminClassController {
 	}
 
 	@GetMapping("/classes/{classSequenceNo}/class-manage-page")
-	public ModelAndView classManagePage(@PathVariable String classSequenceNo,
-			@RequestParam(value = "className", required = true) String className) {
+	public ModelAndView classManagePage(@PathVariable String classSequenceNo) {
 		
 		ModelAndView mav = new ModelAndView("admin/class/class-manage-page");
 		mav.addObject("classSequenceNo", classSequenceNo);
-		mav.addObject("className", className);
 		return mav;
 	}
 	

@@ -18,6 +18,7 @@ import com.jwland.domain.classes.ClassVO;
 import com.jwland.domain.classes.dto.ClassAccountMapDto;
 import com.jwland.domain.classes.dto.ClassAttendanceEnrollDto;
 import com.jwland.domain.classes.dto.ClassDetailDto;
+import com.jwland.domain.classes.dto.ClassListDto;
 import com.jwland.domain.classes.dto.CreateClassDto;
 import com.jwland.domain.classes.dto.EnrolledAccountsDto;
 import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
@@ -54,8 +55,8 @@ public class AdminClassService {
 		return ((LoginSuccessDto) sessionLoginAttr).getId();
 	}
 
-	public List<ClassDetailDto> getClassDetails(String open) {
-		return classMapper.getClassDetails(open);
+	public List<ClassListDto> getClassList(String open) {
+		return classMapper.getClassList(open);
 	}
 
 	@Transactional
@@ -123,6 +124,15 @@ public class AdminClassService {
 
 	public List<Map> getClassTypes() {
 		return classMapper.getClassTypes();
+	}
+
+	public ClassDetailDto getClassDetail(int classSequenceNo) {
+		return classMapper.getClassDetail(classSequenceNo);
+	}
+
+	public void updateClass(ClassDetailDto classDetailDto) {
+		int updateCount = classMapper.updateClass(classDetailDto);
+		log.info("classUpdateCount : {}", updateCount);
 	}
 	
 	

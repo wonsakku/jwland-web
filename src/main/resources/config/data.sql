@@ -98,29 +98,29 @@ values('화학1');
 
 -- 회원 임시 데이터
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('루피', '루피', '1q1q1q', 9, 9);
+values('민준', 'test01', '1q1q1q', 9, 9);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('조로', '조로','1q1q1q', 10, 7);
+values('서준', 'test02','1q1q1q', 10, 7);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('나미', '나미','1q1q1q', 10, 8);
+values('예준', 'test03','1q1q1q', 10, 8);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('상디', '상대','1q1q1q', 10, 7);
+values('도윤', 'test04','1q1q1q', 10, 7);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('비비', '비비','1q1q1q', 11, 8);
+values('시우', 'test05','1q1q1q', 11, 8);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('블라디레나 밀리제', '블라디레나 밀리제','1q1q1q', 12, 7);
+values('주원', 'test06','1q1q1q', 12, 7);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('신에이 노우젠', '신에이 노우젠','1q1q1q', 12, 6);
+values('서연', 'test07','1q1q1q', 12, 6);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('라이덴 슈가', '라이덴 슈가','1q1q1q', 11, 5);
+values('서윤', 'test08','1q1q1q', 11, 5);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('세오토 릿카', '세오토 릿카','1q1q1q', 10, 4);
+values('지우', 'test09','1q1q1q', 10, 4);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('앙쥬 에마', '앙쥬 에마','1q1q1q', 11, 3);
+values('서현', 'test10','1q1q1q', 11, 3);
 insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('크레나 쿠쿠밀라', '크루나 쿠쿠밀라','1q1q1q', 10, 1);
+values('민서', 'test11','1q1q1q', 10, 1);
 insert into jwland.account(name, id, password, grade_sequence_no, role, school_sequence_no, approved)
-values('admin', 'admin','1q1q1q', 0, 'ROLE_ADMIN', 0,'Y');
+values('admin', 'admin','0000', 0, 'ROLE_ADMIN', 0,'Y');
 
 
 

@@ -60,21 +60,6 @@ create table jwland.menu(
 );
 
 
-
-create table jwland.account(
-	account_sequence_no BIGINT DEFAULT NEXTVAL('jwland.account_sequence'),
-	id varchar(20) not null UNIQUE,
-	name varchar(20) not null,
-	password varchar(300) not null,
-	grade_sequence_no SMALLINT not null,
-	school_sequence_no BIGINT NOT NULL,
-	approved varchar(1) not null DEFAULT 'N',
-	role varchar(20) not null default 'ROLE_STUDENT',
-	created_at TIMESTAMP not null default now(),
-	modify_at TIMESTAMP not null default now(),
-	constraint account_primary_key PRIMARY KEY("account_sequence_no")
-);
-
 create table jwland.grades(/*common_table*/
 	grade_sequence_no INT NOT NULL,
 	grade varchar(5) NOT NULL,
@@ -82,7 +67,42 @@ create table jwland.grades(/*common_table*/
 );
 
 
-create table jwland.exam_subject(/*common_table*/
+create table jwland.school(/*common_table*/
+	school_sequence_no BIGINT DEFAULT NEXTVAL('jwland.school_sequence'),
+	school_name varchar(10) NOT NULL UNIQUE,
+	CONSTRAINT school_primary_key PRIMARY KEY("school_sequence_no")
+);
+
+
+
+
+create table jwland.account(
+	account_sequence_no BIGINT DEFAULT NEXTVAL('jwland.account_sequence'),
+	id varchar(20) not null UNIQUE,
+	name varchar(20) not null,
+	password varchar(300) not null,
+	grade_sequence_no SMALLINT not null, -- done
+	school_sequence_no BIGINT NOT NULL, -- done
+	approved varchar(1) not null DEFAULT 'N',
+	role varchar(20) not null default 'ROLE_STUDENT',
+	created_at TIMESTAMP not null default now(),
+	modify_at TIMESTAMP not null default now(),
+	constraint account_primary_key PRIMARY KEY("account_sequence_no"),
+	CONSTRAINT grade_fk FOREIGN KEY(grade_sequence_no) REFERENCES jwland.grades(grade_sequence_no),
+	CONSTRAINT school_fk FOREIGN KEY(school_sequence_no) REFERENCES jwland.school(school_sequence_no)
+);
+
+
+
+
+create table jwland.subject(/*common_table*/
+	subject_sequence_no INT NOT NULL,
+	subject_name varchar(10) NOT NULL UNIQUE,
+	CONSTRAINT subject_primary_key PRIMARY KEY("subject_sequence_no")
+);
+
+
+create table jwland.exam_subject(/*common_table*/ -- subject와 중복?
 	exam_subject_sequence_no int DEFAULT NEXTVAL('jwland.exam_subject_sequence'),
 	subject varchar(10) NOT NULL UNIQUE,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
@@ -108,39 +128,30 @@ create table jwland.exam_type(
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	constraint exam_type_primary_key PRIMARY KEY("exam_type_sequence_no"),
-	constraint exam_type_unique_info_key UNIQUE(year, month, exam_organization_sequence_no)	
+	constraint exam_type_unique_info_key UNIQUE(year, month, exam_organization_sequence_no),
+	CONSTRAINT exam_organization_fk FOREIGN KEY(exam_organization_sequence_no) REFERENCES jwland.exam_organization(exam_organization_sequence_no)
 );
+
 
 
 create table jwland.exam_master(
 	exam_master_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_master_sequence'),
-	exam_type_sequence_no INT NOT NULL,
-	exam_subject_sequence_no INT NOT NULL,
+	exam_type_sequence_no INT NOT NULL, -- XX년 X월 XXX기관
+	exam_subject_sequence_no INT NOT NULL, -- 과목
 	problem_number SMALLINT NOT NULL CHECK(problem_number >= 1 AND problem_number <= 20),
 	account_sequence_no BIGINT NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	constraint exam_master_primary_key PRIMARY KEY("exam_master_sequence_no"),
-	constraint exam_master_unique_info_key UNIQUE(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no)	
+	constraint exam_master_unique_info_key UNIQUE(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no),
+	CONSTRAINT exam_type_fk FOREIGN KEY(exam_type_sequence_no) REFERENCES jwland.exam_type(exam_type_sequence_no),
+	CONSTRAINT exam_subject_fk FOREIGN KEY(exam_subject_sequence_no) REFERENCES jwland.exam_subject(exam_subject_sequence_no),
+	CONSTRAINT exam_account_fk FOREIGN KEY(account_sequence_no) REFERENCES jwland.account(account_sequence_no)
 );
 
 
 
-
-create table jwland.class(
-	class_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_sequence'),
-	class_name varchar(100) NOT NULL,
-	class_type_sequence_no BIGINT NOT NULL,
-	start_date varchar(6) NOT NULL,
-	open varchar(10) NOT NULL DEFAULT 'OPEN',
-	created_at TIMESTAMP NOT NULL DEFAULT now(),
-	create_account_id varchar(20) NOT NULL,
-	modify_at TIMESTAMP NOT NULL DEFAULT now(),
-	modify_account_id varchar(20) NOT NULL,
-	constraint class_primary_key PRIMARY KEY("class_sequence_no")
-);
-
-
+-- 중3 공통과학, 고1 공통과학, 고2 생명과학, 고2 화학, 고3 생명과학, 고3 화학
 create table jwland.class_type(/*common_table*/
 	class_type_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_type_sequence'),
 	class_type_name varchar(20) NOT NULL,
@@ -148,12 +159,29 @@ create table jwland.class_type(/*common_table*/
 );
 
 
+create table jwland.class(
+	class_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_sequence'),
+	class_name varchar(100) NOT NULL, -- 중3 공통과학, XX고 고1 공통과학, OO고 고1 공통과학, AA고 고1 공통과학, 고2 생명과학, 고2 화학, 고3 생명과학, 고3 생명과학
+	class_type_sequence_no BIGINT NOT NULL, 
+	start_date varchar(6) NOT NULL,
+	open varchar(10) NOT NULL DEFAULT 'OPEN',
+	created_at TIMESTAMP NOT NULL DEFAULT now(),
+	create_account_id varchar(20) NOT NULL,
+	modify_at TIMESTAMP NOT NULL DEFAULT now(),
+	modify_account_id varchar(20) NOT NULL,
+	constraint class_primary_key PRIMARY KEY("class_sequence_no"),
+	CONSTRAINT class_type_fk FOREIGN KEY(class_type_sequence_no) REFERENCES jwland.class_type(class_type_sequence_no)
+);
+
 
 create table jwland.account_class_map(
 	class_sequence_no BIGINT,
 	account_sequence_no BIGINT,
-	constraint account_class_map_primary_key PRIMARY KEY("class_sequence_no", "account_sequence_no")
+	constraint account_class_map_primary_key PRIMARY KEY("class_sequence_no", "account_sequence_no"),
+	CONSTRAINT class_fk FOREIGN KEY(class_sequence_no) REFERENCES jwland.class(class_sequence_no),
+	CONSTRAINT account_fk FOREIGN KEY(account_sequence_no) REFERENCES jwland.account(account_sequence_no)
 );
+
 
 
 create table jwland.attendance_status(/*common_table*/
@@ -171,8 +199,21 @@ create table jwland.class_attendance_management(
 	create_account_id varchar(20) NOT NULL,
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_account_id varchar(20) NOT NULL,
-	constraint class_attendance_management_primary_key PRIMARY KEY("class_sequence_no", "account_sequence_no", "class_date")
+	constraint class_attendance_management_primary_key PRIMARY KEY("class_sequence_no", "account_sequence_no", "class_date"),
+	CONSTRAINT attendance_class_fk FOREIGN KEY(class_sequence_no) REFERENCES jwland.class(class_sequence_no),
+	CONSTRAINT attendance_account_fk FOREIGN KEY(account_sequence_no) REFERENCES jwland.account(account_sequence_no),
+	CONSTRAINT attendance_status_fk FOREIGN KEY(attendance_status_sequence_no) REFERENCES jwland.attendance_status(attendance_status_sequence_no)
 );
+
+
+-- 클리닉, 보충수업
+create table jwland.clinic_type( /*common_table*/
+	clinic_type_sequence_no BIGINT NOT NULL,
+	clinic_type VARCHAR(3) NOT NULL,
+	CONSTRAINT clinic_type_primary_key PRIMARY KEY("clinic_type_sequence_no")	
+);
+
+
 
 
 create table jwland.clinic_master(
@@ -183,37 +224,21 @@ create table jwland.clinic_master(
 	hour varchar(2) NOT NULL,
 	minute varchar(2) NOT NULL,
 	CONSTRAINT clinic_master_primary_key PRIMARY KEY("clinic_master_sequence_no"),
-	CONSTRAINT clinic_master_unique_key UNIQUE("date", "hour", "minute")
-);
+	CONSTRAINT clinic_master_unique_key UNIQUE("date", "hour", "minute"),
+	CONSTRAINT clinic_class_type_fk FOREIGN KEY(class_type_sequence_no) REFERENCES jwland.class_type(class_type_sequence_no),
+	CONSTRAINT clinic_type_fk FOREIGN KEY(clinic_type_sequence_no) REFERENCES jwland.clinic_type(clinic_type_sequence_no)
 
-
-create table jwland.clinic_type( /*common_table*/
-	clinic_type_sequence_no BIGINT NOT NULL,
-	clinic_type VARCHAR(3) NOT NULL,
-	CONSTRAINT clinic_type_primary_key PRIMARY KEY("clinic_type_sequence_no")	
 );
 
 
 create table jwland.clinic_account_map(
 	clinic_master_sequence_no BIGINT,
 	account_sequence_no BIGINT,
-	CONSTRAINT clinic_account_map_primary_key PRIMARY KEY("clinic_master_sequence_no", "account_sequence_no")
+	CONSTRAINT clinic_account_map_primary_key PRIMARY KEY("clinic_master_sequence_no", "account_sequence_no"),
+	CONSTRAINT clinic_master_fk FOREIGN KEY(clinic_master_sequence_no) REFERENCES jwland.clinic_master(clinic_master_sequence_no),
+	CONSTRAINT clinic_account_fk FOREIGN KEY(account_sequence_no) REFERENCES jwland.account(account_sequence_no)
 );
 
-
-create table jwland.school(/*common_table*/
-	school_sequence_no BIGINT DEFAULT NEXTVAL('jwland.school_sequence'),
-	school_name varchar(10) NOT NULL UNIQUE,
-	CONSTRAINT school_primary_key PRIMARY KEY("school_sequence_no")
-);
-
-
-
-create table jwland.subject(/*common_table*/
-	subject_sequence_no INT NOT NULL,
-	subject_name varchar(10) NOT NULL UNIQUE,
-	CONSTRAINT subject_primary_key PRIMARY KEY("subject_sequence_no")
-);
 
 
 

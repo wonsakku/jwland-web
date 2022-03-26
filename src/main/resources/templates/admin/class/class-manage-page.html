@@ -24,44 +24,74 @@
 
 </head>
 <body>
-	<main layout:fragment="content"  role="main">
-			
-<!-- 	  <section class="jumbotron text-center mt-4"> -->
-<!-- 	    <div class="container"> -->
-<!-- 	      <h1>Album example</h1> -->
-<!-- 	      <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p> -->
-<!-- 	      <p> -->
-<!-- 	        <a href="#" class="btn btn-primary my-2">Main call to action</a> -->
-<!-- 	        <a href="#" class="btn btn-secondary my-2">Secondary action</a> -->
-<!-- 	      </p> -->
-<!-- 	    </div> -->
-<!-- 	  </section> -->
 
-	  <div class="album py-5 bg-light">
-	  	  <div class="row pb-4">
-		      <h3 class="col-md-6 col-sm-12">[ [[${className}]] ] 수업 관리 페이지</h3>
-		      <div class="col-md-6 col-sm-12 text-right">
-		      		<input type="text" id="student-name"/>
-		      		<button type="button" class="btn btn-primary" onclick="loadStudents()">검색</button>
-		      		<button type="button" class="btn btn-info" onclick="addStudents()">등록</button>
-		      </div>
-	  	  </div>
-	      <div class="table-responsive text-center">
-	        <table class="table table-striped table-sm">
-	          <thead>
-	            <tr>
-	              <th>선택</th>
-	              <th>이름</th>
-	              <th>생일</th>
-	              <th>닉네임</th>
-	            </tr>
-	          </thead>
-	          <tbody id="student-table-body">
-	          </tbody>
-	        </table>
-	      </div>
-	  </div>
+	<main layout:fragment="content" >
+		<div class="container">
+		
+		  <div class="row py-5">
+			<div class="col-md-2"></div>
+			
+		    <div class="col-md-8">
+		      <h4 class="mb-3">수업 상세 페이지</h4>
+		      <form class="needs-validation" method="post" id="class-update-form">
+		        
+		        <div class="mb-3">
+		          <label for="className">수업명</label>
+		          <div class="input-group">
+		            <div class="input-group-prepend">
+		              <span class="input-group-text">@</span>
+		            </div>
+		            <input type="text" class="form-control" id="className" placeholder="수업명" required>
+		            <div class="invalid-feedback" style="width: 100%;">
+		              Your className is required.
+		            </div>
+		          </div>
+		        </div>
+				
+		        <div class="mb-3">
+		          <label for="classType">수업 분류</label>
+		          <div class="input-group">
+		            <div class="input-group-prepend">
+		              <span class="input-group-text">@</span>
+		            </div>
+<!-- 		            <input type="text" class="form-control" id="classType" placeholder="수업명" required> -->
+		            <select class="form-control" id="classType" required></select>
+		            <div class="invalid-feedback" style="width: 100%;">
+		              Your classType is required.
+		            </div>
+		          </div>
+		        </div>
+		
+		        <div class="mb-3">
+		          <label for="startDate">수업 시작 연&월</label>
+		          <input type="text" class="form-control" id="startDate" placeholder="수업 시작 연&월 (YYYYMM)" required>
+		          <div class="invalid-feedback">
+		            Please enter class start Date.
+		          </div>
+		        </div>
+		        		        
+		        <div class="mb-3">
+		          <label for="open">수업 진행 상황</label>
+		          <select id="open" class="form-control">
+		          	<option value="OPEN">수업 진행 중</option>
+		          	<option value="CLOSE">종강</option>
+		          </select>
+		        </div>
+		        		        
+		        <hr class="mb-4">
+		        <button class="btn btn-warning btn-lg btn-block" type="submit">수업 수정하기</button>
+		      </form>
+		    </div>
+		  </div>
+		
+		  <footer class="my-5 pt-5 text-muted text-center text-small">
+		    <p class="mb-1">&copy; 2017-2021 Company Name</p>
+		  </footer>
+		  
+		</div>
+		
 	</main>
+
 </body>
 
 </html>
@@ -71,154 +101,144 @@
 
 <script th:inline="javascript">
 	
-	var accountSequenceList = new Array();
 	const classSequenceNo = [[${classSequenceNo}]];
-
-	(function() {
-// 		loadStudents();
-// 		loadEnrolledStudent();
+	
+	(function(){
 		
-// 		$("#student-name").on("keyup", function(e){
-// 			if(e.keyCode == 13){
-// 				loadStudents();
-// 			}
-// 		});
+	  	window.addEventListener('load', function () {
 
-		notPrepared();
+			var form = document.getElementById('class-update-form');
+			form.addEventListener("submit", function(e){
+				e.preventDefault();
+				updateClass();
+			});
 
+		    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+		    var forms = document.getElementsByClassName('needs-validation');
 
+		    // Loop over them and prevent submission
+		    Array.prototype.filter.call(forms, function (form) {
+		      form.addEventListener('submit', function (event) {
+		        if (form.checkValidity() === false) {
+		          event.preventDefault();
+		          event.stopPropagation();
+		        }
+		        form.classList.add('was-validated');
+		      }, false)
+		    })
+		  }, false);
+	  	
+	  	renderClassType();
+		loadClassInfo();
 	})();
 
-	
-	function notPrepared(){
-		alert('준비중인 페이지입니다');
-		history.back(-1);
-	}
-	
-	
-	function loadStudents() {
-		var url = "/accounts";
-		var name = $("#student-name").val();
-		
-		if(name != null && name.trim() != ''){
-			url += "?name=" + name;
-		}
-		
+	function renderClassType(){
+		var url = "/admin/class/types";
 		$.ajax({
 			url: url,
-			type: "GET",
-			timeout: 10000,
-			success: function(data, xhrStatus, xhr){
-				_cb_loadStudents(data, xhrStatus, xhr);
+			method: "GET",
+			timeout: 50000,
+			success: function(data, a, b){
+				_cb_renderClassType(data, a, b);
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
 			}
 		});
 	}
-	
-	function _cb_loadStudents(data, xhrStatus, xhr){
-		
-		var $studentTableBody = $("#student-table-body");
-		$studentTableBody.html("");
 
-		var html = "";
+	function _cb_renderClassType(data, a, b){
+		console.log(data);	
+		
+		$("#classType").html("");
+		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html += "<tr>";
-			
-			html += "<td><input type='checkbox' value='" + data[i].accountSequenceNo + "' class='account-sequence-no' onclick='toggleAccountSequenceToList(this)'></td>";
-			html += "<td>" + data[i].name + "</td>";
-			html += "<td>" + data[i].birth + "</td>";
-			html += "<td>" + data[i].nickName + "</td>";
-
-			html += "</tr>";
+			html += "<option value='" + data[i].class_type_sequence_no + "'>" + data[i].class_type_name + "</option>";	
 		}
 		
-		$studentTableBody.html(html);
-		checkEnrolledStudents();
+		$("#classType").html(html);
 	}
+
 	
-	function loadEnrolledStudent(){
-		var url = "/admin/class/classes/" + classSequenceNo + "/accounts";
+	function loadClassInfo(){
+		
+		if(classSequenceNo == null || classSequenceNo == ''){
+			alert("잘못된 접근 방식입니다.");
+			location.href = "/";
+		}
+		
+		var url = "/admin/class/classes/" + classSequenceNo;
+		
 		$.ajax({
-			url: url,
 			type: "GET",
+			url: url,
+			contentType: "application/json",
 			timeout: 10000,
-			success: function(data, xhrStatus, xhr){
-				_cb_loadEnrolledStudent(data, xhrStatus, xhr);
+			success: function(data, a, b){
+				_cb_loadClassInfo(data, a, b);
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
 			}
 		});
 	}
 	
-	
-	function _cb_loadEnrolledStudent(data, xhrStatus, xhr) {
-
-		accountSequenceList = data;
-// 		console.log(accountSequenceList);
-		checkEnrolledStudents();
+	function _cb_loadClassInfo(data, a, b){
+		console.log(data);
+		$("#className").val(data.className);
+		$("#classType").val(data.classTypeSequenceNo);
+		$("#startDate").val(data.startDate);
+		$("#open").val(data.open);
 	}
 	
 	
-	function checkEnrolledStudents(){
+	function updateClass(){
 		
-		$("#student-table-body").find(".account-sequence-no").each(function(index, item) {
-			
-			for(var i = 0 ; i < accountSequenceList.length ; i++ ){
-				if($(item).val() == accountSequenceList[i] ){
-					$(item).attr("checked", "true");
-					break;
-				}
-			}
-		});
-	}
-	
-	
-	function toggleAccountSequenceToList(elem){
-		
-		var seq = $(elem).val();
-		
-		if($(elem).is(":checked")){
-			accountSequenceList.push(seq);
-		}else{
-				
-			for(var i = 0 ; i < accountSequenceList.length ; i++){
-				
-				if(accountSequenceList[i] == seq){
-					accountSequenceList.splice(i, 1);
-					break;
-				}
-			}
-		}
-	}
-	
-	function addStudents(){
-		
-		if(!confirm("등록하시겠습니까?")){
+// 		if(loginInfo.role.indexOf("ADMIN") > 0){
+		if(loginInfo.role.indexOf("ADMIN") < 0){
+			alert("수정 권한이 없습니다. indxe페이지로 이동합니다.");
+			location.href = "/";
 			return ;
 		}
 		
-		var formData = document.createElement("form");
+		console.log(loginInfo);
 		
-		var hiddenField = document.createElement("input");
-		hiddenField.setAttribute("type", "hidden");
-		hiddenField.setAttribute("name", "classSequenceNo");
-		hiddenField.setAttribute("value", classSequenceNo);
-		formData.appendChild(hiddenField);
-		
-		for(var i = 0 ; i < accountSequenceList.length ; i++){
-			var hiddenField2 = document.createElement("input");
-			hiddenField2.setAttribute("type", "hidden");
-			hiddenField2.setAttribute("name", "accountSequenceList[" + i + "]");
-			hiddenField2.setAttribute("value", accountSequenceList[i]);
-			formData.appendChild(hiddenField2);
+		if(!confirm("수정하시겠습니까?")){
+			return ;
 		}
 		
-		formData.setAttribute("charset", "UTF-8");
-		formData.setAttribute("method", "post");
-		formData.setAttribute("action", "/admin/class/classes/student/enroll");
+		var className = $("#className").val();
+		var classTypeSequenceNo = $("#classType").val();
+		var startDate = $("#startDate").val();
+		var open = $("#open").val();
 		
-		document.body.appendChild(formData);
+		var requestBody = new Object();
+		requestBody.className = className;
+		requestBody.classTypeSequenceNo = classTypeSequenceNo;
+		requestBody.startDate = startDate;
+		requestBody.open = open;
+		requestBody.modifyAccountId = loginInfo.id;
+
+		var url = "/admin/class/classes/" + classSequenceNo + "/update";
 		
-		formData.submit();
+		$.ajax({
+			url: url,
+			method: "POST",
+			contentType: "application/json",
+			timeout: 50000,
+			data: JSON.stringify(requestBody),
+			success: function(message, a, b){
+				alert(message);
+				location.href = "/admin/manage-page";
+			},
+			error: function(a, b, c){
+				alert(a.responseText);
+			}
+		});		
 	}
+	
+	
 	
 </script>
 

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.jwland.domain.classes.ClassAttendanceManagementVO;
 import com.jwland.domain.classes.ClassVO;
 import com.jwland.domain.classes.dto.ClassDetailDto;
+import com.jwland.domain.classes.dto.ClassListDto;
 import com.jwland.domain.classes.dto.EnrolledAccountsDto;
 import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
 
@@ -18,7 +19,7 @@ public interface AdminClassMapper {
 
 	ClassVO findClassByClassName(String className);
 
-	List<ClassDetailDto> getClassDetails(String open);
+	List<ClassListDto> getClassList(String open);
 
 	void deleteMapTableWithClassSequenceNo(int classSequenceNo);
 
@@ -37,4 +38,8 @@ public interface AdminClassMapper {
 	List<PersonalClassAttendanceDto> findAttendanceInfoByDate(Map<String, String> parameter);
 
 	List<Map> getClassTypes();
+
+	ClassDetailDto getClassDetail(int classSequenceNo);
+
+	int updateClass(ClassDetailDto classDetailDto);
 }

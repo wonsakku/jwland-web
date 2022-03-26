@@ -37,27 +37,14 @@
 		<if test="name != null and name != ''">
 			AND name LIKE '%' || #{name} || '%'
 		</if>
+		<if test="gradeSequenceNo != null and gradeSequenceNo != ''">
+			AND a.grade_sequence_no = #{gradeSequenceNo}::INT
+		</if>
 		AND approved = 'Y'
 		ORDER BY account_sequence_no
 	</select>
 
-	
-	<select id="getSchoolInfo" resultType="map">
-		SELECT school_sequence_no, school_name
-		FROM jwland.school
-		WHERE school_sequence_no > 0
-		ORDER BY school_sequence_no
-		;
-	</select>
 
-	<select id="getGradeInfo" resultType="map">
-		SELECT grade_sequence_no, grade
-		FROM jwland.grades
-		WHERE grade_sequence_no > 0
-		ORDER BY grade_sequence_no
-		;
-	</select>
-	
 	<select id="idDuplicationCheck" parameterType="com.jwland.domain.account.dto.JoinAccountDto" resultType="map">
 		SELECT * FROM jwland.account
 		WHERE id = #{id}
