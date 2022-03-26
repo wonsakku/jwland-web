@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(NoAccountException.class)
 	public ResponseEntity<String> noAccountException(NoAccountException e) {
+		e.printStackTrace();
 		log.error("--- Exception Message : {}", e.getMessage());
 		return errorResponseEntity(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
@@ -34,6 +35,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(WrongAccessException.class)
 	public ModelAndView wrongAccessException(WrongAccessException e, RedirectAttributes rttr) {
+		e.printStackTrace();
 		log.error("--- Exception Message : {}", e.getMessage());
 		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
 		return new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
@@ -41,6 +43,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(AuthorizeException.class)
 	public ModelAndView authorizeException(AuthorizeException e, RedirectAttributes rttr) {
+		e.printStackTrace();
 		log.error("--- Exception Message : {}", e.getMessage());
 		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
 		return new ModelAndView(UrlPathConstant.REDIRECT_ROOT_PAGE);
@@ -48,6 +51,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(AuthenticationException.class)
 	public ModelAndView authenticationException(AuthenticationException e, RedirectAttributes rttr) {
+		e.printStackTrace();
 		log.error("--- Exception Message : {}", e.getMessage());
 		rttr.addFlashAttribute(VariableConstant.ERROR, e.getMessage());
 		return new ModelAndView(UrlPathConstant.REDIRECT_LOGIN_PAGE);
@@ -55,12 +59,14 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(AlreadyEnrolledException.class)
 	public ResponseEntity<String> alreayEnrolledException(AlreadyEnrolledException e){
+		e.printStackTrace();
 		log.error("--- Exception Message : {}", e.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 	
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ResponseEntity<String> missingServletRequestParameterException(MissingServletRequestParameterException e){
+		e.printStackTrace();
 		log.error("--- Exception Message ; {}", e.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
@@ -84,6 +90,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<String> runtimeException(RuntimeException e){
+		e.printStackTrace();
 		return errorResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 	}
 	

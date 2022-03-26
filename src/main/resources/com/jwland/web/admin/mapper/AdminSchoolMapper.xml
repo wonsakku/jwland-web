@@ -1,0 +1,47 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jwland.web.admin.mapper.AdminSchoolMapper">
+
+	<select id="getSchoolList" resultType="com.jwland.domain.school.SchoolVO">
+		SELECT school_sequence_no, school_name
+		FROM jwland.school
+		ORDER BY school_sequence_no
+	</select>
+
+	<insert id="enrollSchool" parameterType="com.jwland.domain.school.SchoolVO">
+		INSERT INTO jwland.school(school_name)
+		values(#{schoolName})
+	</insert>
+
+	<update id="updateSchool" parameterType="com.jwland.domain.school.SchoolVO">
+		UPDATE jwland.school
+		SET school_name = #{schoolName}
+		WHERE school_sequence_no = #{schoolSequenceNo}
+	</update>
+	
+	<select id="getStudentCount" parameterType="int" resultType="map">
+		SELECT COUNT(*) AS count
+		FROM jwland.account
+		WHERE school_sequence_no = #{schoolSequenceNo}
+		;
+	</select>
+	
+	<delete id="deleteSchool" parameterType="int">
+		DELETE FROM jwland.school
+		WHERE school_sequence_no = #{schoolSequenceNo}
+		;
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
