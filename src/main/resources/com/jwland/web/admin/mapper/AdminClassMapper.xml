@@ -25,8 +25,13 @@
 	<select id="getClassList" parameterType="String" resultType="com.jwland.domain.classes.dto.ClassListDto">
 		SELECT class_sequence_no, class_name, start_date, open
 		FROM jwland.class
-		WHERE open = #{open}
-		ORDER BY open DESC
+		WHERE 1=1 
+		
+		<if test="open != null and open != ''">
+			AND open = #{open}
+		</if>
+		
+		ORDER BY start_date DESC
 	</select>
 
 	<select id="getClassDetail" parameterType="int" resultType="com.jwland.domain.classes.dto.ClassDetailDto">

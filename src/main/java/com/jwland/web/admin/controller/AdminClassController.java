@@ -70,8 +70,9 @@ public class AdminClassController {
 	}
 	
 	@GetMapping("/classes")
-	public List<ClassListDto> getClassList(@RequestParam(value = "open", required = false, defaultValue = "OPEN") String open){
-		return classService.getClassList(open);
+	public ResponseEntity<List<ClassListDto>> getClassList(@RequestParam(value = "open", required = false, defaultValue = "") String open){
+		List<ClassListDto> classList = classService.getClassList(open);
+		return ResponseEntity.status(HttpStatus.OK).body(classList);
 	}
 	
 	
