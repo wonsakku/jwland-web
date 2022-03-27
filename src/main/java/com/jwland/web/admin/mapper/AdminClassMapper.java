@@ -42,4 +42,8 @@ public interface AdminClassMapper {
 	ClassDetailDto getClassDetail(int classSequenceNo);
 
 	int updateClass(ClassDetailDto classDetailDto);
+
+	List<Map<String, String>> findClassAttendanceInfo(int classSequenceNo);
+
+	Map<String, String> getClassName(int classSequenceNo);
 }

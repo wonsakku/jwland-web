@@ -1,10 +1,13 @@
 package com.jwland.web.admin.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +29,7 @@ import com.jwland.domain.classes.dto.ClassListDto;
 import com.jwland.domain.classes.dto.CreateClassDto;
 import com.jwland.domain.classes.dto.EnrolledAccountsDto;
 import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
+import com.jwland.util.ExcelUtil;
 import com.jwland.web.admin.service.AdminClassService;
 import com.jwland.web.constant.VariableConstant;
 
@@ -167,7 +171,10 @@ public class AdminClassController {
 		return mav;
 	}
 	
-	
+	@GetMapping("/classes/{classSequenceNo}/attendance/excel-download")
+	public void download(@PathVariable int classSequenceNo, HttpServletResponse response, HttpServletRequest request) throws IOException{
+		Workbook classAttendanceExcel = classService.getClassAttendanceExcel(classSequenceNo, response, request);
+	}
 	
 }
 

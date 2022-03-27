@@ -91,7 +91,7 @@
 		FROM jwland.class_attendance_management
 		WHERE class_sequence_no = #{classSequenceNo}
 		GROUP BY class_date
-		ORDER BY class_date
+		ORDER BY class_date DESC
 	</select>
 
 	<delete id="deleteClassAttendanceInfo" parameterType="map">
@@ -113,7 +113,27 @@
 		AND class_date = #{classDate}
 	</select>
 	
-
+	
+	<select id="findClassAttendanceInfo" parameterType="int" resultType="map">
+		SELECT cam.account_sequence_no, s.school_name, g.grade, a.name, cam.class_date, ats.attendance_status 
+		FROM jwland.class_attendance_management cam
+		LEFT JOIN jwland.account a
+		ON cam.account_sequence_no = a.account_sequence_no
+		LEFT JOIN jwland.attendance_status ats
+		ON ats.attendance_status_sequence_no = cam.attendance_status_sequence_no
+		LEFT JOIN jwland.school s
+		ON a.school_sequence_no = s.school_sequence_no
+		LEFT JOIN jwland.grades g
+		ON a.grade_sequence_no = g.grade_sequence_no
+		WHERE class_sequence_no = #{classSequenceNo}
+		order by name, class_date
+		;
+	</select>
+	
+	<select id="getClassName" parameterType="int" resultType="map">
+		SELECT class_name FROM jwland.class
+		WHERE class_sequence_no = #{classSequenceNo}
+	</select>
 </mapper>
 
 

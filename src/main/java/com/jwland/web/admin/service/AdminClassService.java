@@ -1,13 +1,19 @@
 package com.jwland.web.admin.service;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.ss.usermodel.Workbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +28,7 @@ import com.jwland.domain.classes.dto.ClassListDto;
 import com.jwland.domain.classes.dto.CreateClassDto;
 import com.jwland.domain.classes.dto.EnrolledAccountsDto;
 import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
+import com.jwland.util.ExcelUtil;
 import com.jwland.web.admin.mapper.AdminClassMapper;
 import com.jwland.web.constant.VariableConstant;
 import com.jwland.web.exception.WrongAccessException;
@@ -34,8 +41,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class AdminClassService {
 
+	private static final String USER_AGENT = "User-Agent";
 	private final AdminClassMapper classMapper;
 	private final ModelMapper modelMapper;
+	private final String ATTENDANCE_FILE_NAME_SUFFIX = "_출석_현황";
 
 	public void enrollClass(CreateClassDto createClassDto, HttpServletRequest request) {
 		ClassVO clz = modelMapper.map(createClassDto, ClassVO.class);
@@ -134,7 +143,75 @@ public class AdminClassService {
 		int updateCount = classMapper.updateClass(classDetailDto);
 		log.info("classUpdateCount : {}", updateCount);
 	}
+
+	
+	public Workbook getClassAttendanceExcel(int classSequenceNo) throws IOException {
+		List<Map<String, String>> classAttendanceInfo = classMapper.findClassAttendanceInfo(classSequenceNo);
+		Map<String, String> className = classMapper.getClassName(classSequenceNo);
+		String strClassName = className.get("class_name");
+		String fileAndSheetName = strClassName + ATTENDANCE_FILE_NAME_SUFFIX;
+		
+		Workbook excelFile = ExcelUtil.createClassAttendanceExcelFile(classAttendanceInfo, fileAndSheetName, fileAndSheetName);
+		
+		return excelFile;
+	}
+	
+
+	public Workbook getClassAttendanceExcel(int classSequenceNo, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		List<Map<String, String>> classAttendanceInfo = classMapper.findClassAttendanceInfo(classSequenceNo);
+		Map<String, String> className = classMapper.getClassName(classSequenceNo);
+		String strClassName = className.get("class_name");
+		String fileAndSheetName = strClassName + ATTENDANCE_FILE_NAME_SUFFIX;
+		String fileDownloadNmae = "[" + strClassName + "]" + ATTENDANCE_FILE_NAME_SUFFIX;
+
+		Workbook excelFile = ExcelUtil.createClassAttendanceExcelFile(classAttendanceInfo, fileAndSheetName, fileAndSheetName);
+		excelFileDownload(excelFile, response, request, fileDownloadNmae);
+		
+		return excelFile;
+	}
+
+	private void excelFileDownload(Workbook excelFile, HttpServletResponse response, HttpServletRequest request, String fileName) throws IOException {
+		
+		String agent = request.getHeader(USER_AGENT);
+		
+		fileName = encodingFileNmae(fileName, agent);
+		
+		response.setContentType(ExcelUtil.EXCEL_CONTENT_TYPE);
+		response.setHeader(ExcelUtil.EXCEL_HEADER_KEY, ExcelUtil.EXCEL_HEADER_VALUE_PREFIX + fileName + ExcelUtil.EXCEL_EXT);
+		excelFile.write(response.getOutputStream());
+		excelFile.close();
+	}
+
+	private String encodingFileNmae(String fileName, String agent) {
+		
+		String encodedFileName = "";
+		
+        try {
+			if(agent.contains("Trident"))//Internet Explore
+				encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
+			    
+			else if(agent.contains("Edge")) //Micro Edge
+				encodedFileName = URLEncoder.encode(fileName, "UTF-8");
+			else //Chrome
+				encodedFileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return encodedFileName;
+	}
 	
 	
 	
 }
+
+
+
+
+
+
+
+
+
+

@@ -30,7 +30,9 @@
 	  	  <div class="row pb-4">
 		      <h3 class="col-md-6 col-sm-12">[ [[${className}]] ] 출결관리</h3>
 		      <div class="col-md-6 col-sm-12 text-right">
+		      	<button class='btn btn-info btn-md mr-2' onclick="excelDownload()">엑셀 다운로드</button>
 		      	<button class='btn btn-primary btn-md mr-2' onclick="enrollAttendance()">등록</button>
+<!-- 		      	<button class='btn btn-warning btn-md mr-2' onclick="updateAttendance()">수정</button> -->
 		      	<select id="class-date-select" class="form-control d-inline w-25">
 		      	</select>
 		      </div>
@@ -44,6 +46,7 @@
 	              <th>학교</th>
 	              <th>이름</th>
 	              <th>출석</th>
+<!-- 	              <th>수정</th> -->
 	            </tr>
 	          </thead>
 	          <tbody id="attendance-table-body">
@@ -62,6 +65,9 @@
 <script th:inline="javascript">
 	
 	var accountSequenceList = new Array();
+	
+	var updateAccountSequenceList = new Array();
+	
 	const classSequenceNo = [[${classSequenceNo}]];
 	const className = [[${className}]];
 	const today = getFormatDate();
@@ -78,8 +84,6 @@
 			findAttendanceInfoByDate(selectedDate);
 		});
 
-		disableEnroll();
-		
 	})();
 
 	
@@ -132,6 +136,7 @@
 			html += "<option value='3'>결석</option>";
 			html += "</select>";
 			html += "</td>";
+// 			html += "<td><button class='btn btn-info' onclick='activateAttendanceSelect(this)'>편집</button></td>";
 			html += "</tr>";
 		}
 		
@@ -170,6 +175,7 @@
 		}
 		
 		$("#class-date-select").html(html);
+// 		disableEnroll();
 	}
 	
 	
@@ -213,7 +219,7 @@
 		requestBody.classDate = classDate;
 		requestBody.attendanceInfo = attendanceInfo;
 		
-		console.log(requestBody);
+// 		console.log(requestBody);
 		
 		var url = "/admin/class/classes/attendance/enroll";
 		
@@ -236,7 +242,7 @@
 	
 	
 	function findAttendanceInfoByDate(selectedDate){
-// 		console.log(selectedDate);
+
 		var url = "/admin/class/classes/" + classSequenceNo + "/attendance-info?classDate=" + selectedDate;
 		$.ajax({
 			url: url,
@@ -249,10 +255,14 @@
 				alert("학생 데이터를 로딩하는 중 문제가 발생했습니다.");
 			}
 		});
-
 	}
 	
 	function _cb_findAttendanceInfoByDate(data, xhrStatus, xhr){
+		
+		$(".attendance_status_sequence_no").each(function(index, item){
+			$($(item).find("option")[0]).prop("selected", "selected");
+		});
+				
 		
 		for(var i = 0 ; i < data.length ; i++){
 			var _status = data[i].attendanceStatusSequenceNo;
@@ -263,12 +273,13 @@
 					return false;
 				}
 			});
+// 			$tr.find(".attendance_status_sequence_no").attr("disabled", "disabled");
 		}
 
-		toggleAttendanceSelectbodDiable();
+		toggleAttendanceSelectboxDiable();
 	}
 	
-	function toggleAttendanceSelectbodDiable(){
+	function toggleAttendanceSelectboxDiable(){
 		
 		var selected_date = $("#class-date-select").val();
 		
@@ -282,28 +293,19 @@
 	function disableEnroll(){
 		
 		var $classDateSelect = $("#class-date-select");
-		console.log($classDateSelect);
+		var $options = $classDateSelect.find("option");
 		
-		var $classOptions = $classDateSelect.find(".date-option").length;
-		
-		console.log("############");
-		console.log($classOptions);
-		
-		var $options = $classDateSelect.find(".date-option");
-		var _o = $options[0];		
-		console.log("~~~~~~~~~~~~~");
-		console.log(_o);
-		
-		for(var i = 0 ; i < $classDateSelect.length ; i++){
-			console.log($classDateSelect[i]);
-			var option = $classDateSelect.find("option")[i];
-			
+		for(var i = 0 ; i < $options.length ; i++){
+			var option = $options[i];
 			console.log(option);
 			
-// 			if(option.value == today){
-// 				alert("Hello world");
-// 			}
 		} 
+	}
+	
+	
+	function excelDownload(){
+		var url = "/admin/class/classes/" + classSequenceNo + "/attendance/excel-download";
+		location.href = url;
 	}
 	
 	
