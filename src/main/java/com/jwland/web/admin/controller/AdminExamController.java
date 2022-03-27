@@ -1,5 +1,13 @@
 package com.jwland.web.admin.controller;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,6 +66,33 @@ public class AdminExamController {
 	public ResponseEntity<String> deleteExamType(@PathVariable int examTypeSequenceNo){
 		adminExamService.deleteExamType(examTypeSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_DELETE_SUCCESS);
+	}
+	
+	@GetMapping("/excel-page")
+	public ModelAndView excelPage() {
+		return new ModelAndView("admin/exam-excel-page");
+	}
+	
+	@GetMapping("/excel-download")
+	public void examExcelDownload(@RequestParam(name = "start") String start,
+			@RequestParam(name = "end", required = false, defaultValue = "") String end,
+			@RequestParam(name="examSubjectSequenceNo", required = false, defaultValue = "") String examSubjectSequenceNo, 
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		
+		Map<String, String> parameter = new HashMap<>();
+		parameter.put("start", start);
+		
+		if(end == null || "".equals(end)) {
+			end = new SimpleDateFormat("yyyy").format(new Date());
+		}
+		parameter.put("end", end);
+		
+		if(examSubjectSequenceNo != null && !"".equals(examSubjectSequenceNo)) {
+			parameter.put("examSubjectSequenceNo", examSubjectSequenceNo);
+		}
+		
+		adminExamService.excelDownload(parameter, request, response);
 	}
 	
 }

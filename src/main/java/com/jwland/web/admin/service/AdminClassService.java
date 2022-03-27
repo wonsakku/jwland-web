@@ -28,6 +28,7 @@ import com.jwland.domain.classes.dto.ClassListDto;
 import com.jwland.domain.classes.dto.CreateClassDto;
 import com.jwland.domain.classes.dto.EnrolledAccountsDto;
 import com.jwland.domain.classes.dto.PersonalClassAttendanceDto;
+import com.jwland.util.CommonUtil;
 import com.jwland.util.ExcelUtil;
 import com.jwland.web.admin.mapper.AdminClassMapper;
 import com.jwland.web.constant.VariableConstant;
@@ -41,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class AdminClassService {
 
-	private static final String USER_AGENT = "User-Agent";
+
 	private final AdminClassMapper classMapper;
 	private final ModelMapper modelMapper;
 	private final String ATTENDANCE_FILE_NAME_SUFFIX = "_출석_현황";
@@ -151,7 +152,7 @@ public class AdminClassService {
 		String strClassName = className.get("class_name");
 		String fileAndSheetName = strClassName + ATTENDANCE_FILE_NAME_SUFFIX;
 		
-		Workbook excelFile = ExcelUtil.createClassAttendanceExcelFile(classAttendanceInfo, fileAndSheetName, fileAndSheetName);
+		Workbook excelFile = ExcelUtil.createClassAttendanceExcelFile(classAttendanceInfo, fileAndSheetName);
 		
 		return excelFile;
 	}
@@ -164,44 +165,13 @@ public class AdminClassService {
 		String fileAndSheetName = strClassName + ATTENDANCE_FILE_NAME_SUFFIX;
 		String fileDownloadNmae = "[" + strClassName + "]" + ATTENDANCE_FILE_NAME_SUFFIX;
 
-		Workbook excelFile = ExcelUtil.createClassAttendanceExcelFile(classAttendanceInfo, fileAndSheetName, fileAndSheetName);
-		excelFileDownload(excelFile, response, request, fileDownloadNmae);
+		Workbook excelFile = ExcelUtil.createClassAttendanceExcelFile(classAttendanceInfo, fileAndSheetName);
+		ExcelUtil.excelFileDownload(excelFile, response, request, fileDownloadNmae);
 		
 		return excelFile;
 	}
 
-	private void excelFileDownload(Workbook excelFile, HttpServletResponse response, HttpServletRequest request, String fileName) throws IOException {
-		
-		String agent = request.getHeader(USER_AGENT);
-		
-		fileName = encodingFileNmae(fileName, agent);
-		
-		response.setContentType(ExcelUtil.EXCEL_CONTENT_TYPE);
-		response.setHeader(ExcelUtil.EXCEL_HEADER_KEY, ExcelUtil.EXCEL_HEADER_VALUE_PREFIX + fileName + ExcelUtil.EXCEL_EXT);
-		excelFile.write(response.getOutputStream());
-		excelFile.close();
-	}
 
-	private String encodingFileNmae(String fileName, String agent) {
-		
-		String encodedFileName = "";
-		
-        try {
-			if(agent.contains("Trident"))//Internet Explore
-				encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", " ");
-			    
-			else if(agent.contains("Edge")) //Micro Edge
-				encodedFileName = URLEncoder.encode(fileName, "UTF-8");
-			else //Chrome
-				encodedFileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return encodedFileName;
-	}
-	
 	
 	
 }

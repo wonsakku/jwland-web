@@ -19,4 +19,8 @@ public interface AdminExamMapper {
 	void updateExamType(ExamUpdateDto examUpdateDto);
 
 	int deleteExamType(int examTypeSequenceNo);
+
+	List<Map> getSubjectInfo(Map<String, String> parameter);
+
+	List<Map> getExamStatistic(Map<String, Integer> newParameter);
 }
