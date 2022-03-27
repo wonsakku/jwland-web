@@ -30,8 +30,15 @@
 		ON em.exam_type_sequence_no = t1.exam_type_sequence_no
 		AND em.exam_subject_sequence_no = t1.exam_subject_sequence_no
 		AND em.problem_number = t1.problem_number
+		
+		WHERE 1=1
+		
 		<if test="accountSequenceNo != null and accountSequenceNo != ''">
-			WHERE em.account_sequence_no = #{accountSequenceNo}::INT
+			AND em.account_sequence_no = #{accountSequenceNo}::INT
+		</if>
+		
+		<if test="examSubjectSequenceNo != null and examSubjectSequenceNo != ''">
+			AND t1.exam_subject_sequence_no = #{examSubjectSequenceNo}::INT
 		</if>
 		GROUP BY et.year, et.month, eo.exam_organization_name, es.subject, em.problem_number, t1.wrong_count
 		ORDER BY t1.wrong_count DESC, et.year DESC, et.month DESC, es.subject DESC, em.problem_number DESC

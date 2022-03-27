@@ -52,7 +52,7 @@ public class ExamCheckController {
 	public ResponseEntity<List<ExamTotalInfoDto>> examCheckList(
 			@RequestParam(value = "accountSequenceNo", required = false, defaultValue = "") String accountSequenceNo,
 			@RequestParam(value = "examSubjectSequenceNo", required = false, defaultValue = "") String examSubjectSequenceNo) {
-		log.info("----- ExamCheckController.examCheckList() -----");
+		
 		List<ExamTotalInfoDto> examTotalInfoList = examCheckService.getExamCheckList(examSubjectSequenceNo, accountSequenceNo);
 		log.info("examData`````{}", examTotalInfoList);
 		return ResponseEntity.status(HttpStatus.OK).body(examTotalInfoList);
