@@ -49,7 +49,26 @@
 		SELECT * FROM jwland.account
 		WHERE id = #{id}
 	</select>
-
+	
+	<select id="getAccountDetail" parameterType="long" resultType="com.jwland.domain.account.AccountVO">
+		SELECT account_sequence_no, id, name, grade_sequence_no, school_sequence_no, approved
+		FROM jwland.account
+		WHERE account_sequence_no = #{accountSequenceNo}
+<!-- 		limit 1 -->
+	</select>
+	
+	<update id="updateAccount" parameterType="com.jwland.domain.account.AccountVO">
+		UPDATE jwland.account
+		SET
+			  name = #{name}
+			, grade_sequence_no = #{gradeSequenceNo}
+			, school_sequence_no = #{schoolSequenceNo}
+			<if test="password != null and password != ''">
+				, password = #{password}
+			</if>
+		WHERE account_sequence_no = #{accountSequenceNo}
+		;
+	</update>
 
 </mapper>
 

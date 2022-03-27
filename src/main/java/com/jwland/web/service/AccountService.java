@@ -68,6 +68,21 @@ public class AccountService{
 		return accountMapper.findAccountsInfo(parameter) ;
 	}
 
+	public AccountVO getAccountDetail(long accountSequenceNo) {
+		AccountVO account = accountMapper.getAccountDetail(accountSequenceNo);
+		return account;
+	}
+
+	public void updateAccount(AccountVO accountVO) {
+		String password = accountVO.getPassword();
+		
+		if(password != null || "".equals(password)) {
+			// TODO 패스워드 인코딩
+			
+		}
+		accountMapper.updateAccount(accountVO);
+	}
+
 
 //	@Override
 //	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

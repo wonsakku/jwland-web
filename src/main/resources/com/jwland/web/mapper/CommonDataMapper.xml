@@ -8,7 +8,7 @@
 	<select id="getSchoolInfo" resultType="map">
 		SELECT school_sequence_no, school_name
 		FROM jwland.school
-		WHERE school_sequence_no > 0
+<!-- 		WHERE school_sequence_no > 0 -->
 		ORDER BY school_sequence_no
 		;
 	</select>
@@ -16,7 +16,7 @@
 	<select id="getGradeInfo" resultType="map">
 		SELECT grade_sequence_no, grade
 		FROM jwland.grades
-		WHERE grade_sequence_no > 0
+<!-- 		WHERE grade_sequence_no > 0 -->
 		ORDER BY grade_sequence_no
 		;
 	</select>

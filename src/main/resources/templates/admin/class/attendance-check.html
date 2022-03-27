@@ -30,8 +30,8 @@
 	  	  <div class="row pb-4">
 		      <h3 class="col-md-6 col-sm-12">[ [[${className}]] ] 출결관리</h3>
 		      <div class="col-md-6 col-sm-12 text-right">
-		      	<button class='btn btn-primary btn-sm mr-2' onclick="enrollAttendance()">등록</button>
-		      	<select id="class-date-select">
+		      	<button class='btn btn-primary btn-md mr-2' onclick="enrollAttendance()">등록</button>
+		      	<select id="class-date-select" class="form-control d-inline w-25">
 		      	</select>
 		      </div>
 	  	  </div>
@@ -40,9 +40,9 @@
 	          <thead>
 	            <tr>
 	              <th></th>
-	              <th>이름</th>
 	              <th>학년</th>
 	              <th>학교</th>
+	              <th>이름</th>
 	              <th>출석</th>
 	            </tr>
 	          </thead>
@@ -78,6 +78,8 @@
 			findAttendanceInfoByDate(selectedDate);
 		});
 
+		disableEnroll();
+		
 	})();
 
 	
@@ -119,11 +121,11 @@
 		for(var i = 0 ; i < data.length ; i++){
 			html += "<tr>";
 			html += "<td><input type='hidden' class='account-sequence-no' id='account-sequence-no-" + data[i].accountSequenceNo + "' value='" + data[i].accountSequenceNo + "'></td>";
-			html += "<td class='name'>" + data[i].name + "</td>";
-			html += "<td>" + data[i].grade + "</td>";
-			html += "<td>" + data[i].schoolName + "</td>";
+			html += "<td><span class='form-control'>" + data[i].grade + "</span></td>";
+			html += "<td><span class='form-control'>" + data[i].schoolName + "</span></td>";
+			html += "<td class='name'><span class='name form-control'>" + data[i].name + "</span></td>";
 			html += "<td>";
-			html += "<select class='attendance_status_sequence_no'>";
+			html += "<select class='attendance_status_sequence_no form-control'>";
 			html += "<option disabled selected value=''>선택</option>";
 			html += "<option value='1'>출석</option>";
 			html += "<option value='2'>지각</option>";
@@ -164,7 +166,7 @@
 			var year = _date.substr(0,4);
 			var month = _date.substr(4,2);
 			var day = _date.substr(6,2);
-			html += "<option value='" + _date + "'>" + year + "-" + month + "-" + day + "</option>";
+			html += "<option class='date-option' value='" + _date + "'>" + year + "-" + month + "-" + day + "</option>";
 		}
 		
 		$("#class-date-select").html(html);
@@ -252,8 +254,6 @@
 	
 	function _cb_findAttendanceInfoByDate(data, xhrStatus, xhr){
 		
-		console.log(data);
-		
 		for(var i = 0 ; i < data.length ; i++){
 			var _status = data[i].attendanceStatusSequenceNo;
 			var $tr = $("#account-sequence-no-" + data[i].accountSequenceNo).closest("tr");
@@ -277,6 +277,33 @@
 		}else{
 			$(".status").attr("disabled", "disabled");
 		}
+	}
+	
+	function disableEnroll(){
+		
+		var $classDateSelect = $("#class-date-select");
+		console.log($classDateSelect);
+		
+		var $classOptions = $classDateSelect.find(".date-option").length;
+		
+		console.log("############");
+		console.log($classOptions);
+		
+		var $options = $classDateSelect.find(".date-option");
+		var _o = $options[0];		
+		console.log("~~~~~~~~~~~~~");
+		console.log(_o);
+		
+		for(var i = 0 ; i < $classDateSelect.length ; i++){
+			console.log($classDateSelect[i]);
+			var option = $classDateSelect.find("option")[i];
+			
+			console.log(option);
+			
+// 			if(option.value == today){
+// 				alert("Hello world");
+// 			}
+		} 
 	}
 	
 	

@@ -15,8 +15,13 @@ public interface VariableConstant {
 	public static final String ADMIN = "ROLE_ADMIN";
 	
 	// etc message
+	
+	
+	// 계정관련
 	public static final String JOIN_SUCCESS_MESSAGE_SURFFIX = "님의 가입이 완료되었습니다."; 
+	public static final String ACCOUNT_UPDATE_SUCCESS = "프로필 수정이 완료되었습니다.";
 	public static final String LOGIN_MESSAGE_SUFFIX = "님이 로그인하였습니다.";
+	
 	
 	// class
 	public static final String CLASS_ENROLL_SUCCESS = "강의 등록이 완료되었습니다.";
@@ -48,6 +53,7 @@ public interface VariableConstant {
 	public static final String SCHOOL_UPDATE_SUCCESS = "학교 수정이 완료되었습니다.";
 	public static final String SCHOOL_DELETE_SUCCESS = "학교 삭제가 완료되었습니다.";
 	public static final String SCHOOL_DELETE_FAIL = "해당 학교에 소속된 학생이 있을 경우 삭제할 수 없습니다.";
+	
 
 }
 

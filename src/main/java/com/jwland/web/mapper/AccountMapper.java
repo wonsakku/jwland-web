@@ -24,7 +24,12 @@ public interface AccountMapper {
 
 	public Map idDuplicationCheck(JoinAccountDto joinAccountDto);
 
+	public AccountVO getAccountDetail(long accountSequenceNo);
+
+	public void updateAccount(AccountVO accountVO);
+
 }
+
 
 
 

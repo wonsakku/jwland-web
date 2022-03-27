@@ -11,22 +11,23 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jwland.domain.account.AccountVO;
 import com.jwland.domain.account.dto.AccountInfoDto;
 import com.jwland.domain.account.dto.FormLoginDto;
 import com.jwland.domain.account.dto.JoinAccountDto;
+import com.jwland.domain.account.dto.LoginSuccessDto;
 import com.jwland.web.constant.UrlPathConstant;
 import com.jwland.web.constant.VariableConstant;
+import com.jwland.web.exception.AuthenticationException;
 import com.jwland.web.exception.WrongAccessException;
 import com.jwland.web.service.AccountService;
 
@@ -93,7 +94,53 @@ public class AccountController {
 		List<AccountInfoDto> accountInfos = accountService.findAccountsInfo(name, gradeSequenceNo);
 		return ResponseEntity.status(HttpStatus.OK).body(accountInfos);
 	}
+	
+	
+	@GetMapping("/accounts/{accountSequenceNo}")
+	public ResponseEntity<AccountVO> getAccountDetail(@PathVariable long accountSequenceNo){
+		AccountVO account = accountService.getAccountDetail(accountSequenceNo);
+		return ResponseEntity.status(HttpStatus.OK).body(account);
+	}
+	
+	@GetMapping("/profile")
+	public ModelAndView profilePage(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		LoginSuccessDto loginInfo = (LoginSuccessDto) session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME);
+		
+		if(loginInfo == null || loginInfo.getAccountSequenceNo() == null) {
+			throw new AuthenticationException();
+		}
+		
+		return new ModelAndView("account/profile"); 
+	}
 
+	
+	@PostMapping("/accounts/{accountSequenceNo}/update")
+	public ResponseEntity updateAccount(@PathVariable Long accountSequenceNo, 
+			@RequestBody AccountVO accountVO,HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		LoginSuccessDto loginInfo = (LoginSuccessDto) session.getAttribute(VariableConstant.LOGIN_ATTRIBUTE_NAME);
+		
+		if(loginInfo == null) {
+			throw new AuthenticationException();
+		}
+		
+		Long loginAccountSequenceNo = loginInfo.getAccountSequenceNo();
+		
+		if(accountSequenceNo != loginAccountSequenceNo) {
+			throw new WrongAccessException();
+		}
+		
+		accountVO.setAccountSequenceNo(accountSequenceNo);
+		
+		accountService.updateAccount(accountVO);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.ACCOUNT_UPDATE_SUCCESS);
+	}
+	
 }
 
 
