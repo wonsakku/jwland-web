@@ -35,7 +35,7 @@
 					</button>
 					<button type="button" class="btn btn-danger btn-sm mr-1" id="my-wrong-answer-btn" onclick="showMyExamList()">내가 틀린 문제</button>
 	<!-- 				<button type="button" class="btn btn-info btn-sm mr-1" style="display:none;">오답 전체</button> -->
-					<button type="button" class="btn btn-info btn-sm mr-1" id="all-wrong-answer-btn" style="display:none;" onclick="showExamList()">오답 전체</button>
+					<button type="button" class="btn btn-info btn-sm mr-1" id="all-wrong-answer-btn" style="display:none;" onclick="showExamAllList()">오답 전체</button>
 				</th:block>
           </div>
         </div>
@@ -79,6 +79,8 @@
 // 	console.log(data);	
 // 	console.log(2);
 	
+	var isCheckMyProblem = false;
+	
 	(function(){
 		showExamList();
 		loadExamSubjects();
@@ -97,15 +99,21 @@
 		
 	})();
 	
+	function showExamAllList(){
+		var _subject = $("#exam-subject").val();
+		isCheckMyProblem = false;
+		showExamList(_subject);
+	}
+	
 	function showExamList(){
 		var url = "/exam-check?";
 		
-		if(arguments[0] != null){
+		if(arguments[0] != null && arguments[0] != ''){
 			var _examSubjectSequenceNo = arguments[0];
 			url += "examSubjectSequenceNo=" + _examSubjectSequenceNo;
 		}
 		
-		if(arguments[1] != null){
+		if(arguments[1] != null && arguments[1] != '' && isCheckMyProblem){
 			var _accountSequenceNo = arguments[1];
 			url += "&accountSequenceNo=" + _accountSequenceNo;
 		}
@@ -187,6 +195,7 @@
 	
 	
 	function showMyExamList(){
+		isCheckMyProblem = true;
 		var _accountSequenceNo = accountSequenceNo;
 		var _subject = $("#exam-subject").val();
 		showExamList(_subject,_accountSequenceNo);
