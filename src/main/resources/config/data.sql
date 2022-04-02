@@ -25,78 +25,89 @@ values('내 계정 관리', 7, '/profile', 'N');
 
 
 -- 시험 기관
-insert into jwland.exam_organization(exam_organization_name) values('수능');
-insert into jwland.exam_organization(exam_organization_name) values('평가원');
-insert into jwland.exam_organization(exam_organization_name) values('교육청');
-insert into jwland.exam_organization(exam_organization_name) values('대성');
-insert into jwland.exam_organization(exam_organization_name) values('종로');
+INSERT INTO jwland.common_code_group VALUES('E01', '시험 주관 기관');
+INSERT INTO jwland.common_code_detail VALUES 
+('E01', 'E0101', '수능'),
+('E01', 'E0102', '평가원'),
+('E01', 'E0103', '대성'),
+('E01', 'E0104', '종로')
+;
+
 
 -- 시험 종류
 -- 수능
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,11,1);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,11,1);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,11,1);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,11,1);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values
+(2021,11,'E0101'),
+(2020,11,'E0101'),
+(2019,11,'E0101'),
+(2018,11,'E0101'),
+
 -- 평가원
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,9,2);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,6,2);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,9,2);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,6,2);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,9,2);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,6,2);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,9,2);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,6,2);
+(2021,9,'E0102'),
+(2021,6,'E0102'),
+(2020,9,'E0102'),
+(2020,6,'E0102'),
+(2019,9,'E0102'),
+(2019,6,'E0102'),
+(2018,9,'E0102'),
+(2018,6,'E0102'),
+
 -- 교육청
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,10,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,7,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,4,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,3,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,10,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,7,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,4,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,3,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,10,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,7,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,4,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,3,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,10,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,7,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,4,3);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,3,3);
+(2021,10,'E0103'),
+(2021,7,'E0103'),
+(2021,4,'E0103'),
+(2021,3,'E0103'),
+(2020,10,'E0103'),
+(2020,7,'E0103'),
+(2020,4,'E0103'),
+(2020,3,'E0103'),
+(2019,10,'E0103'),
+(2019,7,'E0103'),
+(2019,4,'E0103'),
+(2019,3,'E0103'),
+(2018,10,'E0103'),
+(2018,7,'E0103'),
+(2018,4,'E0103'),
+(2018,3,'E0103')
+;
 
 --사설
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,10,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,9,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,8,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,7,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,5,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2021,4,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,10,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,9,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,8,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,7,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,5,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2020,4,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,10,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,9,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,8,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,7,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,5,5); 
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2019,4,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,10,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,9,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,8,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,7,4);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,5,5);
-insert into jwland.exam_type(year, month, exam_organization_sequence_no) values(2018,4,4);
+insert into jwland.exam_type(year, month, exam_organization_sequence_no) values
+(2021,10,'E0105'),
+(2021,9,'E0104'),
+(2021,8,'E0105'),
+(2021,7,'E0104'),
+(2021,5,'E0105'),
+(2021,4,'E0104'),
+(2020,10,'E0105'),
+(2020,9,'E0104'),
+(2020,8,'E0105'),
+(2020,7,'E0104'),
+(2020,5,'E0105'),
+(2020,4,'E0104'),
+(2019,10,'E0105'),
+(2019,9,'E0104'),
+(2019,8,'E0105'),
+(2019,7,'E0104'),
+(2019,5,5,'E0105',
+(2019,4,'E0104'),
+(2018,10,'E0105'),
+(2018,9,'E0104'),
+(2018,8,'E0105'),
+(2018,7,'E0104'),
+(2018,5,'E0105'),
+(2018,4,'E0104')
+;
  
 
 
 -- 과목 종류
-insert into jwland.exam_subject(subject)
-values('생명과학1');
-insert into jwland.exam_subject(subject)
-values('화학1');
+INSERT INTO jwland.common_code_group VALUES('E02', '시험 과목');
+INSERT INTO jwland.common_code_detail VALUES 
+('E02', 'E0201', '생명과학1'),
+('E02', 'E0202', '화학1')
+;
+
  
 
 -- 회원 임시 데이터
@@ -130,72 +141,74 @@ values('admin', 'admin','0000', 'G0100', 'ROLE_ADMIN', 'S0100','Y');
 
 
 -- exam_master 임시 데이터
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 19, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 19, 2);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 19, 3);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 19, 4);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 19, 5);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 19, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 19, 7);
+insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values
+('E0101', 'E0201', 19, 1),
+('E0101', 'E0201', 19, 2),
+('E0101', 'E0201', 19, 3),
+('E0101', 'E0201', 19, 4),
+('E0101', 'E0201', 19, 5),
+('E0101', 'E0201', 19, 6),
+('E0101', 'E0201', 19, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 2, 20, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 2, 20, 3);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 2, 20, 5);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 2, 20, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 2, 20, 7);
+('E0101', 'E0202', 20, 1),
+('E0101', 'E0202', 20, 3),
+('E0101', 'E0202', 20, 5),
+('E0101', 'E0202', 20, 6),
+('E0101', 'E0202', 20, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 17, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 17, 3);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 17, 7);
+('E0101', 'E0201', 17, 1),
+('E0101', 'E0201', 17, 3),
+('E0101', 'E0201', 17, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 18, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 18, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(1, 1, 18, 7);
+('E0101', 'E0201', 18, 1),
+('E0101', 'E0201', 18, 6),
+('E0101', 'E0201', 18, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 20, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 20, 2);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 20, 3);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 20, 4);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 20, 5);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 20, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 20, 7);
+('E0102', 'E0202', 20, 1),
+('E0102', 'E0202', 20, 2),
+('E0102', 'E0202', 20, 3),
+('E0102', 'E0202', 20, 4),
+('E0102', 'E0202', 20, 5),
+('E0102', 'E0202', 20, 6),
+('E0102', 'E0202', 20, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 1, 20, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 1, 20, 4);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 1, 20, 5);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 1, 20, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 1, 20, 7);
+('E0102', 'E0201', 20, 1),
+('E0102', 'E0201', 20, 4),
+('E0102', 'E0201', 20, 5),
+('E0102', 'E0201', 20, 6),
+('E0102', 'E0201', 20, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 16, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 16, 4);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 16, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(2, 2, 16, 7);
+('E0102', 'E0202', 16, 1),
+('E0102', 'E0202', 16, 4),
+('E0102', 'E0202', 16, 6),
+('E0102', 'E0202', 16, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(3, 1, 13, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(3, 1, 13, 7);
+('E0103', 'E0201', 13, 1),
+('E0103', 'E0201', 13, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(3, 2, 15, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(3, 2, 15, 5);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(3, 2, 15, 7);
+('E0103', 'E0202', 15, 1),
+('E0103', 'E0202', 15, 5),
+('E0103', 'E0202', 15, 7),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 2);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 3);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 4);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 5);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 7);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 1, 20, 8);
+('E0104', 'E0201', 20, 1),
+('E0104', 'E0201', 20, 2),
+('E0104', 'E0201', 20, 3),
+('E0104', 'E0201', 20, 4),
+('E0104', 'E0201', 20, 5),
+('E0104', 'E0201', 20, 6),
+('E0104', 'E0201', 20, 7),
+('E0104', 'E0201', 20, 8),
 
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 1);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 2);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 3);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 4);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 5);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 6);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 7);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 8);
-insert into jwland.exam_master(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no) values(4, 2, 19, 9);
+('E0104', 'E0202', 19, 1),
+('E0104', 'E0202', 19, 2),
+('E0104', 'E0202', 19, 3),
+('E0104', 'E0202', 19, 4),
+('E0104', 'E0202', 19, 5),
+('E0104', 'E0202', 19, 6),
+('E0104', 'E0202', 19, 7),
+('E0104', 'E0202', 19, 8),
+('E0104', 'E0202', 19, 9)
+;
 
 
 

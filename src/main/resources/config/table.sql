@@ -1,10 +1,8 @@
 --drop table
 drop table if exists jwland.menu CASCADE;
 drop table if exists jwland.account CASCADE;
-drop table if exists jwland.exam_subject CASCADE;
 drop table if exists jwland.exam_type CASCADE;
 drop table if exists jwland.exam_master CASCADE;
-drop table if exists jwland.exam_organization CASCADE;
 drop table if exists jwland.class CASCADE;
 drop table if exists jwland.account_class_map CASCADE;
 drop table if exists jwland.class_attendance_management CASCADE;
@@ -20,10 +18,8 @@ drop table if exists jwland.common_code_detail;
 --drop sequence
 drop sequence if exists jwland.menu_sequence;
 drop sequence if exists jwland.account_sequence;
-drop sequence if exists jwland.exam_subject_sequence;
 drop sequence if exists jwland.exam_type_sequence;
 drop sequence if exists jwland.exam_master_sequence;
-drop sequence if exists jwland.exam_organization_sequence;
 drop sequence if exists jwland.class_sequence;
 drop sequence if exists jwland.clinic_master_sequence;
 drop sequence if exists jwland.class_type_sequence;
@@ -34,10 +30,8 @@ drop sequence if exists jwland.class_type_sequence;
 -- sequence
 create sequence jwland.menu_sequence;
 create sequence jwland.account_sequence;
-create sequence jwland.exam_subject_sequence;
 create sequence jwland.exam_type_sequence;
 create sequence jwland.exam_master_sequence;
-create sequence jwland.exam_organization_sequence;
 create sequence jwland.class_sequence;
 create sequence jwland.clinic_master_sequence;
 create sequence jwland.class_type_sequence;
@@ -87,35 +81,16 @@ create table jwland.account(
 	constraint account_primary_key PRIMARY KEY("account_sequence_no")
 );
 
-
-
-create table jwland.exam_subject(/*common_table*/
-	exam_subject_sequence_no int DEFAULT NEXTVAL('jwland.exam_subject_sequence'),
-	subject varchar(10) NOT NULL UNIQUE,
-	created_at TIMESTAMP NOT NULL DEFAULT now(),
-	modify_at TIMESTAMP NOT NULL DEFAULT now(),
-	constraint exam_subject_primary_key PRIMARY KEY("exam_subject_sequence_no")
-);
-
-
-create table jwland.exam_organization(/*common_table*/
-	exam_organization_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_organization_sequence'),
-	exam_organization_name VARCHAR(20) NOT NULL UNIQUE,
-	created_at TIMESTAMP NOT NULL DEFAULT now(),
-	modify_at TIMESTAMP NOT NULL DEFAULT now(),
-	constraint exam_organization_primary_key PRIMARY KEY("exam_organization_sequence_no")
-);
-
-
+-- YYYY년 MM월 수능, 평가원, 교육청, 대성, 종로
 create table jwland.exam_type(
 	exam_type_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_type_sequence'),
 	year BIGINT NOT NULL,
 	month BIGINT NOT NULL,
-	exam_organization_sequence_no BIGINT NOT NULL,
+	exam_organization_code VARCHAR(10) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	constraint exam_type_primary_key PRIMARY KEY("exam_type_sequence_no"),
-	constraint exam_type_unique_info_key UNIQUE(year, month, exam_organization_sequence_no)	
+	constraint exam_type_unique_info_key UNIQUE(year, month, exam_organization_code)	
 );
 
 
