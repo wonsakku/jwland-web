@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.jwland.dto.CommonCodeDto;
+import com.jwland.web.constant.CommonCode;
 import com.jwland.web.mapper.CommonDataMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -15,14 +17,13 @@ public class CommonDataService {
 
 	private final CommonDataMapper commonDataMapper;
 	
-	public List<Map> getSchoolInfo() {
-		// TODO Auto-generated method stub
-		return commonDataMapper.getSchoolInfo();
+	public List<CommonCodeDto> getSchoolInfo() {
+		return commonDataMapper.getCommonCode(CommonCode.SCHOOL_GROUP_CODE);
 	}
 
 	
-	public List<Map> getGradeInfo() {
-		return commonDataMapper.getGradeInfo();
+	public List<CommonCodeDto> getGradeInfo() {
+		return commonDataMapper.getCommonCode(CommonCode.GRADE_GROUP_CODE);
 	}
 
 	

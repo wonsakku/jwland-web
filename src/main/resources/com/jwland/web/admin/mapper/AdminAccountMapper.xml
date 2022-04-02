@@ -7,15 +7,15 @@
 	<select id="getAccountManagementList" parameterType="map" resultType="com.jwland.domain.account.dto.AccountManagementDto">
 		SELECT a.account_sequence_no
 			 , a.name
-			 , g.grade
-			 , s.school_name
+			 , c1.common_code_name AS grade
+			 , c2.common_code_name AS school_name
 			 , a.approved
 			 , a.role
 		FROM jwland.account a
-		LEFT JOIN  jwland.grades g
-		ON g.grade_sequence_no = a.grade_sequence_no
-		LEFT JOIN jwland.school s
-		ON s.school_sequence_no = a.school_sequence_no
+		LEFT JOIN  jwland.common_code_detail c1
+		ON c1.common_code = a.grade_code
+		LEFT JOIN jwland.common_code_detail c2
+		ON c2.common_code = a.school_code
 		WHERE 1=1
 		<if test="name != '' and name != null">
 			AND name LIKE '%'||#{name}||'%'

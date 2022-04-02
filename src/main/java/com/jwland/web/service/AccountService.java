@@ -61,10 +61,10 @@ public class AccountService{
 		accountMapper.join(joinAccountDto);
 	}
 
-	public List<AccountInfoDto> findAccountsInfo(String name, String gradeSequenceNo) {
+	public List<AccountInfoDto> findAccountsInfo(String name, String gradeCode) {
 		Map<String, String> parameter = new HashMap<>();
 		parameter.put("name", name);
-		parameter.put("gradeSequenceNo", gradeSequenceNo);
+		parameter.put("gradeCode", gradeCode);
 		return accountMapper.findAccountsInfo(parameter) ;
 	}
 

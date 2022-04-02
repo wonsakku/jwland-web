@@ -13,6 +13,6 @@ import lombok.ToString;
 @Getter
 public class SchoolVO {
 
-	private int schoolSequenceNo;
+	private String schoolCode;
 	private String schoolName;
 }

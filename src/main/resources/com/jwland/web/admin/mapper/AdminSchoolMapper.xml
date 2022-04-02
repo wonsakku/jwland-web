@@ -5,9 +5,10 @@
 <mapper namespace="com.jwland.web.admin.mapper.AdminSchoolMapper">
 
 	<select id="getSchoolList" resultType="com.jwland.domain.school.SchoolVO">
-		SELECT school_sequence_no, school_name
-		FROM jwland.school
-		ORDER BY school_sequence_no
+		SELECT common_code AS school_code, common_code_name AS school_name
+		FROM jwland.common_code_detil
+		WHERE group_code = 'S01'
+		ORDER BY common_code_detail
 	</select>
 
 	<insert id="enrollSchool" parameterType="com.jwland.domain.school.SchoolVO">

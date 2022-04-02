@@ -25,7 +25,7 @@ mybatis:
   mapper-locations:
   - classpath:com.jwland.mapper.**.xml
   
-login-id: test01
-login-password: 1q1q1q
-#login-id: "admin"
-#login-password: "0000"
+#login-id: test01
+#login-password: 1q1q1q
+login-id: "admin"
+login-password: "0000"

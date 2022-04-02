@@ -48,9 +48,9 @@ public class AdminSchoolController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(VariableConstant.SCHOOL_CREATE_SUCCESS);
 	}
 	
-	@PostMapping("/{schoolSequenceNo}/update")
-	public ResponseEntity updateSchool(@PathVariable int schoolSequenceNo, @RequestBody SchoolVO schoolVO) {
-		schoolVO.setSchoolSequenceNo(schoolSequenceNo);
+	@PostMapping("/{schoolCode}/update")
+	public ResponseEntity updateSchool(@PathVariable String schoolCode, @RequestBody SchoolVO schoolVO) {
+		schoolVO.setSchoolCode(schoolCode);
 		adminSchoolService.updateSchool(schoolVO);
 		log.info("schoolVO={}", schoolVO);
 		

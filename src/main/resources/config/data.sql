@@ -19,6 +19,9 @@ values('관리자 페이지', 6, '/admin/manage-page', 'Y');
 --insert into jwland.menu(menu_name, menu_priority, url, admin_page)
 --values('클리닉/보충', 8, , 'Y');
 
+insert into jwland.menu (menu_name, menu_priority, url, admin_page)
+values('내 계정 관리', 7, '/profile', 'N');
+
 
 
 -- 시험 기관
@@ -97,30 +100,30 @@ values('화학1');
  
 
 -- 회원 임시 데이터
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('민준', 'test01', '1q1q1q', 9, 9);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('서준', 'test02','1q1q1q', 10, 7);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('예준', 'test03','1q1q1q', 10, 8);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('도윤', 'test04','1q1q1q', 10, 7);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('시우', 'test05','1q1q1q', 11, 8);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('주원', 'test06','1q1q1q', 12, 7);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('서연', 'test07','1q1q1q', 12, 6);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('서윤', 'test08','1q1q1q', 11, 5);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('지우', 'test09','1q1q1q', 10, 4);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('서현', 'test10','1q1q1q', 11, 3);
-insert into jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-values('민서', 'test11','1q1q1q', 10, 1);
-insert into jwland.account(name, id, password, grade_sequence_no, role, school_sequence_no, approved)
-values('admin', 'admin','0000', 0, 'ROLE_ADMIN', 0,'Y');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('민준', 'test01', '1q1q1q', 'G0103', 'S0108');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('서준', 'test02','1q1q1q', 'G0102', 'S0107');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('예준', 'test03','1q1q1q', 'G0101', 'S0109');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('도윤', 'test04','1q1q1q', 'G0101', 'S0109');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('시우', 'test05','1q1q1q', 'G0102', 'S0106');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('주원', 'test06','1q1q1q', 'G0103', 'S0105');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('서연', 'test07','1q1q1q', 'G0104', 'S0104');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('서윤', 'test08','1q1q1q', 'G0104', 'S0103');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('지우', 'test09','1q1q1q', 'G0103', 'S0101');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('서현', 'test10','1q1q1q', 'G0102', 'S0102');
+insert into jwland.account(name, id, password, grade_code, school_code)
+values('민서', 'test11','1q1q1q', 'G0101', 'S0109');
+insert into jwland.account(name, id, password, grade_code, role, school_code, approved)
+values('admin', 'admin','0000', 'G0100', 'ROLE_ADMIN', 'S0100','Y');
 
 
 
@@ -207,16 +210,18 @@ insert into jwland.clinic_type values(2, '보충');
 
 
 -- school
-insert into jwland.school(school_sequence_no, school_name) values(0, 'jwland');
-insert into jwland.school(school_name) values('영동고');
-insert into jwland.school(school_name) values('경기고');
-insert into jwland.school(school_name) values('청담고');
-insert into jwland.school(school_name) values('현대고');
-insert into jwland.school(school_name) values('진선여고');
-insert into jwland.school(school_name) values('숙명여고');
-insert into jwland.school(school_name) values('휘문고');
-insert into jwland.school(school_name) values('경기여고');
-insert into jwland.school(school_name) values('중학교');
+INSERT INTO jwland.common_code_group VALUES('S01', '학교명');
+INSERT INTO jwland.common_code_detail VALUES 
+('S01', 'S0100', 'jwland'),
+('S01', 'S0101', '영동고'),
+('S01', 'S0102', '경기고'),
+('S01', 'S0103', '청담고'),
+('S01', 'S0104', '현대고'),
+('S01', 'S0105', '진선여고'),
+('S01', 'S0106', '숙명여고'),
+('S01', 'S0107', '휘문고'),
+('S01', 'S0108', '경기여고'),
+('S01', 'S0109', '중학교');
 
 -- class type
 insert into jwland.class_type(class_type_name) values('중3 과학');
@@ -227,12 +232,15 @@ insert into jwland.class_type(class_type_name) values('고3 화학1');
 insert into jwland.class_type(class_type_name) values('고3 생명과학1');
 
 -- grades
-insert into jwland.grades(grade_sequence_no, grade) values(0, 'jw');
-insert into jwland.grades(grade_sequence_no, grade) values(9, '중3');
-insert into jwland.grades(grade_sequence_no, grade) values(10, '고1');
-insert into jwland.grades(grade_sequence_no, grade) values(11, '고2');
-insert into jwland.grades(grade_sequence_no, grade) values(12, '고3');
-insert into jwland.grades(grade_sequence_no, grade) values(13, 'N수생');
+
+INSERT INTO jwland.common_code_group VALUES('G01', '학년');
+INSERT INTO jwland.common_code_detail VALUES 
+('G01', 'G0100', 'jwland'),
+('G01', 'G0101', '중3'),
+('G01', 'G0102', '고1'),
+('G01', 'G0103', '고2'),
+('G01', 'G0104', '고3'),
+('G01', 'G0105', 'N수생');
 
 
 -- clinic data

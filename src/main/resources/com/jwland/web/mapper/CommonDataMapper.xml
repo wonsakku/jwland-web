@@ -21,6 +21,12 @@
 		;
 	</select>
 
+	<select id="getCommonCode" parameterType="String" resultType="com.jwland.dto.CommonCodeDto">
+		SELECT common_code, common_code_name 
+		FROM jwland.common_code_detail
+		WHERE group_code = #{groupCode}
+	</select>
+
 </mapper>
 
 

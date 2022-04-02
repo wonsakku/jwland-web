@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class CommonCodeDto {
 
-	private String code;
-	private String codeName;
+	private String commonCode;
+	private String commonCodeName;
 }

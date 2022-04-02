@@ -11,8 +11,8 @@
 	</select>
 
 	<insert id="join" parameterType="com.jwland.domain.account.dto.JoinAccountDto">
-		INSERT INTO jwland.account(name, id, password, grade_sequence_no, school_sequence_no)
-		VALUES(#{name}, #{id}, #{password}, #{gradeSequenceNo}, #{schoolSequenceNo})
+		INSERT INTO jwland.account(name, id, password, grade_code, school_code)
+		VALUES(#{name}, #{id}, #{password}, #{gradeCode}, #{schoolCode})
 	</insert>
 
 	<select id="findByName" resultType="com.jwland.domain.account.AccountVO">
@@ -25,20 +25,20 @@
 	<select id="findAccountsInfo" resultType="com.jwland.domain.account.dto.AccountInfoDto">
 		SELECT a.account_sequence_no
 			 , a.name
-			 , g.grade
-			 , s.school_name
+			 , c1.common_code_name AS grade
+			 , c2.common_code_name AS school_name
 		FROM jwland.account a
-		LEFT JOIN jwland.grades g
-		ON a.grade_sequence_no = g.grade_sequence_no
-		LEFT JOIN jwland.school s
-		ON s.school_sequence_no = a.school_sequence_no
+		LEFT JOIN  jwland.common_code_detail c1
+		ON c1.common_code = a.grade_code
+		LEFT JOIN jwland.common_code_detail c2
+		ON c2.common_code = a.school_code
 		WHERE 1=1
 		AND	  role != 'ROLE_ADMIN'
 		<if test="name != null and name != ''">
 			AND name LIKE '%' || #{name} || '%'
 		</if>
-		<if test="gradeSequenceNo != null and gradeSequenceNo != ''">
-			AND a.grade_sequence_no = #{gradeSequenceNo}::INT
+		<if test="gradeCode != null and gradeCode != ''">
+			AND c1.common_code = #{gradeCode}
 		</if>
 		AND approved = 'Y'
 		ORDER BY account_sequence_no
@@ -51,7 +51,12 @@
 	</select>
 	
 	<select id="getAccountDetail" parameterType="long" resultType="com.jwland.domain.account.AccountVO">
-		SELECT account_sequence_no, id, name, grade_sequence_no, school_sequence_no, approved
+		SELECT account_sequence_no, 
+			   id, 
+			   name, 
+			   grade_code, 
+			   school_code, 
+			   approved
 		FROM jwland.account
 		WHERE account_sequence_no = #{accountSequenceNo}
 <!-- 		limit 1 -->
@@ -61,8 +66,8 @@
 		UPDATE jwland.account
 		SET
 			  name = #{name}
-			, grade_sequence_no = #{gradeSequenceNo}
-			, school_sequence_no = #{schoolSequenceNo}
+			, grade_code = #{gradeCode}
+			, school_code = #{schoolCode}
 			<if test="password != null and password != ''">
 				, password = #{password}
 			</if>

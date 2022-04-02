@@ -113,7 +113,7 @@
 		html += "<option value=''>전체 학년</option>"
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html += "<option value='" + data[i].grade_sequence_no + "'>" + data[i].grade + "</option>";	
+			html += "<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";	
 		}
 		
 		$gradeSelectbox.html(html);
@@ -131,7 +131,7 @@
 		}
 		
 		if(grade != null && grade.trim() != ''){
-			url += "gradeSequenceNo=" + grade;
+			url += "gradeCode=" + grade;
 		}
 		
 		

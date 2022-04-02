@@ -86,12 +86,12 @@ public class AccountController {
 
 	@GetMapping("/accounts")
 	public ResponseEntity<List<AccountInfoDto>> findAccountsInfo(@RequestParam(value = "name", required = false, defaultValue = "") String name,
-			@RequestParam(value = "gradeSequenceNo", required = false, defaultValue = "") String gradeSequenceNo){
+			@RequestParam(value = "gradeCode", required = false, defaultValue = "") String gradeCode){
 		
 		log.info("name={}", name);
-		log.info("gradeSequenceNo={}", gradeSequenceNo);
+		log.info("gradeCode={}", gradeCode);
 		
-		List<AccountInfoDto> accountInfos = accountService.findAccountsInfo(name, gradeSequenceNo);
+		List<AccountInfoDto> accountInfos = accountService.findAccountsInfo(name, gradeCode);
 		return ResponseEntity.status(HttpStatus.OK).body(accountInfos);
 	}
 	

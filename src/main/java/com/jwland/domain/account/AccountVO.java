@@ -20,8 +20,8 @@ public class AccountVO {
 	private String name;
 	private String id;
 	private String password;
-	private int gradeSequenceNo;
-	private int schoolSequenceNo;
+	private String gradeCode;
+	private String schoolCode;
 	private String approved;
 	private String role;
 	private LocalDateTime createdAt;

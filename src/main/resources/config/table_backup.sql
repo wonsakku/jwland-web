@@ -9,13 +9,13 @@ drop table if exists jwland.class CASCADE;
 drop table if exists jwland.account_class_map CASCADE;
 drop table if exists jwland.class_attendance_management CASCADE;
 drop table if exists jwland.clinic_master CASCADE;
+drop table if exists jwland.school CASCADE;
 drop table if exists jwland.class_type CASCADE;
 drop table if exists jwland.clinic_type CASCADE;
 drop table if exists jwland.clinic_account_map CASCADE;
+drop table if exists jwland.grades CASCADE;
 drop table if exists jwland.subject CASCADE;
 drop table if exists jwland.attendance_status CASCADE;
-drop table if exists jwland.common_code_group;
-drop table if exists jwland.common_code_detail;
 
 --drop sequence
 drop sequence if exists jwland.menu_sequence;
@@ -26,6 +26,7 @@ drop sequence if exists jwland.exam_master_sequence;
 drop sequence if exists jwland.exam_organization_sequence;
 drop sequence if exists jwland.class_sequence;
 drop sequence if exists jwland.clinic_master_sequence;
+drop sequence if exists jwland.school_sequence;
 drop sequence if exists jwland.class_type_sequence;
 
 
@@ -40,26 +41,13 @@ create sequence jwland.exam_master_sequence;
 create sequence jwland.exam_organization_sequence;
 create sequence jwland.class_sequence;
 create sequence jwland.clinic_master_sequence;
+create sequence jwland.school_sequence;
 create sequence jwland.class_type_sequence;
 
 
 
 
 -- table
-
-create table jwland.common_code_group(
-	group_code VARCHAR(10),
-	group_code_name varchar(100) NOT NULL,
-	CONSTRAINT common_code_group_primary_key PRIMARY KEY("group_code")
-);
-
-create table jwland.common_code_detail(
-	group_code VARCHAR(10),
-	common_code VARCHAR(10),
-	common_code_name VARCHAR(100) NOT NULL,
-	CONSTRAINT common_code_detail_primary_key PRIMARY KEY("group_code", "common_code")
-);
-
 create table jwland.menu(
 	menu_sequence_no bigint DEFAULT NEXTVAL('jwland.menu_sequence'),
 	menu_name varchar(50) not null unique,
@@ -78,8 +66,8 @@ create table jwland.account(
 	id varchar(20) not null UNIQUE,
 	name varchar(20) not null,
 	password varchar(300) not null,
-	grade_code VARCHAR(10) NOT NULL,
-	school_code VARCHAR(10) NOT NULL,
+	grade_sequence_no SMALLINT not null,
+	school_sequence_no BIGINT NOT NULL,
 	approved varchar(1) not null DEFAULT 'N',
 	role varchar(20) not null default 'ROLE_STUDENT',
 	created_at TIMESTAMP not null default now(),
@@ -87,6 +75,11 @@ create table jwland.account(
 	constraint account_primary_key PRIMARY KEY("account_sequence_no")
 );
 
+create table jwland.grades(/*common_table*/
+	grade_sequence_no INT NOT NULL,
+	grade varchar(5) NOT NULL,
+	CONSTRAINT grade_primary_key PRIMARY KEY("grade_sequence_no")
+);
 
 
 create table jwland.exam_subject(/*common_table*/
@@ -205,6 +198,13 @@ create table jwland.clinic_account_map(
 	clinic_master_sequence_no BIGINT,
 	account_sequence_no BIGINT,
 	CONSTRAINT clinic_account_map_primary_key PRIMARY KEY("clinic_master_sequence_no", "account_sequence_no")
+);
+
+
+create table jwland.school(/*common_table*/
+	school_sequence_no BIGINT DEFAULT NEXTVAL('jwland.school_sequence'),
+	school_name varchar(10) NOT NULL UNIQUE,
+	CONSTRAINT school_primary_key PRIMARY KEY("school_sequence_no")
 );
 
 

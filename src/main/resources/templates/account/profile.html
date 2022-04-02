@@ -163,16 +163,18 @@
 
 		var role = loginInfo.role;
 
+		console.log(data);
+		
 		$("#school").html("");
 		var html = "<option value=''>학교를 선택하세요.</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
 			if(data[i].school_sequence_no == 0){
 				if(role.indexOf("ADMIN") >= 0){
-					html += "<option value='" + data[i].school_sequence_no + "'>" + data[i].school_name + "</option>";
+					html += "<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";
 				}
 			}else{
-				html += "<option value='" + data[i].school_sequence_no + "'>" + data[i].school_name + "</option>";
+				html += "<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";
 			}
 		}
 		
@@ -204,10 +206,10 @@
 			
 			if(data[i].grade_sequence_no == 0){
 				if(role.indexOf("ADMIN") >= 0){
-					html += "<option value='" + data[i].grade_sequence_no + "'>" + data[i].grade + "</option>";
+					html += "<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";
 				}
 			}else{
-					html += "<option value='" + data[i].grade_sequence_no + "'>" + data[i].grade + "</option>";
+					html += "<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";
 			}
 			
 		}
@@ -235,10 +237,12 @@
 	
 	function cb_getAccountInfo(data){
 
+		console.log(data);
+		
 		$("#id").val(data.id);
 		$("#name").val(data.name);
-		$("#grade").val(data.gradeSequenceNo);
-		$("#school").val(data.schoolSequenceNo);
+		$("#grade").val(data.gradeCode);
+		$("#school").val(data.schoolCode);
 		$("#approved").val(data.approved);
 	}
 	
@@ -263,8 +267,8 @@
 		}
 		
 		param.name = name;
-		param.gradeSequenceNo = grade;
-		param.schoolSequenceNo = school;
+		param.gradeCode = grade;
+		param.schoolCode = school;
 		
 		var url = "/accounts/" + accountSequenceNo + "/update";
 		

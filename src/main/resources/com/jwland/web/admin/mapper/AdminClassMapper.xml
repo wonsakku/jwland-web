@@ -73,15 +73,15 @@
 	<select id="getEnrolledAccountInfos" parameterType="int" resultType="com.jwland.domain.classes.dto.EnrolledAccountsDto">
 		SELECT acm.account_sequence_no
 			 , a.name
-			 , g.grade
-			 , s.school_name
+			 , c1.common_code_name AS grade
+			 , c2.common_code_name AS school_name
 		FROM jwland.account_class_map acm
 		LEFT JOIN jwland.account a
 		ON acm.account_sequence_no = a.account_sequence_no
-		LEFT JOIN jwland.grades g
-		ON a.grade_sequence_no = g.grade_sequence_no
-		LEFT JOIN jwland.school s
-		ON a.school_sequence_no = s.school_sequence_no
+		LEFT JOIN jwland.common_code_detail c1
+		ON c1.common_code = a.grade_code
+		LEFT JOIN jwland.common_code_detail c2
+		ON c2.common_code = a.school_code
 		WHERE acm.class_sequence_no = #{classSequenceNo}
 	</select>
 	
@@ -115,16 +115,19 @@
 	
 	
 	<select id="findClassAttendanceInfo" parameterType="int" resultType="map">
-		SELECT cam.account_sequence_no, s.school_name, g.grade, a.name, cam.class_date, ats.attendance_status 
+		SELECT cam.account_sequence_no, 
+			   c2.common_code_name AS school_name, 
+			   c1.common_code_name AS grade, 
+			   a.name, cam.class_date, 
+			   ats.attendance_status 
 		FROM jwland.class_attendance_management cam
 		LEFT JOIN jwland.account a
 		ON cam.account_sequence_no = a.account_sequence_no
 		LEFT JOIN jwland.attendance_status ats
 		ON ats.attendance_status_sequence_no = cam.attendance_status_sequence_no
-		LEFT JOIN jwland.school s
-		ON a.school_sequence_no = s.school_sequence_no
-		LEFT JOIN jwland.grades g
-		ON a.grade_sequence_no = g.grade_sequence_no
+		ON c1.common_code = a.grade_code
+		LEFT JOIN jwland.common_code_detail c2
+		ON c2.common_code = a.school_code
 		WHERE class_sequence_no = #{classSequenceNo}
 		order by name, class_date
 		;
