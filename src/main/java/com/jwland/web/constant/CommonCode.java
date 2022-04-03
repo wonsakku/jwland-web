@@ -7,5 +7,6 @@ public interface CommonCode {
 	
 	public static final String EXAM_ORGANIZATION_CODE = "E01";
 	public static final String EXAM_SUBJECT_CODE = "E02";
+	public static final String CLASS_TYPE_CODE = "C01";
 	
 }

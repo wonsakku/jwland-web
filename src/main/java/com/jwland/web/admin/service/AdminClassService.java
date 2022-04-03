@@ -132,10 +132,6 @@ public class AdminClassService {
 		return classMapper.findAttendanceInfoByDate(parameter);
 	}
 
-	public List<Map> getClassTypes() {
-		return classMapper.getClassTypes();
-	}
-
 	public ClassDetailDto getClassDetail(int classSequenceNo) {
 		return classMapper.getClassDetail(classSequenceNo);
 	}

@@ -12,7 +12,7 @@ public class CreateClassDto {
 	private String className;
 
 	@NotNull(message = "수업 분류를 선택해주세요")
-	private int classTypeSequenceNo;
+	private String classTypeCode;
 	
 	@NotNull
 	@Size(max = 6, min = 6, message = "수업 시작 연&월은 6자리로 입력해야 합니다.")

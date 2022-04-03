@@ -47,6 +47,14 @@ public class CommonDataController {
 		return ResponseEntity.status(HttpStatus.OK).body(examSubjects);
 	}
 
+	
+
+	@GetMapping("/class-types")
+	public ResponseEntity<List<CommonCodeDto>> getClassTypes(){
+		List<CommonCodeDto> classTypes = commonDataService.getClassTypes();
+		return ResponseEntity.status(HttpStatus.OK).body(classTypes);
+	}
+	
 }
 
 

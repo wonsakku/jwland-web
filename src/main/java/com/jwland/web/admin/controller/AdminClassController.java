@@ -51,14 +51,6 @@ public class AdminClassController {
 		return mav;
 	}
 	
-
-	@GetMapping("/types")
-	public ResponseEntity<List<Map>> getClassTypes(){
-		List<Map> classTypes = classService.getClassTypes();
-		return ResponseEntity.status(HttpStatus.OK).body(classTypes);
-	}
-	
-	
 	@PostMapping("/enroll")
 	public ResponseEntity<String> enrollClass(@RequestBody @Validated CreateClassDto createClassDto, 
 									HttpServletRequest request,

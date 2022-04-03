@@ -37,8 +37,6 @@ public interface AdminClassMapper {
 
 	List<PersonalClassAttendanceDto> findAttendanceInfoByDate(Map<String, String> parameter);
 
-	List<Map> getClassTypes();
-
 	ClassDetailDto getClassDetail(int classSequenceNo);
 
 	int updateClass(ClassDetailDto classDetailDto);

@@ -133,7 +133,7 @@
 	})();
 
 	function renderClassType(){
-		var url = "/admin/class/types";
+		var url = "/class-types";
 		$.ajax({
 			url: url,
 			method: "GET",
@@ -154,7 +154,7 @@
 		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html += "<option value='" + data[i].class_type_sequence_no + "'>" + data[i].class_type_name + "</option>";	
+			html += "<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";	
 		}
 		
 		$("#classType").html(html);
@@ -187,7 +187,7 @@
 	function _cb_loadClassInfo(data, a, b){
 		console.log(data);
 		$("#className").val(data.className);
-		$("#classType").val(data.classTypeSequenceNo);
+		$("#classType").val(data.classTypeCode);
 		$("#startDate").val(data.startDate);
 		$("#open").val(data.open);
 	}
@@ -202,24 +202,24 @@
 			return ;
 		}
 		
-		console.log(loginInfo);
-		
 		if(!confirm("수정하시겠습니까?")){
 			return ;
 		}
 		
 		var className = $("#className").val();
-		var classTypeSequenceNo = $("#classType").val();
+		var classTypeCode = $("#classType").val();
 		var startDate = $("#startDate").val();
 		var open = $("#open").val();
 		
 		var requestBody = new Object();
 		requestBody.className = className;
-		requestBody.classTypeSequenceNo = classTypeSequenceNo;
+		requestBody.classTypeCode = classTypeCode;
 		requestBody.startDate = startDate;
 		requestBody.open = open;
 		requestBody.modifyAccountId = loginInfo.id;
 
+		console.log(requestBody);
+		
 		var url = "/admin/class/classes/" + classSequenceNo + "/update";
 		
 		$.ajax({

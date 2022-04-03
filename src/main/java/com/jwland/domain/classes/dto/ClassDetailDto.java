@@ -7,7 +7,7 @@ public class ClassDetailDto {
 
 	private int classSequenceNo;
 	private String className;
-	private int classTypeSequenceNo;
+	private String classTypeCode;
 	private String startDate;
 	private String open;
 	private String modifyAccountId;

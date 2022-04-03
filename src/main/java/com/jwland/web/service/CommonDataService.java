@@ -36,6 +36,11 @@ public class CommonDataService {
 		return commonDataMapper.getCommonCode(CommonCode.EXAM_SUBJECT_CODE);
 	}
 
+
+	public List<CommonCodeDto> getClassTypes() {
+		return commonDataMapper.getCommonCode(CommonCode.CLASS_TYPE_CODE);
+	}
+
 	
 	
 	

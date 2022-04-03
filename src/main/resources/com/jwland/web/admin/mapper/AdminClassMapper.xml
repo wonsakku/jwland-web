@@ -4,15 +4,9 @@
 
 <mapper namespace="com.jwland.web.admin.mapper.AdminClassMapper">
 
-	<select id="getClassTypes" resultType="map">
-		SELECT 	class_type_sequence_no, class_type_name FROM jwland.class_type
-		ORDER BY class_type_sequence_no
-		;
-	</select>
-
 	<insert id="enrollClass" parameterType="com.jwland.domain.classes.ClassVO">
-		INSERT INTO jwland.class(class_name, class_type_sequence_no, start_date, created_at, create_account_id, modify_at, modify_account_id)
-		VALUES(#{className}, #{classTypeSequenceNo}, #{startDate}, now(), #{createAccountId}, now(), #{modifyAccountId})
+		INSERT INTO jwland.class(class_name, class_type_code, start_date, created_at, create_account_id, modify_at, modify_account_id)
+		VALUES(#{className}, #{classTypeCode}, #{startDate}, now(), #{createAccountId}, now(), #{modifyAccountId})
 	</insert>
 
 
@@ -35,7 +29,7 @@
 	</select>
 
 	<select id="getClassDetail" parameterType="int" resultType="com.jwland.domain.classes.dto.ClassDetailDto">
-		SELECT class_sequence_no, class_name, class_type_sequence_no, start_date, open, modify_account_id, modify_at
+		SELECT class_sequence_no, class_name, class_type_code, start_date, open, modify_account_id, modify_at
 		FROM jwland.class
 		WHERE class_sequence_no = #{classSequenceNo}
 	</select>	
@@ -44,6 +38,7 @@
 		UPDATE jwland.class
 		SET class_name = #{className},
 			start_date = #{startDate},
+			class_type_code = #{classTypeCode},
 			open = #{open},
 			modify_account_id = #{modifyAccountId},
 			modify_at = now()

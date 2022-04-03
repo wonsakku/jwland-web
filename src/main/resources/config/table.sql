@@ -7,10 +7,8 @@ drop table if exists jwland.class CASCADE;
 drop table if exists jwland.account_class_map CASCADE;
 drop table if exists jwland.class_attendance_management CASCADE;
 drop table if exists jwland.clinic_master CASCADE;
-drop table if exists jwland.class_type CASCADE;
 drop table if exists jwland.clinic_type CASCADE;
 drop table if exists jwland.clinic_account_map CASCADE;
-drop table if exists jwland.subject CASCADE;
 drop table if exists jwland.attendance_status CASCADE;
 drop table if exists jwland.common_code_group;
 drop table if exists jwland.common_code_detail;
@@ -22,7 +20,6 @@ drop sequence if exists jwland.exam_type_sequence;
 drop sequence if exists jwland.exam_master_sequence;
 drop sequence if exists jwland.class_sequence;
 drop sequence if exists jwland.clinic_master_sequence;
-drop sequence if exists jwland.class_type_sequence;
 
 
 
@@ -34,7 +31,6 @@ create sequence jwland.exam_type_sequence;
 create sequence jwland.exam_master_sequence;
 create sequence jwland.class_sequence;
 create sequence jwland.clinic_master_sequence;
-create sequence jwland.class_type_sequence;
 
 
 
@@ -97,13 +93,13 @@ create table jwland.exam_type(
 create table jwland.exam_master(
 	exam_master_sequence_no BIGINT DEFAULT NEXTVAL('jwland.exam_master_sequence'),
 	exam_type_sequence_no INT NOT NULL,
-	exam_subject_sequence_no INT NOT NULL,
+	exam_subject_code VARCHAR(10) NOT NULL,
 	problem_number SMALLINT NOT NULL CHECK(problem_number >= 1 AND problem_number <= 20),
 	account_sequence_no BIGINT NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
 	modify_at TIMESTAMP NOT NULL DEFAULT now(),
 	constraint exam_master_primary_key PRIMARY KEY("exam_master_sequence_no"),
-	constraint exam_master_unique_info_key UNIQUE(exam_type_sequence_no, exam_subject_sequence_no, problem_number, account_sequence_no)	
+	constraint exam_master_unique_info_key UNIQUE(exam_type_sequence_no, exam_subject_code, problem_number, account_sequence_no)	
 );
 
 
@@ -112,7 +108,7 @@ create table jwland.exam_master(
 create table jwland.class(
 	class_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_sequence'),
 	class_name varchar(100) NOT NULL,
-	class_type_sequence_no BIGINT NOT NULL,
+	class_type_code varchar(10) NOT NULL,
 	start_date varchar(6) NOT NULL,
 	open varchar(10) NOT NULL DEFAULT 'OPEN',
 	created_at TIMESTAMP NOT NULL DEFAULT now(),
@@ -121,14 +117,6 @@ create table jwland.class(
 	modify_account_id varchar(20) NOT NULL,
 	constraint class_primary_key PRIMARY KEY("class_sequence_no")
 );
-
-
-create table jwland.class_type(/*common_table*/
-	class_type_sequence_no BIGINT DEFAULT NEXTVAL('jwland.class_type_sequence'),
-	class_type_name varchar(20) NOT NULL,
-	CONSTRAINT class_type_primary_key PRIMARY KEY("class_type_sequence_no")	
-);
-
 
 
 create table jwland.account_class_map(
@@ -159,7 +147,7 @@ create table jwland.class_attendance_management(
 
 create table jwland.clinic_master(
 	clinic_master_sequence_no BIGINT DEFAULT NEXTVAL('jwland.clinic_master_sequence'),
-	class_type_sequence_no BIGINT NOT NULL,
+	class_type_code varchar(10) NOT NULL,
 	clinic_type_sequence_no BIGINT NOT NULL,
 	date varchar(8) NOT NULL,
 	hour varchar(2) NOT NULL,
@@ -181,20 +169,6 @@ create table jwland.clinic_account_map(
 	account_sequence_no BIGINT,
 	CONSTRAINT clinic_account_map_primary_key PRIMARY KEY("clinic_master_sequence_no", "account_sequence_no")
 );
-
-
-
-create table jwland.subject(/*common_table*/
-	subject_sequence_no INT NOT NULL,
-	subject_name varchar(10) NOT NULL UNIQUE,
-	CONSTRAINT subject_primary_key PRIMARY KEY("subject_sequence_no")
-);
-
-
-
-
-
-
 
 
 

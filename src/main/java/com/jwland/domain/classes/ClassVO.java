@@ -19,7 +19,7 @@ public class ClassVO {
 	
 	private Long classSequenceNo;
 	private String className;
-	private int classTypeSequenceNo;
+	private String classTypeCode;
 	private String startDate;
 	private String open;
 	private LocalDateTime createdAt;
