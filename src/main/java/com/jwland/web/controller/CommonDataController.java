@@ -40,6 +40,13 @@ public class CommonDataController {
 		List<CommonCodeDto> examTypes = commonDataService.getExamOrganzations();
 		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
 	}
+	
+	@GetMapping("/exam-subjects")
+	public ResponseEntity<List<CommonCodeDto>> getExamSubjects(){
+		List<CommonCodeDto> examSubjects = commonDataService.getExamSubjects();
+		return ResponseEntity.status(HttpStatus.OK).body(examSubjects);
+	}
+
 }
 
 

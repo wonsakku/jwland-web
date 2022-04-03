@@ -16,11 +16,11 @@
             	<!-- Button trigger modal -->
 <!-- 				<button type="button" class="btn btn-info btn-sm mr-1"  -->
 <!-- 						data-toggle="modal" data-target="#popup-enroll-exam" id="popup-enroll-exam-btn"> -->
-<!-- 				  기출 등록 -->
+<!-- 				  湲곗텧 �벑濡� -->
 <!-- 				</button> -->
 <!-- 				<button type="button" class="btn btn-warning btn-sm mr-1"  -->
 <!-- 						data-toggle="modal" data-target="#popup-update-exam" id="popup-update-exam-btn"> -->
-<!-- 				  기출 수정 -->
+<!-- 				  湲곗텧 �닔�젙 -->
 <!-- 				</button> -->
 		      <select id="exam-subject" class="mr-1">
 		      </select>
@@ -31,10 +31,10 @@
 					</button>
 					<button type="button" class="btn btn-success btn-sm mr-1" 
 							data-toggle="modal" data-target="#popup-update-wrongasnwer" id="popup-update-wrongasnwer-btn">
-					  오답 수정
+					 오답 수정
 					</button>
 					<button type="button" class="btn btn-danger btn-sm mr-1" id="my-wrong-answer-btn" onclick="showMyExamList()">내가 틀린 문제</button>
-	<!-- 				<button type="button" class="btn btn-info btn-sm mr-1" style="display:none;">오답 전체</button> -->
+	<!-- 				<button type="button" class="btn btn-info btn-sm mr-1" style="display:none;">�삤�떟 �쟾泥�</button> -->
 					<button type="button" class="btn btn-info btn-sm mr-1" id="all-wrong-answer-btn" style="display:none;" onclick="showExamAllList()">오답 전체</button>
 				</th:block>
           </div>
@@ -109,8 +109,8 @@
 		var url = "/exam-check?";
 		
 		if(arguments[0] != null && arguments[0] != ''){
-			var _examSubjectSequenceNo = arguments[0];
-			url += "examSubjectSequenceNo=" + _examSubjectSequenceNo;
+			var _examSubjectCode = arguments[0];
+			url += "examSubjectCode=" + _examSubjectCode;
 		}
 		
 		if(arguments[1] != null && arguments[1] != '' && isCheckMyProblem){
@@ -154,7 +154,7 @@
 	function loadExamSubjects(){
 		
 		
-		var url = "/exam/subjects";
+		var url = "/exam-subjects";
 		
 	    $.ajax({
 	        url: url,
@@ -171,10 +171,10 @@
 	
 	function _cb_loadExamSubjects(data, xhr, status){
 		$("#exam-subject").html("");
-		var html = "<option value=''>=== 전 체 ===</option>";
+		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html +="<option value='" + data[i].exam_subject_sequence_no + "'>" + data[i].subject + "</option>";
+			html +="<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";
 		}
 		$("#exam-subject").html(html);
 	}

@@ -20,5 +20,5 @@ public class ExamDuplicationValidateParameter {
 	private int month;
 	
 	@NotNull
-	private int examOrganizationSequenceNo;
+	private String examOrganizationCode;
 }

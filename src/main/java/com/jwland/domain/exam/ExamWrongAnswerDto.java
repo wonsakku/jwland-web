@@ -13,13 +13,13 @@ public class ExamWrongAnswerDto {
 	@NotNull
 	private int accountSequenceNo;
 	
-	@NotNull
-	private int examSubjectSequenceNo;
+	@NotNull(message = "시험 과목 선택은 필수입니다.")
+	private String examSubjectCode;
 	
-	@NotNull
+	@NotNull(message = "시험 기관 선택은 필수입니다.")
 	private int examTypeSequenceNo;
 	
-	@NotNull
+	@NotNull(message = "선택한 번호가 없습니다.")
 	@Size(min = 1, max = 20, message = "문제번호를 1~20개 선택해야 합니다.")
 	private List<Integer> problemNumberList;
 	

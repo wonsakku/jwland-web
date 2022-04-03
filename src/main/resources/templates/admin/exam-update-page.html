@@ -40,7 +40,7 @@
 	      <div class="modal-body">
 	      	<form>
 				<div class="form-group row">
-					<label for="update-exam-year" class="col-sm-2 col-form-label text-center">시험 연도</label>
+					<label for="update-exam-year" class="col-sm-2 col-form-label text-center">연도</label>
 				    <div class="col-sm-10">
 				      <select class="form-control" id="update-exam-year">
 				      </select>
@@ -48,7 +48,7 @@
 				</div>
 				<hr>
 				<div class="form-group row">
-					<label for="update-exam-month" class="col-sm-2 col-form-label text-center">시험 월</label>
+					<label for="update-exam-month" class="col-sm-2 col-form-label text-center">월</label>
 				    <div class="col-sm-10">
 				      <select class="form-control" id="update-exam-month" disabled>
 				      </select>
@@ -56,7 +56,7 @@
 				</div>
 				<hr>
 				<div class="form-group row">
-					<label for="update-enrolled-exam-type" class="col-sm-2 col-form-label text-center">변경할 시험명</label>
+					<label for="update-enrolled-exam-type" class="col-sm-2 col-form-label text-center">변경할 시험</label>
 				    <div class="col-sm-10">
 				      <select class="form-control" id="update-enrolled-exam-type" disabled>
 				      </select>
@@ -210,7 +210,7 @@
 	
 	
 	function loadExamOrganization(){
-		var url = "/exam/organization";
+		var url = "/exam-organization";
 	    $.ajax({
 	        url: url,
 	        method: "GET",
@@ -226,10 +226,12 @@
 	function _cb_loadExamOrganization(data, xhr, status){
 		$("#update-exam-organization").html("");
 		
+		console.log(data);
+		
 		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html +="<option value='" + data[i].exam_organization_sequence_no + "'>" + data[i].exam_organization_name + "</option>";
+			html +="<option value='" + data[i].commonCode + "'>" + data[i].commonCodeName + "</option>";
 	//			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
 		}
 		$("#update-exam-organization").html(html);
@@ -243,26 +245,26 @@
 		var updateExamMonth = $("#update-exam-month").val();
 		
 		var examTypeSequenceNo = $("#update-enrolled-exam-type").val();
-		var changeExamOrganizationSequenceNo = $("#update-exam-organization").val();
+		var changeExamOrganizationCode = $("#update-exam-organization").val();
 		
 	
 		if(updateExamYear == null || updateExamYear.trim() == ''){
-			alert("시험 연도을 선택해주세요");
+			alert("시험 시행 연도를 입력해주세요");
 			return ;
 		}
 		
 		if(updateExamMonth == null || updateExamMonth.trim() == ''){
-			alert("시험 월을 선택해주세요");
+			alert("몇월 시힘인지 입력해주세요");
 			return ;
 		}
 		
 		if(examTypeSequenceNo == null || examTypeSequenceNo.trim() == ''){
-			alert("변경할 시험명을 선택해주세요");
+			alert("변경할 시험을 선택해주세요");
 			return ;
 		}
 		
-		if(changeExamOrganizationSequenceNo == null || changeExamOrganizationSequenceNo.trim() == ''){
-			alert("시험 기관을 선택해주세요");
+		if(changeExamOrganizationCode == null || changeExamOrganizationCode.trim() == ''){
+			alert("시험기관을 선택해주세요");
 			return ;
 		}
 	
@@ -274,7 +276,7 @@
 		requestBody.year = updateExamYear;
 		requestBody.month = updateExamMonth;
 		requestBody.examTypeSequenceNo = examTypeSequenceNo;
-		requestBody.examOrganizationSequenceNo = changeExamOrganizationSequenceNo; 
+		requestBody.examOrganizationCode = changeExamOrganizationCode; 
 		
 		
 		var url = "/admin/exam";
@@ -305,25 +307,25 @@
 		var examOrganizationName = $("#update-enrolled-exam-type").find("option:selected").text().trim();
 		
 		if(deleteExamYear == null || deleteExamYear.trim() == ''){
-			alert("시험 연도을 선택해주세요");
+			alert("시험 연도를 입력해주세요");
 			return ;
 		}
 		
 		if(deleteExamMonth == null || deleteExamMonth.trim() == ''){
-			alert("시험 월을 선택해주세요");
+			alert("몇월 시험인지 입력해주세요");
 			return ;
 		}
 		
 		if(examTypeSequenceNo == null || examTypeSequenceNo.trim() == ''){
-			alert("변경할 시험명을 선택해주세요");
+			alert("삭제할 시험을 선택해주세요");
 			return ;
 		}
 		
-		var checkRealDelete = prompt("삭제를 원하신다면 시험 연,월,시험명을 입력해주세요 : " + deleteExamYear + "," + deleteExamMonth + "," + examOrganizationName, "");
+		var checkRealDelete = prompt("삭제를 원하신다면 다음의 내용을 입력해주세요 : " + deleteExamYear + "," + deleteExamMonth + "," + examOrganizationName, "");
 		var checkInputValue = deleteExamYear + "," + deleteExamMonth + "," + examOrganizationName;
 		
 		if(checkRealDelete.trim() != checkInputValue.trim()){
-			alert("입력값이 올바르지 않습니다.");
+			alert("입력값이 일치하지 않습니다.");
 			return;
 		}
 		

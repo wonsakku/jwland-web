@@ -40,7 +40,6 @@ public class AdminExamService {
 	public void enrollExam(ExamEnrollDto examEnrollDto) {
 		
 		examDuplicationCheck( modelMapper.map(examEnrollDto, ExamDuplicationValidateParameter.class) );
-		
 		adminExamMapper.enrollExam(examEnrollDto);
 	}
 
@@ -52,7 +51,6 @@ public class AdminExamService {
 	private void examDuplicationCheck(ExamDuplicationValidateParameter parameter) {
 		
 		Map<String, String> duplicateCheckMap = adminExamMapper.checkExamExist(parameter);
-		
 		if(duplicateCheckMap != null) {
 			throw new AlreadyEnrolledException(ExceptionMessages.ALREADY_ENROLLED_EXAM);
 		}
@@ -83,12 +81,12 @@ public class AdminExamService {
 			}
 			
 			Map subjectInfo = subjectInfoList.get(i);
-			int examSubjectSequenceNo = (Integer) subjectInfo.get("exam_subject_sequence_no");
+			String examSubjectCode =  subjectInfo.get("exam_subject_code").toString();
 			
-			Map<String, Integer> newParameter = new HashMap<>();
+			Map newParameter = new HashMap<>();
 			newParameter.put("start", Integer.parseInt(start));
 			newParameter.put("end", Integer.parseInt(end));
-			newParameter.put("examSubjectSequenceNo", examSubjectSequenceNo);
+			newParameter.put("examSubjectCode", examSubjectCode);
 			List<Map> wrongProblemStatistic = adminExamMapper.getExamStatistic(newParameter);
 			
 			String sheetName = subjectInfo.get("subject").toString();

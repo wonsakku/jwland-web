@@ -86,7 +86,7 @@
 	})();
 
 	function loadExamOrganizationInExamEnroll() {
-		var url = "/exam/organization";
+		var url = "/exam-organization";
 		$.ajax({
 			url : url,
 			method : "GET",
@@ -106,8 +106,8 @@
 		var html = "<option value=''>=== 선 택 ===</option>";
 
 		for (var i = 0; i < data.length; i++) {
-			html += "<option value='" + data[i].exam_organization_sequence_no + "'>"
-					+ data[i].exam_organization_name + "</option>";
+			html += "<option value='" + data[i].commonCode + "'>"
+					+ data[i].commonCodeName + "</option>";
 			//			html +="<option value='" + data[i].exam_type_sequence_no + "'>" + data[i].exam_type + "</option>";
 		}
 		$("#enroll-exam-organization").html(html);
@@ -117,18 +117,18 @@
 
 		var examYear = $("#enroll-exam-year").val();
 		var examMonth = $("#enroll-exam-month").val();
-		var examOrganizationSequenceNo = $("#enroll-exam-organization").val();
+		var examOrganizationCode = $("#enroll-exam-organization").val();
 
 		if (examYear == null || examYear.trim() == '') {
 			alert("시험 연도를 입력해주세요");
 			return;
 		}
 		if (examMonth == null || examMonth.trim() == '') {
-			alert("시험 월를 입력해주세요");
+			alert("몇월 시험인지 입력해주세요");
 			return;
 		}
-		if (examOrganizationSequenceNo == null
-				|| examOrganizationSequenceNo.trim() == '') {
+		if (examOrganizationCode == null
+				|| examOrganizationCode.trim() == '') {
 			alert("시험 기관을 선택해주세요");
 			return;
 		}
@@ -136,10 +136,11 @@
 		var examInfo = new Object();
 		examInfo.year = examYear;
 		examInfo.month = examMonth;
-		examInfo.examOrganizationSequenceNo = examOrganizationSequenceNo;
+		examInfo.examOrganizationCode = examOrganizationCode;
 
 		var url = "/admin/exam/enroll";
 
+		
 		if (!confirm("등록하시겠습니까?")) {
 			return;
 		}

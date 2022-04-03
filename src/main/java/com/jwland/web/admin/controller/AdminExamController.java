@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jwland.domain.exam.ExamEnrollDto;
 import com.jwland.domain.exam.ExamUpdateDto;
 import com.jwland.web.admin.service.AdminExamService;
+import com.jwland.web.constant.CommonCode;
 import com.jwland.web.constant.VariableConstant;
 
 import lombok.RequiredArgsConstructor;
@@ -76,7 +77,7 @@ public class AdminExamController {
 	@GetMapping("/excel-download")
 	public void examExcelDownload(@RequestParam(name = "start") String start,
 			@RequestParam(name = "end", required = false, defaultValue = "") String end,
-			@RequestParam(name="examSubjectSequenceNo", required = false, defaultValue = "") String examSubjectSequenceNo, 
+			@RequestParam(name="examSubjectCode", required = false, defaultValue = "") String examSubjectCode, 
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		
@@ -88,8 +89,10 @@ public class AdminExamController {
 		}
 		parameter.put("end", end);
 		
-		if(examSubjectSequenceNo != null && !"".equals(examSubjectSequenceNo)) {
-			parameter.put("examSubjectSequenceNo", examSubjectSequenceNo);
+		parameter.put("groupCode", CommonCode.EXAM_SUBJECT_CODE);
+		
+		if(examSubjectCode != null && !"".equals(examSubjectCode)) {
+			parameter.put("examSubjectCode", examSubjectCode);
 		}
 		
 		adminExamService.excelDownload(parameter, request, response);

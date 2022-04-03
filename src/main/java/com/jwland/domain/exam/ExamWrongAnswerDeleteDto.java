@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class ExamWrongAnswerDeleteDto {
 
-	@NotNull
+	@NotNull(message = "시험 기관을 선택해주세요")
 	private int examTypeSequenceNo;
-	@NotNull
-	private int examSubjectSequenceNo;
+	@NotNull(message = "시험 과목을 선택해주세요")
+	private String examSubjectCode;
 	@NotNull
 	private int accountSequenceNo;
 	

@@ -42,7 +42,6 @@ public class ExamCheckController {
 	
 	@GetMapping("/exam-check/page")
 	public ModelAndView examCheckPage(HttpServletRequest request) {
-		log.info("----- ExamCheckController.examCheckPage() -----");
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("exam-check");
 		return mav;
@@ -79,12 +78,6 @@ public class ExamCheckController {
 		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
 	}
 	
-	@GetMapping("/exam/subjects")
-	public ResponseEntity<List<Map>> getExamSubjects(){
-		List<Map> examSubjects = examCheckService.getExamSubjects();
-		return ResponseEntity.status(HttpStatus.OK).body(examSubjects);
-	}
-
 	
 	@GetMapping("/exam/subjects/not-enrolled")
 	public ResponseEntity<List<Map>> getNotEnrolledSubjects(@RequestParam(value = "examTypeSequenceNo") String examTypeSequenceNo,
@@ -130,22 +123,22 @@ public class ExamCheckController {
 	
 	
 	
-	@GetMapping("/exam/wrong-answer/exam-types/{examTypeSequenceNo}/subjects/{examSubjectSequenceNo}")
+	@GetMapping("/exam/wrong-answer/exam-types/{examTypeSequenceNo}/subjects/{examSubjectCode}")
 	public ResponseEntity<List<Integer>> getWrongAsnwerNumbers(@RequestParam(value = "accountSequenceNo") String accountSequenceNo,
 			@PathVariable(value = "examTypeSequenceNo") String examTypeSequenceNo,
-			@PathVariable(value = "examSubjectSequenceNo") String examSubjectSequenceNo){
-		List<Integer> wrongAsnwerNumberList = examCheckService.getWrongAsnwerNumbers(accountSequenceNo, examTypeSequenceNo, examSubjectSequenceNo);
+			@PathVariable(value = "examSubjectCode") String examSubjectCode){
+		List<Integer> wrongAsnwerNumberList = examCheckService.getWrongAsnwerNumbers(accountSequenceNo, examTypeSequenceNo, examSubjectCode);
 		return ResponseEntity.status(HttpStatus.OK).body(wrongAsnwerNumberList);
 	}
 	
 	@PutMapping("/exam")
-	public ResponseEntity<String> updateWrongAsnwerNumbers(@RequestBody @Validated ExamWrongAnswerDto examWrongAnswerDto){
+	public ResponseEntity<String> updateWrongAnswerNumbers(@RequestBody @Validated ExamWrongAnswerDto examWrongAnswerDto){
 		examCheckService.updateWrongAnswerNumbers(examWrongAnswerDto);
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_UPDATE_WRONG_ANSWER_SUCCESS);
 	}
 	
 	@DeleteMapping("/exam")
-	public ResponseEntity<String> updateWrongAsnwerNumbers(@RequestBody @Validated ExamWrongAnswerDeleteDto examWrongAnswerDeleteDto){
+	public ResponseEntity<String> deleteWrongAnswerNumbers(@RequestBody @Validated ExamWrongAnswerDeleteDto examWrongAnswerDeleteDto){
 		examCheckService.deleteWrongAnswerNumbers(examWrongAnswerDeleteDto);
 		return ResponseEntity.status(HttpStatus.OK).body(VariableConstant.EXAM_DELETE_WRONG_ANSWER_SUCCESS);
 	}

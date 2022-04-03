@@ -251,6 +251,8 @@
 	function _cb_loadEnrolledWrongAnswerExamType(data, xhr, status){
 		$("#enrolled-wronganswer-exam-type").html("");
 		
+		console.log(data);
+		
 		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
@@ -288,7 +290,7 @@
 		var html = "<option value=''>=== 선택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html +="<option value='" + data[i].exam_subject_sequence_no + "'>" + data[i].subject + "</option>";
+			html +="<option value='" + data[i].exam_subject_code + "'>" + data[i].subject + "</option>";
 		}
 		$("#enrolled-wronganswer-subject").html(html);
 		$("#enrolled-wronganswer-subject").removeAttr("disabled");
@@ -401,7 +403,7 @@
 		
 		var requestBody = new Object();
 		requestBody.examTypeSequenceNo = enrolledWronganswerExamType;
-		requestBody.examSubjectSequenceNo = enrolledWronganswerSubject;
+		requestBody.examSubjectCode = enrolledWronganswerSubject;
 		requestBody.accountSequenceNo = _accountSequenceNo;
 		requestBody.problemNumberList = problemNumberList;
 		
@@ -449,7 +451,7 @@
 		
 		var requestBody = new Object();
 		requestBody.examTypeSequenceNo = enrolledWronganswerExamType;
-		requestBody.examSubjectSequenceNo = enrolledWronganswerSubject;
+		requestBody.examSubjectCode = enrolledWronganswerSubject;
 		requestBody.accountSequenceNo = _accountSequenceNo;
 		
 	    $.ajax({

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jwland.domain.exam.ExamWrongAnswerDto;
 import com.jwland.domain.exam.ExamTotalInfoDto;
 import com.jwland.domain.exam.ExamWrongAnswerDeleteDto;
+import com.jwland.web.constant.CommonCode;
 import com.jwland.web.mapper.ExamCheckMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,6 @@ public class ExamCheckService {
 		parameter.put("year", year);
 		parameter.put("month", month);
 		List<Map> result = examCheckMapper.getExamTypes(parameter);
-		System.out.println(result);
 		return result;
 	}
 
@@ -57,20 +57,20 @@ public class ExamCheckService {
 		Map<String, String> parameter = new HashMap<>();
 		parameter.put("examTypeSequenceNo", examTypeSequenceNo);
 		parameter.put("accountSequenceNo", accountSequenceNo);
+		parameter.put("groupCode", CommonCode.EXAM_SUBJECT_CODE);
 		return examCheckMapper.getNotEnrolledSubjects(parameter);
 	}
 
 	@Transactional
 	public void enrollWrongAnswer(ExamWrongAnswerDto examWrongAnswerDto) {
 
-		Map<String, Integer> parameter = getWrongAnswerParameter(examWrongAnswerDto);
+		Map parameter = getWrongAnswerParameter(examWrongAnswerDto);
 		List<Integer> problemNumberList = examWrongAnswerDto.getProblemNumberList();
 		
 		for(Integer problemNumber : problemNumberList) {
 			parameter.put("problemNumber", problemNumber);
 			examCheckMapper.enrollWrongAnswer(parameter);
 		}
-		
 	}
 
 	public List<Integer> getWrongAsnwerExamYears(String accountSequenceNo) {
@@ -100,12 +100,11 @@ public class ExamCheckService {
 		return examCheckMapper.getWrongAsnwerSubjects(parameter);
 	}
 
-	public List<Integer> getWrongAsnwerNumbers(String accountSequenceNo, String examTypeSequenceNo,
-			String examSubjectSequenceNo) {
+	public List<Integer> getWrongAsnwerNumbers(String accountSequenceNo, String examTypeSequenceNo, String examSubjectCode) {
 		Map<String, String> parameter = new HashMap<>();
 		parameter.put("accountSequenceNo", accountSequenceNo);
 		parameter.put("examTypeSequenceNo", examTypeSequenceNo);
-		parameter.put("examSubjectSequenceNo", examSubjectSequenceNo);
+		parameter.put("examSubjectCode", examSubjectCode);
 		return examCheckMapper.getWrongAsnwerNumbers(parameter);
 	}
 
@@ -116,11 +115,11 @@ public class ExamCheckService {
 	}	
 	
 
-	private Map<String, Integer> getWrongAnswerParameter(ExamWrongAnswerDto examWrongAnswerDto){
+	private Map getWrongAnswerParameter(ExamWrongAnswerDto examWrongAnswerDto){
 
-		Map<String, Integer> parameter = new HashMap<>();
+		Map parameter = new HashMap<>();
 		parameter.put("accountSequenceNo", examWrongAnswerDto.getAccountSequenceNo());
-		parameter.put("examSubjectSequenceNo", examWrongAnswerDto.getExamSubjectSequenceNo());
+		parameter.put("examSubjectCode", examWrongAnswerDto.getExamSubjectCode());
 		parameter.put("examTypeSequenceNo", examWrongAnswerDto.getExamTypeSequenceNo());
 		
 		return parameter;
@@ -131,9 +130,6 @@ public class ExamCheckService {
 		examCheckMapper.deleteWrongAsnwerNumbers(examWrongAnswerDeleteDto);
 	}
 
-	public List<Map> getExamSubjects() {
-		return examCheckMapper.getExamSubjects();
-	}
 	
 }
 

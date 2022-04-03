@@ -24,5 +24,5 @@ public class ExamUpdateDto {
 	
 	
 	@NotNull
-	private int examOrganizationSequenceNo;
+	private String examOrganizationCode;
 }

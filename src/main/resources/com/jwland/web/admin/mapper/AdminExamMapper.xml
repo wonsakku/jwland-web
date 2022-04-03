@@ -5,20 +5,20 @@
 <mapper namespace="com.jwland.web.admin.mapper.AdminExamMapper">
 
 	<insert id="enrollExam" parameterType="com.jwland.domain.exam.ExamEnrollDto">
-		INSERT INTO jwland.exam_type(year, month, exam_organization_sequence_no)
-		VALUES(#{year}, #{month}, #{examOrganizationSequenceNo})
+		INSERT INTO jwland.exam_type(year, month, exam_organization_code)
+		VALUES(#{year}, #{month}, #{examOrganizationCode})
 	</insert>
 
 	<select id="checkExamExist" resultType="map" parameterType="com.jwland.domain.exam.ExamDuplicationValidateParameter">
 		SELECT * FROM jwland.exam_type
 		WHERE year = #{year}
 		AND   month = #{month}
-		AND   exam_organization_sequence_no = #{examOrganizationSequenceNo}
+		AND   exam_organization_code = #{examOrganizationCode}
 	</select>
 
 	<update id="updateExamType" parameterType="com.jwland.domain.exam.ExamUpdateDto">
 		UPDATE jwland.exam_type
-		SET exam_organization_sequence_no = #{examOrganizationSequenceNo}
+		SET exam_organization_code = #{examOrganizationCode}
 		WHERE exam_type_sequence_no = #{examTypeSequenceNo}
 	</update>
 	
@@ -29,40 +29,44 @@
 
 
 	<select id="getSubjectInfo" parameterType="map" resultType="map">
-		SELECT exam_subject_sequence_no, subject 
-		FROM jwland.exam_subject
+		SELECT common_code AS exam_subject_code, common_code_name AS subject
+		FROM jwland.common_code_detail
 		
-		<if test="examSubjectSequenceNo != null and examSubjectSequenceNo != ''">
-			WHERE exam_subject_sequence_no = #{examSubjectSequenceNo}::INT
+		WHERE 1=1
+		
+		AND group_code = #{groupCode}
+		
+		<if test="commonCode != null and commonCode != ''">
+			AND common_code = #{commonCode}::INT
 		</if>
 		
-		ORDER BY exam_subject_sequence_no
+		ORDER BY common_code
 	</select>
 
 	<select id="getExamStatistic" parameterType="map" resultType="map">
 	    <![CDATA[
 			SELECT  et.year,
 					et.month,
-					eo.exam_organization_name,
+					ccd.common_code_name AS exam_organization_name,
 					em.problem_number,
 					t1.wrong_count
 			FROM jwland.exam_master em
 			LEFT JOIN jwland.exam_type et
 			ON em.exam_type_sequence_no = et.exam_type_sequence_no
-			LEFT JOIN jwland.exam_organization eo
-			ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
+			LEFT JOIN jwland.common_code_detail ccd
+			ON et.exam_organization_code = ccd.common_code
 			LEFT JOIN (
-				SELECT exam_type_sequence_no, exam_subject_sequence_no, problem_number, COUNT(*) AS wrong_count
-				FROM jwland.exam_master		
-				WHERE exam_subject_sequence_no = #{examSubjectSequenceNo}		
-				GROUP BY exam_type_sequence_no, exam_subject_sequence_no, problem_number
+				SELECT exam_type_sequence_no, exam_subject_code, problem_number, COUNT(*) AS wrong_count
+				FROM jwland.exam_master
+				WHERE exam_subject_code = #{examSubjectCode}		
+				GROUP BY exam_type_sequence_no, exam_subject_code, problem_number
 			) t1
 			ON em.exam_type_sequence_no = t1.exam_type_sequence_no
-			AND em.exam_subject_sequence_no = t1.exam_subject_sequence_no
+			AND em.exam_subject_code = t1.exam_subject_code
 			AND em.problem_number = t1.problem_number		
-			WHERE em.exam_subject_sequence_no = #{examSubjectSequenceNo}		
+			WHERE em.exam_subject_code = #{examSubjectCode}		
 			AND et.year >= #{start} AND et.year <= #{end}
-			GROUP BY et.year, et.month, eo.exam_organization_name, em.problem_number, t1.wrong_count
+			GROUP BY et.year, et.month, ccd.common_code_name, em.problem_number, t1.wrong_count
 			ORDER BY t1.wrong_count DESC, et.year DESC, et.month DESC, em.problem_number DESC		
 	   ]]>
 	</select>

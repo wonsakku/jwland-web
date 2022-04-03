@@ -39,5 +39,4 @@ public interface ExamCheckMapper {
 
 	public void deleteWrongAsnwerNumbers(ExamWrongAnswerDeleteDto examWrongAnswerDeleteDto);
 
-	public List<Map> getExamSubjects();
 }

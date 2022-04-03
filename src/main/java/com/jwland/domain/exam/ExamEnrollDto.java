@@ -23,5 +23,5 @@ public class ExamEnrollDto {
 	private int month;
 	
 	@NotNull
-	private int examOrganizationSequenceNo;
+	private String examOrganizationCode;
 }

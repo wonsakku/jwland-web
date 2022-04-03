@@ -247,6 +247,8 @@
 	function _cb_loadEnrolledExamType(data, xhr, status){
 		$("#enrolled-exam-type").html("");
 		
+		console.log(data);
+		
 		var html = "<option value=''>=== 선 택 ===</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
@@ -279,11 +281,14 @@
 	}
 
 	function _cb_loadNotEnrolledSubject(data, xhr, status){
+		
+		console.log(data);
+		
 		$("#not-enrolled-subject").html("");
 		var html = "<option value=''>원하는 과목이 없다면 오답 수정 버튼을 클릭하세요</option>";
 		
 		for(var i = 0 ; i < data.length ; i++){
-			html +="<option value='" + data[i].exam_subject_sequence_no + "'>" + data[i].subject + "</option>";
+			html +="<option value='" + data[i].common_code + "'>" + data[i].common_code_name + "</option>";
 		}
 		$("#not-enrolled-subject").html(html);
 		$("#not-enrolled-subject").removeAttr("disabled");
@@ -347,16 +352,16 @@
 			return ;
 		}
 		
+		
 		if(!confirm("등록하시겠습니까?")){
 			return ;
 		}
 		
 		var requestBody = new Object();
 		requestBody.examTypeSequenceNo = enrolledExamType;
-		requestBody.examSubjectSequenceNo = selectedSubjectType;
+		requestBody.examSubjectCode = selectedSubjectType;
 		requestBody.accountSequenceNo = _accountSequenceNo;
 		requestBody.problemNumberList = problemNumberList;
-		
 		
 	    $.ajax({
 	        url: url,
