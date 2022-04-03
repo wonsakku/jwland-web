@@ -26,6 +26,11 @@ public class CommonDataService {
 		return commonDataMapper.getCommonCode(CommonCode.GRADE_GROUP_CODE);
 	}
 
+
+	public List<CommonCodeDto> getExamOrganzations() {
+		return commonDataMapper.getCommonCode(CommonCode.EXAM_ORGANIZATION_CODE);
+	}
+
 	
 	
 	

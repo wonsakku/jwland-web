@@ -24,11 +24,11 @@ public class ExamCheckService {
 	private final ExamCheckMapper examCheckMapper;
 	private final ModelMapper modelMapper;
 	
-	public List<ExamTotalInfoDto> getExamCheckList(String examSubjectSequenceNo, String accountSequenceNo) {
+	public List<ExamTotalInfoDto> getExamCheckList(String examSubjectCode, String accountSequenceNo) {
 		
 		Map<String, String> parameter = new HashMap<>();
 		parameter.put("accountSequenceNo", accountSequenceNo);
-		parameter.put("examSubjectSequenceNo", examSubjectSequenceNo);
+		parameter.put("examSubjectCode", examSubjectCode);
 		return examCheckMapper.getExamCheckList(parameter);
 	}
 

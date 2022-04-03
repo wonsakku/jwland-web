@@ -1,6 +1,7 @@
 package com.jwland.web.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,12 @@ public class CommonDataController {
 	}
 	
 	
+	
+	@GetMapping("/exam-organization")
+	public ResponseEntity<List<CommonCodeDto>> getExamOrganzations(){
+		List<CommonCodeDto> examTypes = commonDataService.getExamOrganzations();
+		return ResponseEntity.status(HttpStatus.OK).body(examTypes);
+	}
 }
 
 

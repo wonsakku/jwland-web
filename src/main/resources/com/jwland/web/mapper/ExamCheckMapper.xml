@@ -20,12 +20,12 @@
 		LEFT JOIN jwland.exam_organization eo
 		ON et.exam_organization_sequence_no = eo.exam_organization_sequence_no
 		LEFT JOIN (
-			SELECT exam_type_sequence_no, exam_subject_sequence_no, problem_number, COUNT(*) AS wrong_count
+			SELECT exam_type_sequence_no, exam_subject_code, problem_number, COUNT(*) AS wrong_count
 			FROM jwland.exam_master
-			<if test="examSubjectSequenceNo != null and examSubjectSequenceNo != ''">
-				WHERE exam_subject_sequence_no = #{examSubjectSequenceNo}::INT
+			<if test="examSubjectCode != null and examSubjectCode != ''">
+				WHERE exam_subject_code = #{examSubjectCode}
 			</if>
-			GROUP BY exam_type_sequence_no, exam_subject_sequence_no, problem_number
+			GROUP BY exam_type_sequence_no, exam_subject_code, problem_number
 		) t1
 		ON em.exam_type_sequence_no = t1.exam_type_sequence_no
 		AND em.exam_subject_sequence_no = t1.exam_subject_sequence_no
